@@ -62,6 +62,7 @@ PulseClusterer::PulseClusterer( SuperClusterer *parent, Resolution res )
 	//, clusterRange(3)
 	//, baseFreq(1.0)
 {
+	clusterList.reserve(DEFAULT_CLUSTERS);
 }
 
 PulseClusterer::~PulseClusterer()
@@ -333,8 +334,8 @@ PulseClusterer::clusterDone(Train &cluster)
 //		cout << endl;
 		addPulseToLR((*i).second);
 	}
-	float32_t driftInBinsPerSpectrum;
-	float32_t startBin;
+	float32_t driftInBinsPerSpectrum = 0;
+	float32_t startBin = 0;
 	if (!getLRResult(&startBin,&driftInBinsPerSpectrum))
 		Fatal(666);
 
