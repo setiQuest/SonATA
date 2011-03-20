@@ -35,8 +35,9 @@
 //
 #include <iostream>
 #include "CwClusterer.h"
-#include "SuperClusterer.h"
 #include "DxErr.h"
+#include "SuperClusterer.h"
+#include "System.h"
 
 using std::cout;
 using std::endl;
@@ -53,10 +54,12 @@ CwClusterer::CwClusterer( SuperClusterer *parent, Polarization p  )
 	, clusterRange(3)
 	, pole(p)
 {
+	clusterList.reserve(DEFAULT_CLUSTERS);
 }
 
 CwClusterer::~CwClusterer()
 {
+	clearHits();
 }
 
 //-------------------------
