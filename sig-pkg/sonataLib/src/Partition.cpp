@@ -160,7 +160,7 @@ PartitionSet::alloc(size_t size)
 		++p;
 	unlock();
 	if (!blk) {
-#ifdef notdef
+#ifndef notdef
 		ErrStr(size, "allocation size");
 		string &errMsg = errList->getErrMsg(ERR_MAF);
 		FatalStr(ERR_MAF, errMsg.c_str());
