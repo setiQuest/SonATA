@@ -178,6 +178,8 @@ const uint32_t MAX_TRAIN_PULSES = 250;
 const float64_t MAX_DRIFT = 1.0;
 //const int32_t BASELINE_ACT_DELAY_HF = 4;
 
+const int32_t DEFAULT_CLUSTERS = 1000;
+
 // maximum # of channels supported
 //const int32_t MAX_CHANNELS = 1;
 
