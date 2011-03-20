@@ -774,6 +774,8 @@ ConfirmationTask::sendCwCoherentResult(Msg *msg, Activity *act)
 {
 	CwCoherentSignal *cohSig = static_cast<CwCoherentSignal *> (msg->getData());
 
+	cSem->signal();
+
 	// find the signal
 	Signal *sig = act->findCandidate(cohSig->sig.signalId);
 	Debug(DEBUG_ARCHIVE, (int32_t) cohSig->sig.signalId.number, "sig id ");
@@ -855,8 +857,6 @@ ConfirmationTask::sendPulseResult(Msg *msg, Activity *act)
 Error
 ConfirmationTask::endCwCoherentSignals(Msg *msg, Activity *act)
 {
-	cSem->signal();
-
 	Debug(DEBUG_CONFIRM, (void *) activity, "activity");
 	Debug(DEBUG_CONFIRM, (void *) act, "act");
 #ifdef notdef
