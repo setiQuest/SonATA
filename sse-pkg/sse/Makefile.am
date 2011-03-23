@@ -97,7 +97,7 @@ INCLUDES= \
          -I$(SSE_DX_ARCHIVER_INTERFACE_INC_DIR) \
          -I$(SSE_CHANNELIZER_INTERFACE_INC_DIR) \
 	 -I$(CPPUNIT_ROOT)/include -I$(top_srcdir)/include \
-	 -I/usr/include/tcl8.3 -I/usr/include/tcl8.2 \
+	 -I/usr/include/tcl -I/usr/include/tcl8.3 -I/usr/include/tcl8.2 \
 	 -I$(DOPPLER_INC_DIR) \
          -I$(MYSQL_ROOT)/include \
 	 -I/usr/include/mysql
