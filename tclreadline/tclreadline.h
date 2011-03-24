@@ -17,16 +17,16 @@
 
 #include <tcl.h>
 
-#define TCLRL_LIBRARY        "@TCLRL_DIR@"
+#define TCLRL_LIBRARY        "/usr/local/lib/tclreadline2.1.0"
 
 /* VERSION STRINGS */
-#define TCLRL_VERSION_STR    "@VERSION@"
-#define TCLRL_PATCHLEVEL_STR "@PATCHLEVEL_STR@"
+#define TCLRL_VERSION_STR    "2.1.0"
+#define TCLRL_PATCHLEVEL_STR "2.1.0"
 
 /* VERSION NUMBERS */
-#define TCLRL_MAJOR      @MAJOR@
-#define TCLRL_MINOR      @MINOR@
-#define TCLRL_PATCHLEVEL @PATCHLEVEL@
+#define TCLRL_MAJOR      2
+#define TCLRL_MINOR      1
+#define TCLRL_PATCHLEVEL 0
 
 #ifdef __cplusplus
 extern "C" {

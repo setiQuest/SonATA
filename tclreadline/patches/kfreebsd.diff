@@ -1,0 +1,15 @@
+Patch allows to build shared library on kfreebsd-* architectures.
+
+Index: tclreadline-2.1.0/aux/ltconfig
+===================================================================
+--- tclreadline-2.1.0.orig/aux/ltconfig
++++ tclreadline-2.1.0/aux/ltconfig
+@@ -1984,7 +1984,7 @@
+   ;;
+ 
+ # This must be Linux ELF.
+-linux-gnu*)
++linux-gnu*|kfreebsd-gnu*)
+   version_type=linux
+   need_lib_prefix=no
+   need_version=no

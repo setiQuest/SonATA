@@ -1,0 +1,107 @@
+Index: tclreadline/tclreadline.n.in
+===================================================================
+--- tclreadline.orig/tclreadline.n.in
++++ tclreadline/tclreadline.n.in
+@@ -232,6 +232,11 @@
+ of the printable prompt. See for example the variable `prompt_string'
+ in the file tclreadlineSetup.tcl in your tclreadline installation directory.
+ 
++.TP 5
++\fB::tclreadline::prompt2\fP
++a proc which is called by ::tclreadline::Loop and returns a string
++which will be displayed as the secondary prompt when interactively
++prompting  for  continuation  of  an incomplete command.
+ 
+ .\" .SH "EXAMPLES"
+ 
+Index: tclreadline/tclreadlineSetup.tcl.in
+===================================================================
+--- tclreadline.orig/tclreadlineSetup.tcl.in
++++ tclreadline/tclreadlineSetup.tcl.in
+@@ -135,7 +135,7 @@
+ 	    ::tclreadline::Init
+ 	}
+ 
+-	if {[catch {set a [::tclreadline::prompt1]}] && [info nameofexecutable] != ""} {
++	if {"" == [info procs ::tclreadline::prompt1] && [info nameofexecutable] != ""} {
+ 
+ 	    namespace eval ::tclreadline {
+ 		variable prompt_string
+@@ -170,6 +170,16 @@
+ 	    # puts body=[info body ::tclreadline::prompt1]
+ 	}
+ 
++	if {"" == [info procs ::tclreadline::prompt2] && [info nameofexecutable] != ""} {
++
++	    if {"" == [info procs ::tclreadline::prompt2]} {
++		proc ::tclreadline::prompt2 {} {
++		    return ">"
++		}
++	    }
++	    # puts body=[info body ::tclreadline::prompt2]
++	}
++
+ 	if {"" == [info procs exit]} {
+ 
+ 	    catch {rename ::tclreadline::Exit ""}
+@@ -262,22 +272,21 @@
+ 
+ 	while {1} {
+ 
+-	    if [info exists tcl_prompt2] {
+-		set prompt2 $tcl_prompt2
+-	    } else {
+-		set prompt2 ">"
+-	    }
+-
+ 	    if {[catch {
+ 		if {"" != [namespace eval ::tclreadline {info procs prompt1}]} {
+-		    set LINE [::tclreadline::readline read \
++		    set ::tclreadline::LINE [::tclreadline::readline read \
+ 		    [::tclreadline::prompt1]]
+ 		} else {
+-		    set LINE [::tclreadline::readline read %]
++		    set ::tclreadline::LINE [::tclreadline::readline read %]
+ 		}
+-		while {![::tclreadline::readline complete $LINE]} {
+-		    append LINE "\n"
+-		    append LINE [tclreadline::readline read ${prompt2}]
++		while {![::tclreadline::readline complete $::tclreadline::LINE]} {
++		    append ::tclreadline::LINE "\n"
++		    if {"" != [namespace eval ::tclreadline {info procs prompt2}]} {
++			append ::tclreadline::LINE \
++			    [tclreadline::readline read [::tclreadline::prompt2]]
++		    } else {
++			append ::tclreadline::LINE [tclreadline::readline read >]
++		    }
+ 		}
+ 	    } ::tclreadline::errorMsg]} {
+ 		puts stderr [list tclreadline::Loop: error. \
+@@ -293,19 +302,20 @@
+ 	    # from tcsh's behaviour, but I found it quite convenient
+ 	    # while using mshell on os9.
+ 	    #
+-	    if {[string length $LINE] && [history event 0] != $LINE} {
+-		history add $LINE
++	    if {[string length $::tclreadline::LINE] && \
++		    [history event 0] != $::tclreadline::LINE} {
++		history add $::tclreadline::LINE
+ 	    }
+ 
+ 	    if [catch {
+-		set result [eval $LINE]
+-		if {$result != "" && [tclreadline::Print]} {
+-		    puts $result
++		set ::tclreadline::result [eval $::tclreadline::LINE]
++		if {$::tclreadline::result != "" && [tclreadline::Print]} {
++		    puts $::tclreadline::result
+ 		}
+-		set result ""
++		set ::tclreadline::result ""
+ 	    } ::tclreadline::errorMsg] {
+ 		puts stderr $::tclreadline::errorMsg
+-		puts stderr [list while evaluating $LINE]
++		puts stderr [list while evaluating $::tclreadline::LINE]
+ 	    }
+ 
+ 	}

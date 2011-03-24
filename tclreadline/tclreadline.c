@@ -1,13 +1,13 @@
 
  /* ==================================================================
     FILE: "/home/joze/src/tclreadline/tclreadline.c"
-    LAST MODIFICATION: "Mit, 10 Jan 2001 06:29:33 +0100 (joze)"
-    (C) 1998 - 2001 by Johannes Zellner, <johannes@zellner.org>
-    $Id: tclreadline.c,v 2.20 2001/01/10 05:32:28 joze Exp $
+    LAST MODIFICATION: "Mit, 20 Sep 2000 19:27:47 +0200 (joze)"
+    (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
+    $Id: tclreadline.c,v 2.19 2000/09/20 17:44:34 joze Exp $
     ---
     tclreadline -- gnu readline for tcl
     http://www.zellner.org/tclreadline/
-    Copyright (c) 1998 - 2001, Johannes Zellner <johannes@zellner.org>
+    Copyright (c) 1998 - 2000, Johannes Zellner <johannes@zellner.org>
     This software is copyright under the BSD license.
     ================================================================== */  
 
@@ -559,13 +559,6 @@ int
 Tclreadline_Init(Tcl_Interp *interp)
 {
     int status;
-
-    /* T. Kilsdonk  27 Feb 2002.  
-       Turn off readline signal handlers.
-    */
-    rl_catch_signals = 0;
-
-
     Tcl_CreateObjCommand(interp, "::tclreadline::readline", TclReadlineCmd,
 	(ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
     tclrl_interp = interp;

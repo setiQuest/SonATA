@@ -1,0 +1,24 @@
+Patch by Sergei Golovan fixes syntax error in expression.
+
+Index: tclreadline/tclreadlineCompleter.tcl
+===================================================================
+--- tclreadline.orig/tclreadlineCompleter.tcl
++++ tclreadline/tclreadlineCompleter.tcl
+@@ -3042,7 +3042,7 @@
+ proc complete(regsub) {text start end line pos mod} {
+ 	set prev [PreviousWord ${start} ${line}]
+ 	if {[llength ${prev}] && "--" != $prev && \
+-		("-" == [string index ${prev} 0] || 1 == ${pos)}} {
++		("-" == [string index ${prev} 0] || 1 == ${pos})} {
+ 		set cmds [RemoveUsedOptions ${line} {
+ 			-all -nocase --} {--}]
+ 		if {[llength ${cmds}]} {
+@@ -3449,7 +3449,7 @@
+ proc complete(switch) {text start end line pos mod} {
+ 	set prev [PreviousWord ${start} ${line}]
+ 	if {[llength ${prev}] && "--" != ${prev} && \
+-		("-" == [string index ${prev} 0] || 1 == ${pos)}} {
++		("-" == [string index ${prev} 0] || 1 == ${pos})} {
+ 		set cmds [RemoveUsedOptions ${line} {
+ 			-exact -glob -regexp --} {--}]
+ 		if {[llength ${cmds}]} {

@@ -1,19 +1,17 @@
-#!/bin/sh
+#!/bin/sh 
 
-echo "libtoolize..."
-libtoolize --force --automake 
+echo "applying patches..."
+quilt push -a
+mv aux/config.guess aux/config.guess.backup
+mv aux/config.sub aux/config.sub.backup
+cp /usr/share/misc/config.guess aux/
+cp /usr/share/misc/config.sub aux/
 
-echo "aclocal..."
-aclocal
-
-echo "autoheader..."
-autoheader
-
-echo "autoconf..."
-autoconf --force    
-
-echo "automake..."
-automake --add-missing --force-missing  
+touch aclocal.m4
+touch stamp-h.in
+touch config.h.in
+touch Makefile.in
+touch configure
 
 echo "configure..."
 ./configure $*

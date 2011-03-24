@@ -1,12 +1,12 @@
 FILE: "/home/joze/src/tclreadline/README"
-LAST MODIFICATION: "Mit, 10 Jan 2001 06:29:33 +0100 (joze)"
-(C) 1998 - 2001 by Johannes Zellner, <johannes@zellner.org>
-$Id: README,v 2.10 2001/01/10 05:32:28 joze Exp $
+LAST MODIFICATION: "Fre, 08 Dez 2000 01:42:39 +0100 (joze)"
+(C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
+$Id: README,v 2.9 2000/12/08 00:45:45 joze Exp $
 ---
 
 tclreadline -- gnu readline for tcl
 http://www.zellner.org/tclreadline/
-Copyright (c) 1998 - 2001, Johannes Zellner <johannes@zellner.org>
+Copyright (c) 1998 - 2000, Johannes Zellner <johannes@zellner.org>
 
 This software is copyright under the BSD license.
 

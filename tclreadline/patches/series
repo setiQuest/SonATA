@@ -1,0 +1,11 @@
+manpage.diff
+tclshpath.diff
+completion_pbug.diff
+completion_matches.diff
+memuse.diff
+complete_nontcl.diff
+varnames.diff
+tclrldir.diff
+kfreebsd.diff
+disable_signal_handling.diff
+allow_multiline_input.diff

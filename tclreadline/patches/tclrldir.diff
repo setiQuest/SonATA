@@ -1,0 +1,27 @@
+
+Index: tclreadline-2.1.0/configure
+===================================================================
+--- tclreadline-2.1.0.orig/configure
++++ tclreadline-2.1.0/configure
+@@ -1862,7 +1862,7 @@
+ fi
+ TCLRL_LIBDIR="${prefix}/lib"
+ 
+-TCLRL_DIR="${TCLRL_LIBDIR}/tclreadline$VERSION"
++TCLRL_DIR="/usr/share/tcltk/tclreadline$VERSION"
+ 
+ 
+ # HEADERS
+Index: tclreadline-2.1.0/configure.in
+===================================================================
+--- tclreadline-2.1.0.orig/configure.in
++++ tclreadline-2.1.0/configure.in
+@@ -91,7 +91,7 @@
+ fi
+ TCLRL_LIBDIR="${prefix}/lib"
+ AC_SUBST(TCLRL_LIBDIR)
+-TCLRL_DIR="${TCLRL_LIBDIR}/tclreadline$VERSION"
++TCLRL_DIR="/usr/share/tcltk/tclreadline$VERSION"
+ AC_SUBST(TCLRL_DIR)
+ 
+ # HEADERS

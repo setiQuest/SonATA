@@ -1,0 +1,90 @@
+Index: tclreadline/tclreadlineSetup.tcl.in
+===================================================================
+--- tclreadline.orig/tclreadlineSetup.tcl.in	2011-03-24 21:53:22.219018685 +0200
++++ tclreadline/tclreadlineSetup.tcl.in	2011-03-24 21:55:39.766865247 +0200
+@@ -313,6 +313,85 @@
+     }
+ }
+ 
++# T. Kilsdonk Feb 2002
++# A variation on the Loop proc that does not allow
++# multiline input (ie, no secondary input prompts).
++
++
++proc LoopOneLine {args} {
++
++    eval Setup ${args}
++
++    uplevel #0 {
++
++	while {1} {
++
++	    if [info exists tcl_prompt2] {
++		set prompt2 $tcl_prompt2
++	    } else {
++		set prompt2 ">"
++	    }
++
++	    if {[catch {
++		if {"" != [namespace eval ::tclreadline {info procs prompt1}]} {
++		    set LINE [::tclreadline::readline read \
++		    [::tclreadline::prompt1]]
++
++
++		    # Check for any chars that would prompt for additional
++		    # input, ie., [], {}, or single or double quotes.
++		    # This prevents the user from getting stuck in an
++		    # input mode.
++
++		    set matchstr "*\[\\\[\"\'\{\}]*"
++
++		    if [ string match $matchstr $LINE ] {
++			puts "** Invalid input characters entered: $LINE"
++			puts "** Don't use quotes or brackets."
++			set LINE ""
++		    }
++
++		} else {
++		    set LINE [::tclreadline::readline read %]
++		}
++		while {![::tclreadline::readline complete $LINE]} {
++		    append LINE "\n"
++		    append LINE [tclreadline::readline read ${prompt2}]
++		}
++	    } ::tclreadline::errorMsg]} {
++		puts stderr [list tclreadline::Loop: error. \
++		$::tclreadline::errorMsg]
++		continue
++	    }
++
++	    # Magnus Eriksson <magnus.eriksson@netinsight.se> proposed
++	    # to add the line also to tclsh's history.
++	    #
++	    # I decided to add only lines which are different from
++	    # the previous one to the history. This is different
++	    # from tcsh's behaviour, but I found it quite convenient
++	    # while using mshell on os9.
++	    #
++	    if {[string length $LINE] && [history event 0] != $LINE} {
++		history add $LINE
++	    }
++
++	    if [catch {
++		set result [eval $LINE]
++		if {$result != "" && [tclreadline::Print]} {
++		    puts $result
++		}
++		set result ""
++	    } ::tclreadline::errorMsg] {
++		puts stderr $::tclreadline::errorMsg
++		puts stderr [list while evaluating $LINE]
++	    }
++
++	}
++    }
++}
++
++
+ proc Print {args} {
+     variable PRINT
+     if ![info exists PRINT] {

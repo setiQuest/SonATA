@@ -1,0 +1,13 @@
+Index: tclreadline/tclreadline.c
+=====================================================================
+--- tclreadline.orig/tclreadline.c
++++ tclreadline/tclreadline.c
+@@ -745,7 +745,7 @@
+     }
+ 
+     if (!matches && tclrl_use_builtin_completer) {
+-	matches = completion_matches(text, TclReadline0generator);
++	matches = rl_completion_matches(text, (rl_compentry_func_t *)TclReadline0generator);
+     }
+ 
+     return matches;

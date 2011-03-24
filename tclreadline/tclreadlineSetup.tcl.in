@@ -1,12 +1,12 @@
 #!/usr/locanl/bin/tclsh
 # FILE: "/home/joze/src/tclreadline/tclreadlineSetup.tcl.in"
-# LAST MODIFICATION: "Mit, 10 Jan 2001 06:29:34 +0100 (joze)"
-# (C) 1998 - 2001 by Johannes Zellner, <johannes@zellner.org>
-# $Id: tclreadlineSetup.tcl.in,v 2.11 2001/08/10 20:05:53 dizzi Exp $
+# LAST MODIFICATION: "Sat, 01 Jul 2000 21:53:28 +0200 (joze)"
+# (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
+# $Id: tclreadlineSetup.tcl.in,v 2.9 2000/07/01 22:18:08 joze Exp $
 # ---
 # tclreadline -- gnu readline for tcl
 # http://www.zellner.org/tclreadline/
-# Copyright (c) 1998 - 2001, Johannes Zellner <johannes@zellner.org>
+# Copyright (c) 1998 - 2000, Johannes Zellner <johannes@zellner.org>
 # This software is copyright under the BSD license.
 
 
@@ -136,7 +136,7 @@ proc Setup {args} {
 	    ::tclreadline::Init
 	}
 
-	if {[catch {::tclreadline::prompt1}] && [info nameofexecutable] != ""} {
+	if {[catch {set a [::tclreadline::prompt1]}] && [info nameofexecutable] != ""} {
 
 	    namespace eval ::tclreadline {
 		variable prompt_string
@@ -263,76 +263,6 @@ proc Loop {args} {
 
 	while {1} {
 
-	    # Try to transform {puts -nonewline stdout =>} into {concat =>}
-	    if [info exists tcl_prompt2] {
-		regsub "puts\[ \t]*(-nonewline)?\[ \t](stdout)?" $tcl_prompt2 \
-			"concat" tcl_prompt2
-	    }
-
-	    if {[catch {
-		if {"" != [namespace eval ::tclreadline {info procs prompt1}]} {
-		    set ::tclreadline::LINE [::tclreadline::readline read \
-		    [::tclreadline::prompt1]]
-		} else {
-		    set ::tclreadline::LINE [::tclreadline::readline read %]
-		}
-		while {![::tclreadline::readline complete $::tclreadline::LINE]} {
-		    append ::tclreadline::LINE "\n"
-		    append ::tclreadline::LINE [::tclreadline::readline read [
-		        if [info exists tcl_prompt2] {
-			    eval $tcl_prompt2
-			} else {
-			    concat ">"
-			}
-		    ]]
-		}
-	    } ::tclreadline::errorMsg]} {
-		puts stderr [list tclreadline::Loop: error. \
-		$::tclreadline::errorMsg]
-		continue
-	    }
-
-	    # Magnus Eriksson <magnus.eriksson@netinsight.se> proposed
-	    # to add the line also to tclsh's history.
-	    #
-	    # I decided to add only lines which are different from
-	    # the previous one to the history. This is different
-	    # from tcsh's behaviour, but I found it quite convenient
-	    # while using mshell on os9.
-	    #
-	    if {[string length $::tclreadline::LINE] && [history event 0] != $::tclreadline::LINE} {
-		history add $::tclreadline::LINE
-	    }
-
-	    if [catch {
-		set ::tclreadline::result [eval $::tclreadline::LINE]
-		if {$::tclreadline::result != "" && [::tclreadline::Print]} {
-		    puts $::tclreadline::result
-		}
-		set ::tclreadline::result ""
-	    } ::tclreadline::errorMsg] {
-		puts stderr $::tclreadline::errorMsg
-		puts stderr [list while evaluating $::tclreadline::LINE]
-	    }
-
-	}
-    }
-}
-
-
-# T. Kilsdonk Feb 2002
-# A variation on the Loop proc that does not allow
-# multiline input (ie, no secondary input prompts).
-
-
-proc LoopOneLine {args} {
-
-    eval Setup ${args}
-
-    uplevel #0 {
-
-	while {1} {
-
 	    if [info exists tcl_prompt2] {
 		set prompt2 $tcl_prompt2
 	    } else {
@@ -343,21 +273,6 @@ proc LoopOneLine {args} {
 		if {"" != [namespace eval ::tclreadline {info procs prompt1}]} {
 		    set LINE [::tclreadline::readline read \
 		    [::tclreadline::prompt1]]
-
-
-		    # Check for any chars that would prompt for additional
-		    # input, ie., [], {}, or single or double quotes.
-		    # This prevents the user from getting stuck in an
-		    # input mode.
-
-		    set matchstr "*\[\\\[\"\'\{\}]*"
-
-		    if [ string match $matchstr $LINE ] {
-			puts "** Invalid input characters entered: $LINE"
-			puts "** Don't use quotes or brackets."
-			set LINE ""
-		    }
-
 		} else {
 		    set LINE [::tclreadline::readline read %]
 		}
@@ -397,8 +312,6 @@ proc LoopOneLine {args} {
 	}
     }
 }
-
-
 
 proc Print {args} {
     variable PRINT

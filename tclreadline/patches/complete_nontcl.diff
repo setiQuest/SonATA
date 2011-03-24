@@ -1,0 +1,22 @@
+Index: tclreadline/tclreadlineCompleter.tcl
+=====================================================================
+--- tclreadline.orig/tclreadlineCompleter.tcl
++++ tclreadline/tclreadlineCompleter.tcl
+@@ -625,7 +625,7 @@
+ 			}
+ 		}
+ 	}
+-	if {![catch [list set type [image type ${cmd}]]]} {
++	if {![catch {list set type [image type ${cmd}]}]} {
+ 		switch -- ${type} {
+ 			photo {
+ 				set result [PhotoObj ${text} ${start} ${end} ${line} ${pos}]
+@@ -1460,7 +1460,7 @@
+ 			# this can raise an error, if alias is
+ 			# no valid command.
+ 			#
+-			if {[catch [list set alias [namespace origin $alias]]]} {
++			if {[catch {set alias [namespace origin $alias]}]} {
+ 				return ""
+ 			}
+ 

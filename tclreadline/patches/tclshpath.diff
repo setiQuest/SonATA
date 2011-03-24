@@ -1,0 +1,27 @@
+Index: tclreadline/pkgIndex.tcl.in
+=====================================================================
+--- tclreadline.orig/pkgIndex.tcl.in
++++ tclreadline/pkgIndex.tcl.in
+@@ -1,4 +1,3 @@
+-#!/usr/local/bin/tclsh
+ # FILE: "/home/joze/src/tclreadline/pkgIndex.tcl.in"
+ # LAST MODIFICATION: "Sat, 01 Jul 2000 21:53:04 +0200 (joze)"
+ # (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
+Index: tclreadline/tclreadlineInit.tcl.in
+=====================================================================
+--- tclreadline.orig/tclreadlineInit.tcl.in
++++ tclreadline/tclreadlineInit.tcl.in
+@@ -1,4 +1,3 @@
+-#!/usr/local/bin/tclsh
+ # FILE: "/home/joze/src/tclreadline/tclreadlineInit.tcl.in"
+ # LAST MODIFICATION: "Mit, 20 Sep 2000 19:29:26 +0200 (joze)"
+ # (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
+Index: tclreadline/tclreadlineSetup.tcl.in
+=====================================================================
+--- tclreadline.orig/tclreadlineSetup.tcl.in
++++ tclreadline/tclreadlineSetup.tcl.in
+@@ -1,4 +1,3 @@
+-#!/usr/locanl/bin/tclsh
+ # FILE: "/home/joze/src/tclreadline/tclreadlineSetup.tcl.in"
+ # LAST MODIFICATION: "Sat, 01 Jul 2000 21:53:28 +0200 (joze)"
+ # (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>

@@ -1,0 +1,18 @@
+Index: tclreadline/tclreadline.c
+===================================================================
+--- tclreadline.orig/tclreadline.c	2011-03-24 21:44:32.427233880 +0200
++++ tclreadline/tclreadline.c	2011-03-24 21:45:08.086685088 +0200
+@@ -559,6 +559,13 @@
+ Tclreadline_Init(Tcl_Interp *interp)
+ {
+     int status;
++
++    /* T. Kilsdonk  27 Feb 2002.  
++       Turn off readline signal handlers.
++    */
++
++    rl_catch_signals = 0;
++
+     Tcl_CreateObjCommand(interp, "::tclreadline::readline", TclReadlineCmd,
+ 	(ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
+     tclrl_interp = interp;
