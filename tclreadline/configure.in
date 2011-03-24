@@ -1,18 +1,18 @@
 dnl -*- autoconf -*-
 dnl FILE: "/home/joze/src/tclreadline/configure.in"
-dnl LAST MODIFICATION: "Fre, 08 Dez 2000 01:36:25 +0100 (joze)"
-dnl (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
-dnl $Id: configure.in,v 1.3 2007/05/08 15:56:48 kilsdonk Exp $
+dnl LAST MODIFICATION: "Mit, 10 Jan 2001 06:26:43 +0100 (joze)"
+dnl (C) 1998 - 2001 by Johannes Zellner, <johannes@zellner.org>
+dnl $Id: configure.in,v 2.27 2001/01/10 05:32:28 joze Exp $
 dnl ---
 dnl tclreadline -- gnu readline for tcl
 dnl http://www.zellner.org/tclreadline/
-dnl Copyright (c) 1998 - 2000, Johannes Zellner <johannes@zellner.org>
+dnl Copyright (c) 1998 - 2001, Johannes Zellner <johannes@zellner.org>
 dnl This software is copyright under the BSD license.
 
 AC_INIT(tclreadline.c)
 AM_CONFIG_HEADER(config.h)
 AC_PREREQ(2.13)
-AC_REVISION($Revision: 1.3 $)
+AC_REVISION($Revision: 2.27 $)
 AC_CONFIG_AUX_DIR(./aux)
 
 MAJOR=9
@@ -132,12 +132,7 @@ AC_ARG_WITH(tlib-library,
     [  --with-tlib-library=DIR
 		  lib spec to tlib (e.g. '-L/usr/local/lib -lncurses')],
     LIBS="$LIBS $withval",
-
-# kilsdonk: 2007-05-08 using ncurses generates this error:
-# ld: fatal: relocations remain against allocatable but non-writable sections
-#    for tlib in ncurses termlib termcap curses; do
-
-    for tlib in termlib termcap curses; do
+    for tlib in ncurses termlib termcap curses; do
 	brk=yes
 	AC_CHECK_LIB($tlib, tputs, , brk=no)
 	if test $brk = "yes"; then
@@ -161,26 +156,33 @@ AC_ARG_WITH(readline-includes,
             [  --with-readline-includes=DIR readline include files in DIR],
             rl_includes=$withval, rl_includes="")
 
+dnl look for readline/readline.h
+dnl          ^^^^^^^^
 AC_MSG_CHECKING([where to look for readline.h])
 READLINE_INCLUDE_DIR=""
-for dir in $rl_includes /usr/local/include/readline /usr/local/include /usr/include/readline /usr/include ; do
-    if test -r $dir/readline.h; then
+for dir in $rl_includes /usr/local/include /usr/include ; do
+    if test -r $dir/readline/readline.h; then
         READLINE_INCLUDE_DIR=$dir
         break
     fi
 done
+
+dnl look directly in the include dirs for readline.h
+if test -z "$READLINE_INCLUDE_DIR"; then
+    for dir in $rl_includes /usr/local/include /usr/include ; do
+	if test -r $dir/readline.h; then
+	    READLINE_INCLUDE_DIR=$dir
+	    AC_DEFINE_UNQUOTED(READLINE_LIBRARY, 1, [ Define if we have libreadline. ])
+	    break
+	fi
+    done
+fi
 
 if test -z "$READLINE_INCLUDE_DIR"; then
     AC_MSG_ERROR([
   Can't find readline.h.
   Use --with-readline-includes to specify the directory
   containing readline.h on your system.])
-else
-    AC_MSG_RESULT($READLINE_INCLUDE_DIR/readline.h)
-	base="`(basename ${READLINE_INCLUDE_DIR}) 2>/dev/null`"
-	if test "x${base}" != "xreadline"; then
-		AC_DEFINE_UNQUOTED(READLINE_LIBRARY, 1, [ Define if we have libreadline. ])
-	fi
 fi
 
 AC_ARG_WITH(readline-library,

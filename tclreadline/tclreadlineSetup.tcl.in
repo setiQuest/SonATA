@@ -1,12 +1,12 @@
 #!/usr/locanl/bin/tclsh
 # FILE: "/home/joze/src/tclreadline/tclreadlineSetup.tcl.in"
-# LAST MODIFICATION: "Sat, 01 Jul 2000 21:53:28 +0200 (joze)"
-# (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
-# $Id: tclreadlineSetup.tcl.in,v 1.2 2002/02/28 21:57:47 kilsdonk Exp $
+# LAST MODIFICATION: "Mit, 10 Jan 2001 06:29:34 +0100 (joze)"
+# (C) 1998 - 2001 by Johannes Zellner, <johannes@zellner.org>
+# $Id: tclreadlineSetup.tcl.in,v 2.11 2001/08/10 20:05:53 dizzi Exp $
 # ---
 # tclreadline -- gnu readline for tcl
 # http://www.zellner.org/tclreadline/
-# Copyright (c) 1998 - 2000, Johannes Zellner <johannes@zellner.org>
+# Copyright (c) 1998 - 2001, Johannes Zellner <johannes@zellner.org>
 # This software is copyright under the BSD license.
 
 
@@ -136,7 +136,7 @@ proc Setup {args} {
 	    ::tclreadline::Init
 	}
 
-	if {[catch {set a [::tclreadline::prompt1]}] && [info nameofexecutable] != ""} {
+	if {[catch {::tclreadline::prompt1}] && [info nameofexecutable] != ""} {
 
 	    namespace eval ::tclreadline {
 		variable prompt_string
@@ -263,22 +263,28 @@ proc Loop {args} {
 
 	while {1} {
 
+	    # Try to transform {puts -nonewline stdout =>} into {concat =>}
 	    if [info exists tcl_prompt2] {
-		set prompt2 $tcl_prompt2
-	    } else {
-		set prompt2 ">"
+		regsub "puts\[ \t]*(-nonewline)?\[ \t](stdout)?" $tcl_prompt2 \
+			"concat" tcl_prompt2
 	    }
 
 	    if {[catch {
 		if {"" != [namespace eval ::tclreadline {info procs prompt1}]} {
-		    set LINE [::tclreadline::readline read \
+		    set ::tclreadline::LINE [::tclreadline::readline read \
 		    [::tclreadline::prompt1]]
 		} else {
-		    set LINE [::tclreadline::readline read %]
+		    set ::tclreadline::LINE [::tclreadline::readline read %]
 		}
-		while {![::tclreadline::readline complete $LINE]} {
-		    append LINE "\n"
-		    append LINE [tclreadline::readline read ${prompt2}]
+		while {![::tclreadline::readline complete $::tclreadline::LINE]} {
+		    append ::tclreadline::LINE "\n"
+		    append ::tclreadline::LINE [::tclreadline::readline read [
+		        if [info exists tcl_prompt2] {
+			    eval $tcl_prompt2
+			} else {
+			    concat ">"
+			}
+		    ]]
 		}
 	    } ::tclreadline::errorMsg]} {
 		puts stderr [list tclreadline::Loop: error. \
@@ -294,24 +300,25 @@ proc Loop {args} {
 	    # from tcsh's behaviour, but I found it quite convenient
 	    # while using mshell on os9.
 	    #
-	    if {[string length $LINE] && [history event 0] != $LINE} {
-		history add $LINE
+	    if {[string length $::tclreadline::LINE] && [history event 0] != $::tclreadline::LINE} {
+		history add $::tclreadline::LINE
 	    }
 
 	    if [catch {
-		set result [eval $LINE]
-		if {$result != "" && [tclreadline::Print]} {
-		    puts $result
+		set ::tclreadline::result [eval $::tclreadline::LINE]
+		if {$::tclreadline::result != "" && [::tclreadline::Print]} {
+		    puts $::tclreadline::result
 		}
-		set result ""
+		set ::tclreadline::result ""
 	    } ::tclreadline::errorMsg] {
 		puts stderr $::tclreadline::errorMsg
-		puts stderr [list while evaluating $LINE]
+		puts stderr [list while evaluating $::tclreadline::LINE]
 	    }
 
 	}
     }
 }
+
 
 # T. Kilsdonk Feb 2002
 # A variation on the Loop proc that does not allow

@@ -2,14 +2,14 @@
  /* ==================================================================
 
     FILE: "/home/joze/src/tclreadline/wishrl.c"
-    LAST MODIFICATION: "Sat, 25 Mar 2000 20:52:13 +0100 (joze)"
-    (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
-    $Id: wishrl.c,v 1.1.1.1 2002/02/28 21:23:50 kilsdonk Exp $
+    LAST MODIFICATION: "Mit, 10 Jan 2001 06:29:34 +0100 (joze)"
+    (C) 1998 - 2001 by Johannes Zellner, <johannes@zellner.org>
+    $Id: wishrl.c,v 1.4 2001/01/10 05:32:28 joze Exp $
     ---
 
     tclreadline -- gnu readline for tcl
     http://www.zellner.org/tclreadline/
-    Copyright (c) 1998 - 2000, Johannes Zellner <johannes@zellner.org>
+    Copyright (c) 1998 - 2001, Johannes Zellner <johannes@zellner.org>
 
     This software is copyright under the BSD license.
 

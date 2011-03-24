@@ -1,14 +1,14 @@
 # -*- tclsh -*-
 # FILE: "/home/joze/src/tclreadline/tclreadlineCompleter.tcl"
-# LAST MODIFICATION: "Sat, 01 Jul 2000 16:15:55 +0200 (joze)"
-# (C) 1998 - 2000 by Johannes Zellner, <johannes@zellner.org>
-# $Id: tclreadlineCompleter.tcl,v 1.1.1.1 2002/02/28 21:23:50 kilsdonk Exp $
+# LAST MODIFICATION: "Mit, 10 Jan 2001 06:29:33 +0100 (joze)"
+# (C) 1998 - 2001 by Johannes Zellner, <johannes@zellner.org>
+# $Id: tclreadlineCompleter.tcl,v 2.24 2001/01/10 05:32:28 joze Exp $
 # vim:set ts=4:
 # ---
 #
 # tclreadline -- gnu readline for tcl
 # http://www.zellner.org/tclreadline/
-# Copyright (c) 1998 - 2000, Johannes Zellner <johannes@zellner.org>
+# Copyright (c) 1998 - 2001, Johannes Zellner <johannes@zellner.org>
 #
 # This software is copyright under the BSD license.
 #
