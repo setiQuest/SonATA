@@ -963,8 +963,11 @@ proc prepareChannelizerStartCmd { chanHost } {
     global env
     puts $outchan_ "starting $chanHost"
 
+# gethostip is being used due to a DNS issue at Hat Creek
+# this line can be replaced with set host [exec hostname]
+# if your installation does not have gethostip
 
-    set host [ exec hostname ]
+    set host [ exec gethostip -d [exec hostname] ]
 
     set cmd ""
 
@@ -1032,8 +1035,11 @@ proc prepareChannelizerRestartCmd { chanName } {
     global env
     puts $outchan_ "restarting $chanName"
 
-    set host [ exec hostname ]
-    # puts $outchan_ "hostname is $host"
+# gethostip is being used due to a DNS issue at Hat Creek
+# this line can be replaced with set host [exec hostname]
+# if your installation does not have gethostip
+
+    set host [ exec gethostip -d [exec hostname] ]
 
     set cmd ""
 

@@ -3267,20 +3267,20 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
 	   << " UNIX_TIMESTAMP(activityStartTime), dxNumber, signalIdNumber,"
 	   << " type, pfa, snr"
 	   << " FROM " << CandidateSignalTableName
-	   << " WHERE sigClass = '"
+	   << " WHERE activityId = " << previousActId_
+	   << " AND targetId = " << actUnit_->targetId_
+	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
+	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
+	   << " AND sigClass = '"
 	   << SseDxMsg::signalClassToString(CLASS_CAND)
 	   << "'"
-	   << " AND activityId = " << previousActId_
-	   << " AND targetId = " << actUnit_->targetId_
 	   << " AND (reason = '"
 	   << SseDxMsg::signalClassReasonToBriefString(CONFIRM)
 	   << "'"
 	   << " OR reason = '"
 	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
 	   << "'"
-	   << ")"
-	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
-	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_;
+	   << ")";
 
    /*
      If this is an OFF observation, then only get candidates
@@ -3498,10 +3498,12 @@ string LookUpCandidatesFromCounterpartDxs::prepareQuery()
 	   << "pulsePeriod, numberOfPulses, res "
 	   << " FROM " << CandidateSignalTableName
 	   << " WHERE "
-	   << " sigClass = '"
+	   << " activityId = " << actUnit_->getActivityId()
+	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
+	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
+	   << " AND sigClass = '"
 	   << SseDxMsg::signalClassToString(CLASS_CAND)
 	   << "'"
-	   << " AND activityId = " << actUnit_->getActivityId()
 	   << " AND dxNumber != " << actUnit_->getDxNumber()
 	   << " AND beamNumber != " << actUnit_->beamNumber_
 	   << " AND "
@@ -3514,8 +3516,6 @@ string LookUpCandidatesFromCounterpartDxs::prepareQuery()
 	   << SseDxMsg::signalClassReasonToBriefString(PASSED_POWER_THRESH)
 	   << "') "
 	   << ")"
-	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
-	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
 	   << " ORDER by rfFreq "
 	   << " ";
 

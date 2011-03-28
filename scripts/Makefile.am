@@ -93,6 +93,7 @@ scripts_SCRIPTS = \
 	runpacketsend-dx-vger-dualpol.tcsh \
 	runpacketsend-dx-vger-xpol.tcsh \
 	runpacketsend-setiquest.tcsh \
+	runpacketsend-data-capture-replay.tcsh \
 	setiquest-12dxs.tcl \
 	setiquest-env-vars.tcsh \
 	sonata-cron-begin-cygnus-exoplanets-session.sh \
@@ -147,7 +148,12 @@ scripts_SCRIPTS = \
 	tscope-setup-2beam-4l-data-collect.tcl \
 	tscope-setup-2beam-data-collect.tcl \
 	data-collect-kepler-2beam-800KHz.tcl \
-	data-collect-2beam-env-vars.tcsh 
+	data-collect-2beam-env-vars.tcsh \
+	data-capture-2beam-1500-1520MHz.tcl \
+	data-capture-kepler-2beam.tcl \
+	data-capture-replay-beam1-kepler.tcl \
+	data-capture-replay-env-vars.tcsh
+
 
 
 
