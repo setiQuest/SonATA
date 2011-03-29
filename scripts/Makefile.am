@@ -150,6 +150,8 @@ scripts_SCRIPTS = \
 	tscope-setup-2beam-4l-1500-1520MHz.tcl \
 	tscope-setup-2beam-data-collect.tcl \
 	tscope-setup-3beam-data-capture-1500-1520MHz.tcl \
+	tscope-setup-3beam-data-capture-8420-8430MHz.tcl \
+	tscope-setup-2beam-data-capture-8420-8430MHz.tcl \
 	data-collect-kepler-2beam-800KHz.tcl \
 	data-collect-2beam-env-vars.tcsh \
 	data-collect-3beam-env-vars.tcsh \
