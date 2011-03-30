@@ -36,6 +36,7 @@
 #include <iostream>
 #include "CwClusterer.h"
 #include "DxErr.h"
+#include "Log.h"
 #include "SuperClusterer.h"
 #include "System.h"
 
@@ -226,6 +227,11 @@ CwClusterer::clusterDone(Cluster &cluster)
 {
 	CwPowerSignal cw;
 	cw.sig.path.rfFreq = binsToAbsoluteMHz(cluster.hr.startBin);
+	if (cw.sig.path.rfFreq < baseFreq || cw.sig.path.rfFreq >= highFreq) {
+		LogWarning(ERR_SOC, activityId, "freq = %lf, low = %lf, high = %lf",
+				cw.sig.path.rfFreq, baseFreq, highFreq);
+		return;
+	}
 #ifdef notdef
 	cw.sig.signalId = 0; // XXX
 #endif
