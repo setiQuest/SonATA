@@ -95,7 +95,8 @@ enum DxErrCode {
 	ERR_DCE,						// data collection error
 	ERR_NPRR,						// no packet received, restarting
 	ERR_ASM,						// all subchannels masked
-	ERR_PSU							// packet streams unsynchronized
+	ERR_PSU,							// packet streams unsynchronized
+	ERR_SOC							// signal lies outside channel
 };
 
 }
