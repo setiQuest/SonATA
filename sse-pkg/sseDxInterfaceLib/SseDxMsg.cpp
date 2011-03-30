@@ -172,7 +172,8 @@ static const char *SignalClassReasonStrings[] =
   "TOO_MANY_CANDIDATES",
   "BIRDIE_SCAN",
   "RFI_SCAN",
-  "SECONDARY_NO_SIGNAL_FOUND"
+  "SECONDARY_NO_SIGNAL_FOUND",
+  "SIGNAL_NOT_IN_CHANNEL"
 
 };
 
@@ -257,6 +258,7 @@ static const char *BriefSignalClassReasonStrings[] =
     "BrdScan", // "BIRDIE_SCAN",
     "RFIScan", // "RFI_SCAN"
     "SNoSigl", // "SECONDARY_NO_SIGNAL_FOUND"
+    "SNtInCh", // "SIGNAL_NOT_IN_CHANNEL"
 
 };
 
