@@ -63,7 +63,8 @@ public:
 	SuperClusterer();
 	~SuperClusterer();
 
-	void setObsParams(double baseFreq, int nSpectra, double binWidth,
+	void setObsParams(int32_t activityId, int nSpectra, double baseFreq,
+			double chanWidth, double binWidth,
 			SignalIdGenerator& sigGen);
 	void setSuperClusterGap(float64_t gap);
 
@@ -90,13 +91,18 @@ private:
 #endif
 
 	struct ObsParams {
+		int32_t activityId;
 		int nSpectra;
 		double baseFreq;
+		double chanWidth;
 		double binWidth;
 
-		ObsParams(): nSpectra(64), baseFreq(1.0), binWidth(1.0) {}
-		ObsParams(int nSpectra_, double baseFreq_, double binWidth_):
-			nSpectra(nSpectra_), baseFreq(baseFreq_), binWidth(binWidth_) {}
+		ObsParams(): activityId(-1), nSpectra(64), baseFreq(1.0),
+				chanWidth(1.0), binWidth(1.0) {}
+		ObsParams(int32_t activityId_, int nSpectra_, double baseFreq_,
+				double chanWidth_, double binWidth_): activityId(activityId_),
+			nSpectra(nSpectra_), baseFreq(baseFreq_), chanWidth(chanWidth_),
+			binWidth(binWidth_) {}
 	};
 
 	struct SuperClusterDescription
