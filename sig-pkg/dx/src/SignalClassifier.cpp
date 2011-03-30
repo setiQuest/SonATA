@@ -115,7 +115,7 @@ SignalClassifier::classifySignals(Activity *act)
 }
 
 void
-SignalClassifier::classifySignal(Activity * act, SignalDescription& sig,
+SignalClassifier::classifySignal(Activity *act, SignalDescription& sig,
 		SuperClusterer *superClusterer, int32_t sigNum, int32_t maxCandidates)
 {
 	sig.pol = superClusterer->getNthPolarization(sigNum);
@@ -154,15 +154,15 @@ SignalClassifier::classifySignal(Activity * act, SignalDescription& sig,
 		}
 	}
 	// test for too-big-drift signal
-        if (operations.test(REJECT_ZERO_DRIFT_SIGNALS)) {
-                float32_t absDrift = fabs(sig.path.drift);
-                float32_t maxDrift = params.maxDriftRateTolerance
-                		* MHZ_TO_GHZ(params.dxSkyFreq);
-                if (absDrift > maxDrift) {
-                        sig.sigClass = CLASS_RFI;
-                        sig.reason = DRIFT_TOO_HIGH;
-                }
-        }
+	if (operations.test(REJECT_ZERO_DRIFT_SIGNALS)) {
+		float32_t absDrift = fabs(sig.path.drift);
+		float32_t maxDrift = params.maxDriftRateTolerance
+				* MHZ_TO_GHZ(params.dxSkyFreq);
+		if (absDrift > maxDrift) {
+				sig.sigClass = CLASS_RFI;
+				sig.reason = DRIFT_TOO_HIGH;
+		}
+	}
 
 	// test for test signal mask match; this overrides rfi mask
 	if (operations.test(APPLY_TEST_SIGNAL_MASK) && testSignal) {
@@ -196,6 +196,11 @@ SignalClassifier::classifySignal(Activity * act, SignalDescription& sig,
 	// class unknown
 	if (!operations.test(CANDIDATE_SELECTION))
 		sig.sigClass = CLASS_UNKNOWN;
+	else if (sig.path.rfFreq < act->getChannel()->getLowFreq()
+			|| sig.path.rfFreq >= act->getChannel()->getHighFreq()) {
+		sig.sigClass = CLASS_UNKNOWN;
+		sig.reason = SIGNAL_NOT_IN_CHANNEL;
+	}
 	else if (sig.sigClass == CLASS_CAND
 			&& act->getCandidateCount(ANY_TYPE) >= maxCandidates) {
 		++candidatesOverMax;
