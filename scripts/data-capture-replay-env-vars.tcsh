@@ -30,7 +30,7 @@ setenv CHANHOST1X_OPTS "-P X  -i 50100 -j 51100 -I 228.1.50.1 -J 229.1.1.1"
 setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2"
 
 # Actual Host Names
-setenv DXHOST1 "seti000-3"
+setenv DXHOST1 "seti000-2"
 setenv DXHOST2 "seti000-4"
 
 # DX names

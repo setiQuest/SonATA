@@ -160,6 +160,7 @@ scripts_SCRIPTS = \
 	data-capture-kepler-2beam.tcl \
 	data-capture-kepler-3beam.tcl \
 	data-capture-replay-beam1-kepler.tcl \
+	data-capture-replay-beam1-1500-1520MHz.tcl \
 	data-capture-replay-env-vars.tcsh
 
 
