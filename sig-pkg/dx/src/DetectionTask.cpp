@@ -231,7 +231,8 @@ DetectionTask::startActivity(Msg *msg)
 
 	// compute the bottom edge of the frequency range, which is 1/2
 	// subchannel below the middle of subchannel 0
-	float64_t deltaFreq = -activity->getChannelWidthMHz() / 2;
+	float64_t chanWidth = activity->getChannelWidthMHz();
+	float64_t deltaFreq = -chanWidth / 2;
 	deltaFreq -= activity->getSubchannelWidthMHz() / 2;
 
 	// initialize the signal ID for this activity
@@ -246,8 +247,8 @@ DetectionTask::startActivity(Msg *msg)
 	int32_t spectra = activity->getSpectra(params.daddResolution);
 	float64_t binWidth = activity->getBinWidthHz(params.daddResolution);
 
-	superClusterer->setObsParams(params.dxSkyFreq + deltaFreq, spectra,
-			binWidth, sigGen);
+	superClusterer->setObsParams(params.activityId, spectra,
+			params.dxSkyFreq + deltaFreq, chanWidth, binWidth, sigGen);
 	superClusterer->setSuperClusterGap(HZ_TO_MHZ(params.clusteringFreqTolerance));
 
 	// send a message to the control task indicating that signal detection
