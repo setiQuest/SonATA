@@ -125,6 +125,7 @@ scripts_SCRIPTS = \
 	sserc.tcl \
 	switchConfigFile-1beam-800KHz-1dx.tcsh \
 	switchConfigFile-2beam-data-collect-2dx.tcsh \
+	switchConfigFile-3beam-data-collect-3dx.tcsh \
 	switchConfigFile-1beam-800KHz-24dxs.tcsh \
 	switchConfigFile-3beam-800KHz-72dxs.tcsh \
 	switchConfigFile-beam2-800KHz-24dxs.tcsh \
@@ -146,12 +147,20 @@ scripts_SCRIPTS = \
 	runpacketrelay-beam1.tcsh* \
 	runpacketrelay-beam2.tcsh* \
 	tscope-setup-2beam-4l-data-collect.tcl \
+	tscope-setup-2beam-4l-1500-1520MHz.tcl \
 	tscope-setup-2beam-data-collect.tcl \
+	tscope-setup-3beam-data-capture-1500-1520MHz.tcl \
+	tscope-setup-3beam-data-capture-8420-8430MHz.tcl \
+	tscope-setup-2beam-data-capture-8420-8430MHz.tcl \
 	data-collect-kepler-2beam-800KHz.tcl \
 	data-collect-2beam-env-vars.tcsh \
+	data-collect-3beam-env-vars.tcsh \
 	data-capture-2beam-1500-1520MHz.tcl \
+	data-capture-3beam-1500-1520MHz.tcl \
 	data-capture-kepler-2beam.tcl \
+	data-capture-kepler-3beam.tcl \
 	data-capture-replay-beam1-kepler.tcl \
+	data-capture-replay-beam1-1500-1520MHz.tcl \
 	data-capture-replay-env-vars.tcsh
 
 
