@@ -227,13 +227,13 @@ CwClusterer::clusterDone(Cluster &cluster)
 {
 	CwPowerSignal cw;
 	cw.sig.path.rfFreq = binsToAbsoluteMHz(cluster.hr.startBin);
-#ifdef notdef
+
+	// if the clustered signal lies outside the channel, send a warning
+	// to the SSE.
 	if (cw.sig.path.rfFreq < baseFreq || cw.sig.path.rfFreq >= highFreq) {
 		LogWarning(ERR_SOC, activityId, "freq = %lf, low = %lf, high = %lf",
 				cw.sig.path.rfFreq, baseFreq, highFreq);
-		return;
 	}
-#endif
 #ifdef notdef
 	cw.sig.signalId = 0; // XXX
 #endif

@@ -343,16 +343,12 @@ PulseClusterer::clusterDone(Train &cluster)
 	// format cluster description
 	hdr->sig.path.rfFreq = binsToAbsoluteMHz((int) startBin);
 
-#ifdef notdef
-	// if the clustered signal lies outside the channel, discard it with
+	// if the clustered signal lies outside the channel, send
 	// a warning to the SSE
 	if (hdr->sig.path.rfFreq < baseFreq || hdr->sig.path.rfFreq >= highFreq) {
 		LogWarning(ERR_SOC, activityId, "freq = %lf, low = %lf, high = %lf",
 				hdr->sig.path.rfFreq, baseFreq, highFreq);
-		fftwf_free(hdr);
-		return;
 	}
-#endif
 #ifdef notdef
 	hdr->sig.signalId = 0; // XXX
 #endif
