@@ -48,7 +48,7 @@ using namespace sonata_lib;
 
 namespace dx {
 
-const char *const CODE_VERSION = "kes-1.0.7";
+const char *const CODE_VERSION = "kes-1.0.8";
 
 // defines controlling system configuration
 #define ASSIGN_CPUS			(true)
