@@ -67,9 +67,10 @@ void
 ChildClusterer::setObsParams(int32_t activityId_, int nSpectra_,
 		double baseFreq_, double chanWidth_, double binWidth_)
 {
+	activityId = activityId_;
+	spectraPerObs = nSpectra_; // XXX adjust for resolution ???
 	baseFreq = baseFreq_;
 	highFreq = baseFreq_ + chanWidth_;
-	spectraPerObs = nSpectra_; // XXX adjust for resolution ???
 	binWidth = binWidth_; // XXX adjust for resolution
 	secondsPerObs = (spectraPerObs/2)/binWidth;
 }
