@@ -146,10 +146,12 @@ scripts_SCRIPTS = \
 	sonata-start-gal-survey-obs.tcl \
 	runpacketrelay-beam1.tcsh* \
 	runpacketrelay-beam2.tcsh* \
+	runpacketrelay-beam3.tcsh* \
 	tscope-setup-2beam-4l-data-collect.tcl \
 	tscope-setup-2beam-4l-1500-1520MHz.tcl \
 	tscope-setup-2beam-data-collect.tcl \
 	tscope-setup-3beam-data-capture-1500-1520MHz.tcl \
+	tscope-setup-3beam-data-capture-1500-1540MHz.tcl \
 	tscope-setup-3beam-data-capture-8420-8430MHz.tcl \
 	tscope-setup-2beam-data-capture-8420-8430MHz.tcl \
 	data-collect-kepler-2beam-800KHz.tcl \
