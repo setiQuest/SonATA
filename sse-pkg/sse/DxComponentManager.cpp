@@ -44,9 +44,9 @@
 #include "MsgSender.h"
 
 static const string RcvrBirdieMaskFilename("rcvrBirdieMask.tcl");
-static const string BirdieMaskFilenameIfc1("birdieMaskIfc1.tcl");
-static const string BirdieMaskFilenameIfc2("birdieMaskIfc2.tcl");
-static const string BirdieMaskFilenameIfc3("birdieMaskIfc3.tcl");
+static const string BirdieMaskFilenameIfc1("birdieMask.tcl");
+static const string BirdieMaskFilenameIfc2("birdieMask.tcl");
+static const string BirdieMaskFilenameIfc3("birdieMask.tcl");
 
 
 static void sendConfigureDx(DxProxy *proxy, const string &archiverHostname,
