@@ -24,11 +24,11 @@ setenv CHANHOST3X_NAME "chan3x"
 setenv CHANOPTS "-N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1"
 
 # Beam Specific Command Line options for Channelizers
-setenv CHANHOST1X_OPTS "-C 128 -c 49 -P X  -i 50000 -j 51000 -I 226.1.50.1 -J 227.1.1.1"
-setenv CHANHOST1Y_OPTS "-P Y  -i 50001 -j 51100 -I 226.1.50.2 -J 229.1.1.1"
-setenv CHANHOST2X_OPTS "-C 16 -c 2 -P X  -i 50002 -j 52100 -I 226.2.50.1 -J 229.2.1.1"
+setenv CHANHOST1X_OPTS "-C 128 -c 49 -P X  -i 50000 -j 51000 -I 226.1.50.1 -J 10.1.50.52"
+setenv CHANHOST1Y_OPTS "-P Y  -i 50001 -j 51100 -I 226.1.50.2 -J 10.1.50.52"
+setenv CHANHOST2X_OPTS "-C 16 -c 2 -P X  -i 50002 -j 52100 -I 226.2.50.1 -J 10.1.50.56"
 setenv CHANHOST2Y_OPTS "-P Y  -i 50003 -j 52100 -I 226.2.50.2 -J 229.2.1.1"
-setenv CHANHOST3X_OPTS "-C 16 -c 2 -P X  -i 50004 -j 53100 -I 226.3.50.1 -J 229.3.1.1"
+setenv CHANHOST3X_OPTS "-C 16 -c 2 -P X  -i 50004 -j 53100 -I 226.3.50.1 -J 10.1.50.60"
 setenv CHANHOST3Y_OPTS "-P Y  -i 50005 -j 53100 -I 226.3.50.2 -J 229.3.1.1"
 
 #---------------------------
