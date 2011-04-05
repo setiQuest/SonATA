@@ -55,7 +55,8 @@ public:
 	ChildClusterer(SuperClusterer *parent);
 	virtual ~ChildClusterer();
 
-	void setObsParams(double baseFreq, int nSpectra, double binWidth);
+	void setObsParams(int32_t actId, int nSpectra, double baseFreq,
+			double chanWidth, double binWidth);
 
 	// state management
 	virtual void allHitsLoaded();
@@ -98,13 +99,16 @@ protected:
 
 	void lock() { cLock.lock(); }
 	void unlock() { cLock.unlock(); }
-private:
-	bool complete;
-
-	double baseFreq; // MHz
+protected:
+	int32_t activityId;
 	int spectraPerObs;
+	double baseFreq; // MHz
+	double highFreq; // MHz
 	double binWidth; // Hz
 	double secondsPerObs;
+
+private:
+	bool complete;
 
 	// disallow
 	ChildClusterer(const ChildClusterer&);

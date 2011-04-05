@@ -48,7 +48,7 @@ const int MAX_DX_ACTIVITIES = 2;
 const int MAX_CW_COHERENT_SEGMENTS = 8;
 
 const char *const SSE_DX_INTERFACE_VERSION =
-   "SSE-DX Interface Version 1.130 2010-Jan-14  0:39:37 UTC";
+   "SSE-DX Interface Version 1.131 2011-Mar-30  20:01:48 UTC";
 
 typedef char8_t sseDxInterfaceVersionNumber[MAX_TEXT_STRING];
 
@@ -155,6 +155,7 @@ enum SignalClassReason {
     BIRDIE_SCAN,
     RFI_SCAN,
     SECONDARY_NO_SIGNAL_FOUND,
+    SIGNAL_NOT_IN_CHANNEL,
 
     SIGNAL_CLASS_REASON_END
 };

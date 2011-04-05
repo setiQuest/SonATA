@@ -563,7 +563,7 @@ Channel::getLowFreq()
 float64_t
 Channel::getHighFreq()
 {
-	float64_t freq = activity->getSkyFreq() - (getChannelWidthMHz()
+	float64_t freq = activity->getSkyFreq() + (getChannelWidthMHz()
 			- getSubchannelWidthMHz()) / 2;
 	return (freq);
 }

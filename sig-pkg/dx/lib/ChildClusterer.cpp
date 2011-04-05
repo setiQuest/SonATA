@@ -47,11 +47,13 @@ TR_DECLARE(detail);
 
 ChildClusterer::ChildClusterer(SuperClusterer *parent_ )
 	: parent(parent_)
-	, complete(false)
-	, baseFreq(1.0)
+	, activityId(-1)
 	, spectraPerObs(64)
+	, baseFreq(1.0)
+	, highFreq(1.0)
 	, binWidth(1.0)
 	, secondsPerObs(spectraPerObs/binWidth)
+	, complete(false)
 {
 	parent->attach(this);
 }
@@ -62,11 +64,13 @@ ChildClusterer::~ChildClusterer()
 }
 
 void
-ChildClusterer::setObsParams(double baseFreq_, int nSpectra_,
-								double binWidth_)
+ChildClusterer::setObsParams(int32_t activityId_, int nSpectra_,
+		double baseFreq_, double chanWidth_, double binWidth_)
 {
-	baseFreq = baseFreq_;
+	activityId = activityId_;
 	spectraPerObs = nSpectra_; // XXX adjust for resolution ???
+	baseFreq = baseFreq_;
+	highFreq = baseFreq_ + chanWidth_;
 	binWidth = binWidth_; // XXX adjust for resolution
 	secondsPerObs = (spectraPerObs/2)/binWidth;
 }

@@ -94,6 +94,7 @@ ErrMsgList dxList[] = {
 	{ (ErrCode) ERR_NPRR, "no packets received, restarting" },
 	{ (ErrCode) ERR_ASM, "all subchannels masked" },
 	{ (ErrCode) ERR_PSU, "R&L packet streams are unsynchronized" },
+	{ (ErrCode) ERR_SOC, "Signal lies outside channel" },
 
 
 	{ ERR_END, "" }

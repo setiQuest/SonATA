@@ -35,8 +35,10 @@
 //
 #include <iostream>
 #include "CwClusterer.h"
-#include "SuperClusterer.h"
 #include "DxErr.h"
+#include "Log.h"
+#include "SuperClusterer.h"
+#include "System.h"
 
 using std::cout;
 using std::endl;
@@ -53,10 +55,12 @@ CwClusterer::CwClusterer( SuperClusterer *parent, Polarization p  )
 	, clusterRange(3)
 	, pole(p)
 {
+	clusterList.reserve(DEFAULT_CLUSTERS);
 }
 
 CwClusterer::~CwClusterer()
 {
+	clearHits();
 }
 
 //-------------------------
@@ -223,6 +227,13 @@ CwClusterer::clusterDone(Cluster &cluster)
 {
 	CwPowerSignal cw;
 	cw.sig.path.rfFreq = binsToAbsoluteMHz(cluster.hr.startBin);
+
+	// if the clustered signal lies outside the channel, send a warning
+	// to the SSE.
+	if (cw.sig.path.rfFreq < baseFreq || cw.sig.path.rfFreq >= highFreq) {
+		LogWarning(ERR_SOC, activityId, "freq = %lf, low = %lf, high = %lf",
+				cw.sig.path.rfFreq, baseFreq, highFreq);
+	}
 #ifdef notdef
 	cw.sig.signalId = 0; // XXX
 #endif

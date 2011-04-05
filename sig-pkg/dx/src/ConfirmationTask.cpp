@@ -60,7 +60,7 @@ ConfirmationTask::getInstance()
 ConfirmationTask::ConfirmationTask(string tname_):
 		QTask(tname_, CONFIRMATION_PRIO), cwCount(0), pulseCount(0),
 		activity(0), archiveQ(0), controlQ(0), respQ(0), cwQ(0), pulseQ(0),
-		msgList(0), partitionSet(0), state(0)
+		cSem(0), msgList(0), partitionSet(0), state(0)
 {
 }
 
@@ -250,10 +250,8 @@ ConfirmationTask::handleSecondaryMsg(Msg *msg)
 	Error err = 0;
 	switch (msg->getCode()) {
 	case SEND_CANDIDATE_PULSE_SIGNAL:
-		err = confirmPulseSignal(msg, act);
-		break;
 	case SEND_CW_COHERENT_SIGNAL:
-		err = confirmCwCoherentSignal(msg, act);
+		err = confirmSecondarySignal(msg, act);
 		break;
 	case SEND_CW_COHERENT_CANDIDATE_RESULT:
 		Debug(DEBUG_CONFIRM, 0, "SEND_CW_COHERENT_CANDIDATE_RESULT");
@@ -327,6 +325,25 @@ ConfirmationTask::startActivity(Msg *msg)
 	// record the activity
 	activity = act;
 	Debug(DEBUG_CONFIRM, (void *) activity, "record act");
+
+	// if there are secondary candidates still in the list,
+	// delete them.
+	if (secondaryList.size()) {
+		SecondaryList::iterator p;
+		for (p = secondaryList.begin(); p != secondaryList.end(); ++p) {
+			SecondaryList::iterator q = p;
+			Assert(msgList->free(*q));
+			secondaryList.erase(q);
+		}
+	}
+	// create the confirmation semaphore, destroying any old one
+	// that exists.
+	if (cSem) {
+		delete cSem;
+		cSem = 0;
+	}
+	cSem = new Semaphore("confirmation", 1);
+	Assert(cSem);
 
 	// set all confirmation detector bits
 	stopMask.set();
@@ -709,41 +726,55 @@ ConfirmationTask::confirmPulse(Signal *pulseSig)
 ////////////////////////////////////////////////////////////////////////
 // secondary-specific message handlers
 ///////////////////////////////////////////////////////////////////////
-//
-// confirmPulseSignal: confirm a pulse signal at the secondary site
-//
-// Notes:
-//		The complete set of pulses in the train is included in the signal
-//		description.
-//
+/**
+ * Confirm a pulse or CW coherent signal on a secondary beam
+ */
 Error
-ConfirmationTask::confirmPulseSignal(Msg *msg, Activity *act)
+ConfirmationTask::confirmSecondarySignal(Msg *msg, Activity *act)
 {
+	// save the message with its signal description on the candidate list
 	Msg *cMsg = msgList->alloc();
 	msg->forward(cMsg);
-	pulseQ->send(cMsg);
+	secondaryList.push_back(cMsg);
+	// send the signal if possible
+	processNextSecondarySignal();
 	return (0);
 }
 
-//
-// Notes:
-//		Process a CW coherent signal from the primary detector.
-//		This method just forwards the message to the CW confirmation
-//		detector.
-//
-Error
-ConfirmationTask::confirmCwCoherentSignal(Msg *msg, Activity *act)
+/**
+ * Process next secondary signal
+ *
+ * Description:\n
+ * 	If we are not currently confirming a signal, confirms the next
+ * 	secondary signal in the list.
+ */
+void
+ConfirmationTask::processNextSecondarySignal()
 {
-	Msg *cMsg = msgList->alloc();
-	msg->forward(cMsg);
-	cwQ->send(cMsg);
-	return (0);
+	if (!cSem->wait(0) && secondaryList.size()) {
+		Msg *msg = secondaryList.front();
+		secondaryList.pop_front();
+		switch (msg->getCode()) {
+		case SEND_CANDIDATE_PULSE_SIGNAL:
+			pulseQ->send(msg);
+			break;
+		case SEND_CW_COHERENT_SIGNAL:
+			cwQ->send(msg);
+			break;
+		default:
+			LogFatal(ERR_IMT, activity->getActivityId(), "code = %d",
+					msg->getCode());
+			break;
+		}
+	}
 }
 
 Error
 ConfirmationTask::sendCwCoherentResult(Msg *msg, Activity *act)
 {
 	CwCoherentSignal *cohSig = static_cast<CwCoherentSignal *> (msg->getData());
+
+	cSem->signal();
 
 	// find the signal
 	Signal *sig = act->findCandidate(cohSig->sig.signalId);
@@ -774,6 +805,8 @@ ConfirmationTask::sendCwCoherentResult(Msg *msg, Activity *act)
 	// if that's all the signals, send confirmation complete
 	if (!act->getFirstCandidate(DETECTED))
 		sendConfirmationComplete(act);
+	else
+		processNextSecondarySignal();
 	return (0);
 }
 
@@ -782,6 +815,8 @@ ConfirmationTask::sendPulseResult(Msg *msg, Activity *act)
 {
 	PulseSignalHeader *pulseSig = static_cast<PulseSignalHeader *> (msg->getData());
 
+
+	cSem->signal();
 
 	// find the signal
 	Signal *sig = act->findCandidate(pulseSig->sig.signalId);
@@ -808,6 +843,8 @@ ConfirmationTask::sendPulseResult(Msg *msg, Activity *act)
 	// if that's all the signals, send confirmation complete
 	if (!act->getFirstCandidate(DETECTED))
 		sendConfirmationComplete(act);
+	else
+		processNextSecondarySignal();
 	return (0);
 }
 
@@ -831,6 +868,8 @@ ConfirmationTask::endCwCoherentSignals(Msg *msg, Activity *act)
 			"act->getFirstCandidate");
 	if (!act->getFirstCandidate(DETECTED))
 		sendConfirmationComplete(act);
+	else
+		processNextSecondarySignal();
 	return (0);
 }
 

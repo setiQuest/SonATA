@@ -37,11 +37,12 @@
 #include <stdlib.h>
 #include <values.h>
 #include <fftw3.h>
+#include "DxErr.h"
+#include "Log.h"
 #include "Partition.h"
 #include "PulseClusterer.h"
 #include "Statistics.h"
 #include "System.h"
-#include "DxErr.h"
 
 using std::cout;
 using std::endl;
@@ -62,6 +63,7 @@ PulseClusterer::PulseClusterer( SuperClusterer *parent, Resolution res )
 	//, clusterRange(3)
 	//, baseFreq(1.0)
 {
+	clusterList.reserve(DEFAULT_CLUSTERS);
 }
 
 PulseClusterer::~PulseClusterer()
@@ -333,13 +335,20 @@ PulseClusterer::clusterDone(Train &cluster)
 //		cout << endl;
 		addPulseToLR((*i).second);
 	}
-	float32_t driftInBinsPerSpectrum;
-	float32_t startBin;
+	float32_t driftInBinsPerSpectrum = 0;
+	float32_t startBin = 0;
 	if (!getLRResult(&startBin,&driftInBinsPerSpectrum))
 		Fatal(666);
 
 	// format cluster description
 	hdr->sig.path.rfFreq = binsToAbsoluteMHz((int) startBin);
+
+	// if the clustered signal lies outside the channel, send
+	// a warning to the SSE
+	if (hdr->sig.path.rfFreq < baseFreq || hdr->sig.path.rfFreq >= highFreq) {
+		LogWarning(ERR_SOC, activityId, "freq = %lf, low = %lf, high = %lf",
+				hdr->sig.path.rfFreq, baseFreq, highFreq);
+	}
 #ifdef notdef
 	hdr->sig.signalId = 0; // XXX
 #endif

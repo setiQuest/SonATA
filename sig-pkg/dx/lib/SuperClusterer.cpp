@@ -83,15 +83,15 @@ SuperClusterer::~SuperClusterer()
 }
 
 void
-SuperClusterer::setObsParams(double baseFreq, int nSpectra,
-		double binWidth, SignalIdGenerator& sigGen)
+SuperClusterer::setObsParams(int32_t actId, int nSpectra, double baseFreq,
+		double chanWidth, double binWidth, SignalIdGenerator& sigGen)
 {
 	lock();
 	signalIdGen = sigGen;
-	obsParams = ObsParams(nSpectra, baseFreq, binWidth);
+	obsParams = ObsParams(actId, nSpectra, baseFreq, chanWidth, binWidth);
 	for (int i = 0; i < (int) children.size(); ++i) {
 		ChildClusterer *ch = children[i];
-		ch->setObsParams(baseFreq, nSpectra, binWidth);
+		ch->setObsParams(actId, nSpectra, baseFreq, chanWidth, binWidth);
 	}
 	unlock();
 }
@@ -256,8 +256,8 @@ void
 SuperClusterer::attach(ChildClusterer *child)
 {
 	lock();
-	child->setObsParams(obsParams.baseFreq, obsParams.nSpectra,
-			obsParams.binWidth);
+	child->setObsParams(obsParams.activityId, obsParams.nSpectra,
+			obsParams.baseFreq, obsParams.chanWidth, obsParams.binWidth);
 	children.push_back(child);
 	unlock();
 }

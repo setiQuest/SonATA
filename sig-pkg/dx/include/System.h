@@ -48,7 +48,7 @@ using namespace sonata_lib;
 
 namespace dx {
 
-const char *const CODE_VERSION = "kes-1.0.0";
+const char *const CODE_VERSION = "sonata-1.0.35";
 
 // defines controlling system configuration
 #define ASSIGN_CPUS			(true)
@@ -177,6 +177,8 @@ const int32_t MAX_DIFF_SPECTRA = 1;
 const uint32_t MAX_TRAIN_PULSES = 250;
 const float64_t MAX_DRIFT = 1.0;
 //const int32_t BASELINE_ACT_DELAY_HF = 4;
+
+const int32_t DEFAULT_CLUSTERS = 1000;
 
 // maximum # of channels supported
 //const int32_t MAX_CHANNELS = 1;

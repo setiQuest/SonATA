@@ -39,12 +39,14 @@
 #define _ConfirmationTaskH
 
 #include <bitset>
+#include <list>
 #include "Activity.h"
 #include "CwConfirmationTask.h"
 #include "Msg.h"
 #include "Partition.h"
 #include "PulseConfirmationTask.h"
 #include "QTask.h"
+#include "Semaphore.h"
 #include "Signal.h"
 #include "State.h"
 #include "Struct.h"
@@ -52,6 +54,8 @@
 using namespace sonata_lib;
 
 namespace dx {
+
+typedef list<Msg *> SecondaryList;
 
 // done bit masks
 enum {
@@ -96,7 +100,8 @@ private:
 	Queue *respQ;						// SSE response queue
 	Queue *cwQ;							// CW confirmation queue
 	Queue *pulseQ;						// Pulse confirmation queue
-//	Signal *cwSig;						// current cw signal
+	Semaphore *cSem;					// candidate semaphore
+	SecondaryList secondaryList;		// list of pending secondary candidates
 
 	MsgList *msgList;
 	PartitionSet *partitionSet;
@@ -136,8 +141,8 @@ private:
 	void confirmPulse(Signal *pulseSig);
 
 	// secondary methods
-	Error confirmPulseSignal(Msg *msg, Activity *act);
-	Error confirmCwCoherentSignal(Msg *msg, Activity *act);
+	Error confirmSecondarySignal(Msg *msg, Activity *act);
+	void processNextSecondarySignal();
 	Error sendCwCoherentResult(Msg *msg, Activity *act);
 	Error sendPulseResult(Msg *msg, Activity *act);
 	Error endCwCoherentSignals(Msg *msg, Activity *act);
