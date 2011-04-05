@@ -43,25 +43,15 @@
 #include "ChannelPacket.h"
 #include "BeamPacket.h"
 
-/*
- * 2010-08  Robert Ackermann
- *
- * program packetchan2beam recombines split header and data files
- * from setiQuest observations into packets compatible with SonATA
- * channelizer input (64 byte headers with 4096 byte 8-bit data).
- *
- * there are a number of assumptions: little endian processor, single
- * pol. packets of 8-bit coefficients, ...  if setiQuest observations
- * advance to such things as dual-pol. and wider bandwidths the
- * associated utilities must become more sophisticated. 
- */
 
 using namespace std;
 
 extern char *optarg;
 extern int optind, opterr;
 
+#define MAX_POLS 2
 ATADataPacketHeader beamHdr;
+ATADataPacketHeader chanHdr;
 BeamPacket beampkt;
 
 ChannelPacket chanpkt1;
@@ -73,6 +63,14 @@ void convertchan2beam( ifstream& datastrm);
 void usage();
 void mylog(const char *msg);
 void mylog(ostringstream& ossmsg);
+int seq[MAX_POLS];
+int pktCount[MAX_POLS];
+int expected[MAX_POLS];
+int packetCount = 0;
+int seqGaps = 0;
+int totalMissedPackets =0;
+
+
  
 void short2char(signed char * outpkt, signed short * inpkt1,
 		signed short * inpkt2, int count) {
@@ -97,6 +95,7 @@ void short2char(signed char * outpkt, signed short * inpkt1,
 int main(int argc, char **argv) {
   int c;
   static char optstring[] = "";  // no options for this version 
+  ostringstream ossmsg;
 
   // prepare for inevitable options
   while ((c = getopt(argc, argv, optstring)) != -1) {
@@ -109,6 +108,11 @@ int main(int argc, char **argv) {
     usage();
     exit(EXIT_FAILURE);
   }
+
+//	Initialize packetcounters.
+        expected[0] = expected[1] = 0;
+                seq[0] = seq[1] = 0;
+            pktCount[0] = pktCount[1] = 0;
 
   ifstream datastrm;
 
@@ -129,8 +133,43 @@ int main(int argc, char **argv) {
     mylog("closing data file");
     datastrm.close();
   }
-
+        ossmsg << "Packets: " << packetCount << endl
+                << seqGaps << " gap(s) in sequence; " << totalMissedPackets
+                << " Total Missed Packets" << endl;
+	mylog(ossmsg);
   return (EXIT_SUCCESS);
+}
+
+void checkForMissingPackets( ATADataPacketHeader * hdr )
+{
+  ostringstream ossmsg;
+  int pol;
+
+  if (hdr->polCode == ATADataPacketHeader::XLINEAR) pol = 0;
+        else if (hdr->polCode == ATADataPacketHeader::YLINEAR) pol = 1;
+        else {
+              ossmsg << "Invalid Polarization " << hdr->polCode << endl;
+		mylog(ossmsg);
+               pol = 1;
+                }
+
+   if (!seq[pol] && !expected[pol]) expected[pol] = hdr->seq;
+   seq[pol] = hdr->seq;
+
+   pktCount[pol]++;
+   if ( seq[pol] != expected[pol] )
+                {
+                        ossmsg << " pol " << pol
+                          << " Expected " << expected[pol]
+                          << " Got " << seq[pol]
+                        << " packet count " << pktCount[pol]
+                                << endl;
+			mylog(ossmsg);
+                    totalMissedPackets += (seq[pol]-expected[pol]);
+                        seqGaps++;
+                }
+    expected[pol] = seq[pol] + 1;
+    packetCount++;
 }
 
 void convertchan2beam( ifstream& datastrm) {
@@ -148,9 +187,20 @@ void convertchan2beam( ifstream& datastrm) {
       exit(EXIT_FAILURE);
     }
     chanpkt1.marshall();
+
+// Copy the header into the output buffer
+
     memcpy( reinterpret_cast<void *>(&beamHdr), 
 	reinterpret_cast<void *>(&chanpkt1), sizeof(beamHdr)) ;
     
+
+	if (packetCount == 0)
+	{
+		expected[0] = expected[1] = beamHdr.seq;
+	}
+
+// Check for missing packets
+	checkForMissingPackets(&beamHdr );
     datastrm.read((char *) &chanpkt2, pktSize);  
     if (datastrm.gcount() != pktSize) {
       ossmsg << "(2) unexpected data file read count " <<
@@ -158,7 +208,16 @@ void convertchan2beam( ifstream& datastrm) {
       mylog(ossmsg);
       exit(EXIT_FAILURE);
     }
+// Read the next packet
+
     chanpkt2.marshall();
+    memcpy( reinterpret_cast<void *>(&chanHdr), 
+	reinterpret_cast<void *>(&chanpkt2), sizeof(chanHdr)) ;
+// Check for missing packets
+	checkForMissingPackets( &chanHdr );
+// Convert both packets' data to 8 bit complex and store in 
+// output buffer.
+
     short2char(reinterpret_cast<signed char *>(beampkt.getData()),
 		reinterpret_cast <signed short *>(chanpkt1.getData()),
 		reinterpret_cast <signed short *>(chanpkt2.getData()),
