@@ -157,6 +157,7 @@ scripts_SCRIPTS = \
 	data-collect-kepler-2beam-800KHz.tcl \
 	data-collect-2beam-env-vars.tcsh \
 	data-collect-3beam-env-vars.tcsh \
+	data-collect-3beam-Kepler-HZ-env-vars.tcsh \
 	data-capture-2beam-1500-1520MHz.tcl \
 	data-capture-3beam-1500-1520MHz.tcl \
 	data-capture-kepler-2beam.tcl \
