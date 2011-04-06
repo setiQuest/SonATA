@@ -16,6 +16,9 @@ sched set beam1 on
 sched set beam2 on
 sched set beam3 on
 sched set followup on
+sched set catshigh exoplanets
+sched set catslow habcat,tycho2subset,tycho2remainder
+sched set targetmerit catalog
 
 
 dx set length 388
