@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
     mylog("closing data file");
     datastrm.close();
   }
-        ossmsg << "Packets: " << packetCount << endl
+        ossmsg <<  "Packets: " << packetCount << " " 
                 << seqGaps << " gap(s) in sequence; " << totalMissedPackets
                 << " Total Missed Packets" << endl;
 	mylog(ossmsg);
@@ -184,6 +184,10 @@ void convertchan2beam( ifstream& datastrm) {
       ossmsg << "(1) unexpected data file read count " <<
         dec << datastrm.gcount();
       mylog(ossmsg);
+        ossmsg << "Packets: " << packetCount << endl
+                << seqGaps << " gap(s) in sequence; " << totalMissedPackets
+                << " Total Missed Packets" << endl;
+	mylog(ossmsg);
       exit(EXIT_FAILURE);
     }
     chanpkt1.marshall();
@@ -206,6 +210,10 @@ void convertchan2beam( ifstream& datastrm) {
       ossmsg << "(2) unexpected data file read count " <<
         dec << datastrm.gcount();
       mylog(ossmsg);
+        ossmsg << "Packets: " << packetCount << endl
+                << seqGaps << " gap(s) in sequence; " << totalMissedPackets
+                << " Total Missed Packets" << endl;
+	mylog(ossmsg);
       exit(EXIT_FAILURE);
     }
 // Read the next packet
@@ -227,6 +235,10 @@ void convertchan2beam( ifstream& datastrm) {
     // sanity check for 0xaabbccdd endian order value
     if (beamHdr.order != ATADataPacketHeader::CORRECT_ENDIAN) {
       mylog("output packet header does not contain 0xaabbccdd endian value");
+        ossmsg << "Packets: " << packetCount << endl
+                << seqGaps << " gap(s) in sequence; " << totalMissedPackets
+                << " Total Missed Packets" << endl;
+	mylog(ossmsg);
       exit(EXIT_FAILURE);
     } 
     // fix some of the fields to make packets look like they came
