@@ -1,0 +1,22 @@
+#!/bin/tcsh
+
+# This scripts cleans up any orphan channelizers and dxs
+# on the signal processing machines.
+
+set me=`whoami`
+
+foreach h ( seti000-1: seti001-1: seti002-1 )
+
+set chanCmd="sudo pkill channelizer"
+
+ssh ${me}@$h $chanCmd
+
+end
+
+foreach h (  seti000-2: seti000-3: seti000-4: seti001-2: seti001-3: seti001-4: seti002-2: seti002-3: seti002-4: )
+
+set dxCmd="sudo pkill dx"
+
+ssh ${me}@$h $dxCmd
+
+end
