@@ -38,9 +38,7 @@ setupdir = $(prefix)/setup/
 setup_DATA =
 
 dist_setup_DATA = \
-	birdieMaskIfc1.tcl \
-	birdieMaskIfc2.tcl \
-	birdieMaskIfc3.tcl \
+	birdieMask.tcl \
 	rcvrBirdieMask.tcl \
 	permRfiMask.tcl \
 	testMask.tcl \

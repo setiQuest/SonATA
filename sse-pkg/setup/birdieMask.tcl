@@ -1,6 +1,6 @@
 ################################################################################
 #
-# File:    birdieMaskIfc3.tcl
+# File:    birdieMask.tcl
 # Project: OpenSonATA
 # Authors: The OpenSonATA code is the result of many programmers
 #          over many years
@@ -29,7 +29,7 @@
 ################################################################################
 
 
-# NSS IF birdies for ifc3
+# BaseBand Birdies
 # All values in MHz
 
 # Format:
@@ -40,6 +40,7 @@
 # ...
 # }
 
-set bandcovered {0.0 40}
+set bandcovered {0.0 45}
 set masks {
+	0.0 .4096
 }

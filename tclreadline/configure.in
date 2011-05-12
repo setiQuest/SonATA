@@ -137,7 +137,7 @@ AC_ARG_WITH(tlib-library,
 # ld: fatal: relocations remain against allocatable but non-writable sections
 #    for tlib in ncurses termlib termcap curses; do
 
-    for tlib in termlib termcap curses; do
+    for tlib in termlib termcap ncurses; do
 	brk=yes
 	AC_CHECK_LIB($tlib, tputs, , brk=no)
 	if test $brk = "yes"; then

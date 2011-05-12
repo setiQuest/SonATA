@@ -28,6 +28,7 @@ EXTRA_DIST = reconfig
 scriptsdir = $(prefix)/scripts/
 
 scripts_SCRIPTS = \
+	cleanup-chan-dx.tcsh \
 	1beam-dualpol-800KHz-24dx-env-vars.tcsh \
 	2beam-dualpol-800KHz-48dx-env-vars.tcsh \
 	3beam-dualpol-800KHz-72dx-env-vars-batch.sh \
