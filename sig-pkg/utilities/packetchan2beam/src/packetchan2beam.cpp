@@ -75,17 +75,20 @@ int totalMissedPackets =0;
 void short2char(signed char * outpkt, signed short * inpkt1,
 		signed short * inpkt2, int count) {
       char temp;
-      for (int i = 0; i < count; i++) {
+      outpkt -= 8;
+      inpkt1 -= 8;
+      inpkt2 -= 8;
+      for (int i = 0; i < 2*count; i++) {
 	     if ( *inpkt1 > 127 ) temp = 127;
-		else if ( *inpkt1 < -128) temp = -128;
+		else if ( *inpkt1 < -127) temp = -127;
 		else temp = static_cast<signed char>(*inpkt1);
              *outpkt = temp;
 		inpkt1++;
 		outpkt++;
 	}
-      for (int i = 0; i < count; i++) {
+      for (int i = 0; i < 2*count; i++) {
 	     if ( *inpkt2 > 127 ) temp = 127;
-		else if ( *inpkt2 < -128) temp = -128;
+		else if ( *inpkt2 < -127) temp = -127;
 		else temp = static_cast<signed char>(*inpkt2);
              *outpkt = temp;
 		inpkt2++;
@@ -177,6 +180,19 @@ void convertchan2beam( ifstream& datastrm) {
 
 	int pktSize = chanpkt1.getDataSize() + sizeof(beamHdr);
 
+	ossmsg << "Data Size = " <<  chanpkt1.getDataSize()
+		<< " Header Size = " << sizeof(beamHdr) << endl;
+	ossmsg << " chanpkt1 address " << &chanpkt1 << endl;
+	ossmsg << " chanpkt1 data address " << chanpkt1.getDataAddress() << endl;
+	ossmsg << " chanpkt1 samples address " << chanpkt1.getSamples() << endl;
+	ossmsg << " chanpkt2 address " << &chanpkt2 << endl;
+	ossmsg << " chanpkt2 data address " << chanpkt2.getDataAddress() << endl;
+	ossmsg << " chanpkt2 samples address " << chanpkt2.getSamples() << endl;
+	ossmsg << " beampkt address " << &beampkt << endl;
+	ossmsg << " beampkt data address " << beampkt.getDataAddress() << endl;
+	ossmsg << " beampkt samples address " << beampkt.getSamples() << endl;
+      mylog(ossmsg);
+
   for (;;) {
     datastrm.read((char *) &chanpkt1, pktSize);  
     if (datastrm.gcount() != pktSize) {
@@ -226,10 +242,10 @@ void convertchan2beam( ifstream& datastrm) {
 // Convert both packets' data to 8 bit complex and store in 
 // output buffer.
 
-    short2char(reinterpret_cast<signed char *>(beampkt.getData()),
-		reinterpret_cast <signed short *>(chanpkt1.getData()),
-		reinterpret_cast <signed short *>(chanpkt2.getData()),
-      		chanpkt1.getDataSize());
+    short2char(reinterpret_cast<signed char *>(beampkt.getSamples()),
+		reinterpret_cast <signed short *>(chanpkt1.getSamples()),
+		reinterpret_cast <signed short *>(chanpkt2.getSamples()),
+      		ATADataPacketHeader::CHANNEL_SAMPLES);
 
 
     // sanity check for 0xaabbccdd endian order value
