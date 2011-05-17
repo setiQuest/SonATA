@@ -77,7 +77,7 @@ void short2char(signed char * outpkt, signed short * inpkt1,
       char temp;
       for (int i = 0; i < count; i++) {
 	     if ( *inpkt1 > 127 ) temp = 127;
-		else if ( *inpkt1 < -128) temp = -128;
+		else if ( *inpkt1 < -127) temp = -127;
 		else temp = static_cast<signed char>(*inpkt1);
              *outpkt = temp;
 		inpkt1++;
@@ -85,7 +85,7 @@ void short2char(signed char * outpkt, signed short * inpkt1,
 	}
       for (int i = 0; i < count; i++) {
 	     if ( *inpkt2 > 127 ) temp = 127;
-		else if ( *inpkt2 < -128) temp = -128;
+		else if ( *inpkt2 < -127) temp = -127;
 		else temp = static_cast<signed char>(*inpkt2);
              *outpkt = temp;
 		inpkt2++;

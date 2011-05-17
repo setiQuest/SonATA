@@ -156,7 +156,6 @@ scripts_SCRIPTS = \
 	tscope-setup-3beam-data-capture-8420-8430MHz.tcl \
 	tscope-setup-2beam-data-capture-8420-8430MHz.tcl \
 	data-collect-kepler-2beam-800KHz.tcl \
-	data-collect-2beam-env-vars.tcsh \
 	data-collect-3beam-env-vars.tcsh \
 	data-collect-3beam-Kepler-HZ-env-vars.tcsh \
 	data-capture-2beam-1500-1520MHz.tcl \
@@ -165,8 +164,17 @@ scripts_SCRIPTS = \
 	data-capture-kepler-3beam.tcl \
 	data-capture-replay-beam1-kepler.tcl \
 	data-capture-replay-beam1-1500-1520MHz.tcl \
+	runpacketsend-beam3-data-capture-replay.tcsh \
+	runpacketsend-beam2-data-capture-replay.tcsh \
+	runpacketsend-beam1-data-capture-replay.tcsh \
+	switchConfigFile-dualbeam-replay.tcsh \
+	data-replay-dualbeam-xpol-env-vars.tcsh \
+	replay-2011-03-31-23.45.1700.5168.tcl \
+	replay-2010-11-06-dorothy_tauceti_1420_1.tcl \
+	replay-2011-03-31-20.49.1513.5168.tcl \
+	replay-2011-03-31-21.11.1523.5168.tcl \
+	replay-2011-03-31-21.40.1523.5168.tcl \
+	replay-2011-03-31-22.01.1528.5168.tcl \
+	replay-2011-03-31-22.22.1518.5168.tcl \
+	replay-2011-03-31-23.27.1695.5168.tcl \
 	data-capture-replay-env-vars.tcsh
-
-
-
-
