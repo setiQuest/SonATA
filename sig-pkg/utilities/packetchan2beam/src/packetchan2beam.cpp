@@ -75,9 +75,6 @@ int totalMissedPackets =0;
 void short2char(signed char * outpkt, signed short * inpkt1,
 		signed short * inpkt2, int count) {
       char temp;
-      outpkt -= 8;
-      inpkt1 -= 8;
-      inpkt2 -= 8;
       for (int i = 0; i < 2*count; i++) {
 	     if ( *inpkt1 > 127 ) temp = 127;
 		else if ( *inpkt1 < -127) temp = -127;
@@ -86,7 +83,7 @@ void short2char(signed char * outpkt, signed short * inpkt1,
 		inpkt1++;
 		outpkt++;
 	}
-      for (int i = 0; i < 2*count; i++) {
+      for (int j = 0; j < 2*count; j++) {
 	     if ( *inpkt2 > 127 ) temp = 127;
 		else if ( *inpkt2 < -127) temp = -127;
 		else temp = static_cast<signed char>(*inpkt2);
@@ -94,6 +91,7 @@ void short2char(signed char * outpkt, signed short * inpkt1,
 		inpkt2++;
 		outpkt++;
 	}
+      
 }
 int main(int argc, char **argv) {
   int c;
@@ -178,22 +176,31 @@ void checkForMissingPackets( ATADataPacketHeader * hdr )
 void convertchan2beam( ifstream& datastrm) {
   ostringstream ossmsg;
 
+        int headerSize = sizeof(beamHdr);
 	int pktSize = chanpkt1.getDataSize() + sizeof(beamHdr);
 
+  double * beamData = reinterpret_cast <double *>(&beampkt);
+  double * pkt1Data = reinterpret_cast <double *> (&chanpkt1);
+  double * pkt2Data = reinterpret_cast <double *>(&chanpkt2);
+
+  for ( int k = 0 ; k < 8; k++)
+  {
+	  beamData++;
+	  pkt1Data++;
+	  pkt2Data++;
+  }
 	ossmsg << "Data Size = " <<  chanpkt1.getDataSize()
-		<< " Header Size = " << sizeof(beamHdr) << endl;
+		<< " Header Size = " << headerSize << endl;
 	ossmsg << " chanpkt1 address " << &chanpkt1 << endl;
-	ossmsg << " chanpkt1 data address " << chanpkt1.getDataAddress() << endl;
-	ossmsg << " chanpkt1 samples address " << chanpkt1.getSamples() << endl;
+	ossmsg << " chanpkt1 samples address " <<  pkt1Data << endl;
 	ossmsg << " chanpkt2 address " << &chanpkt2 << endl;
-	ossmsg << " chanpkt2 data address " << chanpkt2.getDataAddress() << endl;
-	ossmsg << " chanpkt2 samples address " << chanpkt2.getSamples() << endl;
+	ossmsg << " chanpkt2 samples address " << pkt2Data << endl;
 	ossmsg << " beampkt address " << &beampkt << endl;
-	ossmsg << " beampkt data address " << beampkt.getDataAddress() << endl;
-	ossmsg << " beampkt samples address " << beampkt.getSamples() << endl;
+	ossmsg << " beampkt samples address " << beamData << endl;
       mylog(ossmsg);
 
-  for (;;) {
+ for (;;) 
+  {
     datastrm.read((char *) &chanpkt1, pktSize);  
     if (datastrm.gcount() != pktSize) {
       if (datastrm.eof()) return;  // EOF should occur on this read 
@@ -242,9 +249,9 @@ void convertchan2beam( ifstream& datastrm) {
 // Convert both packets' data to 8 bit complex and store in 
 // output buffer.
 
-    short2char(reinterpret_cast<signed char *>(beampkt.getSamples()),
-		reinterpret_cast <signed short *>(chanpkt1.getSamples()),
-		reinterpret_cast <signed short *>(chanpkt2.getSamples()),
+    short2char(reinterpret_cast<signed char *>(beamData),
+		reinterpret_cast <signed short *> (pkt1Data),
+		reinterpret_cast <signed short *> (pkt2Data),
       		ATADataPacketHeader::CHANNEL_SAMPLES);
 
 
