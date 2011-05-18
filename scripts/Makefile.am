@@ -125,6 +125,7 @@ scripts_SCRIPTS = \
 	sserc-auto.tcl \
 	sserc.tcl \
 	switchConfigFile-1beam-800KHz-1dx.tcsh \
+	switchConfigFile-1beam-1dx.tcsh \
 	switchConfigFile-2beam-data-collect-2dx.tcsh \
 	switchConfigFile-3beam-data-collect-3dx.tcsh \
 	switchConfigFile-1beam-800KHz-24dxs.tcsh \

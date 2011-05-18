@@ -68,4 +68,4 @@ setenv DXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS"
 
 # Backend Server Host for offline testing
 setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST localhost
-${HOME}/sonata_install/scripts/switchConfigFile-1beam-800KHz-1dx.tcsh
+${HOME}/sonata_install/scripts/switchConfigFile-1beam-1dx.tcsh

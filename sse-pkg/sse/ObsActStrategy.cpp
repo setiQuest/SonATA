@@ -575,6 +575,7 @@ VERBOSE2( getVerboseLevel(),"tuneDxsForMuptipleBeamsOnSingleTarget()" << endl);
   N/2.
 
  */
+// Obsolete
 void ObsActStrategy::channelizeDxTunings(DxList & dxList,
                                           double chanzerTuneMhz,
                                           double chanzerWidthMhz)

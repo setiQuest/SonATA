@@ -61,6 +61,7 @@ dist_setup_DATA = \
 	standardExpectedSonATAComponents.cfg \
 	expected3beamSonATAComponents.cfg \
 	expectedSonATAComponents-1beam-800KHz-1dx.cfg \
+	expectedSonATAComponents-1beam-1dx.cfg \
 	expectedSonATAComponents-1beam-800KHz-24dx.cfg \
 	expectedSonATAComponents-24dxs.cfg \
 	expectedSonATAComponents-2beam-800KHz-48dx.cfg \
