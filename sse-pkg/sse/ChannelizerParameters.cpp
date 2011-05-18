@@ -57,12 +57,14 @@ struct ChannelizerParametersInternal
 {
    // methods:
    ChannelizerParametersInternal();  
+   RangeParameter<int32_t> delay;
 
     // default copy constructor and assignment operator are safe
    string outString_;
 };
 
-ChannelizerParametersInternal::ChannelizerParametersInternal()
+ChannelizerParametersInternal::ChannelizerParametersInternal():
+	delay("delay","sec","Channelizer Start Delay", 3, 3, 10)
 { 
 
 }
@@ -71,6 +73,10 @@ ChannelizerParametersInternal::ChannelizerParametersInternal()
 // -- end ChannelizerParametersInternal
 // -- begin ChannelizerParameters
 
+int32_t ChannelizerParameters::getDelay()
+{
+   return( internal_->delay.getCurrent() );
+}
 
 ChannelizerParameters::ChannelizerParameters(string command) : 
    SeekerParameterGroup(command),
@@ -113,6 +119,7 @@ ChannelizerParameters::~ChannelizerParameters()
 void ChannelizerParameters::addParameters()
 {
 
+   addParam(internal_->delay);
    sort();
 }
 
