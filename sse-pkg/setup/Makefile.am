@@ -71,6 +71,7 @@ dist_setup_DATA = \
 	expectedSonATAComponents-3beam-800KHz-72dx.cfg \
 	expectedSonATAComponents-48dxs.cfg \
 	expectedSonATAComponents-546KHz-12dx.cfg \
+	expectedSonATAComponents-2beam-546KHz-12dx.cfg \
 	expectedSonATAComponents-96dxs.cfg \
 	expectedSonATAComponents-beam2-800KHz-24dx.cfg \
 	expectedSonATAComponents-jane-test.cfg \
