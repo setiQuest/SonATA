@@ -1,0 +1,131 @@
+# $Id$
+# umlgraph/pic2plot UML sequence diagram
+# see http://www.spinellis.gr/sw/umlgraph
+
+# DX-SSE signal detection messages
+
+.PS
+
+
+copy "sequence.pic";
+
+# doc version
+move right;
+"$Id$" ljust
+
+# title
+move down; move right; move right; 
+"DX - SSE Signal Detection Messages" ljust
+move down;
+
+# vertical spacing between messages
+spacing = 0.30;
+
+# move objects apart horizontally
+movewid = 3.5;
+
+#define the objects
+# SSE
+boxwid = 1.2;
+object(SSE,"SSE: ActUnit");
+
+# DX
+boxwid = 0.75;
+object(DX,"DX");
+
+step();
+
+# message sequences
+
+
+message(DX,SSE,"signalDetectionStarted()");
+
+# --- CW Power, Pulse -----
+active(DX);
+message(DX,SSE,"beginSendingCandidates(Count)");
+lconstraint(DX,"[CW Power Detect, Pulse Detect,");
+lconstraint(DX,"Clustering, Candidate Selection]");
+
+message(DX,SSE,"" "sendCandidateCwPowerSignal(CwPowerSignal)" "OR sendCandidatePulseSignal(PulseSignalHeader, Pulse[ ])");
+step();
+
+
+active(SSE);
+
+message(SSE,DX,"" "requestArchiveData(ArchiveRequest)" "OR discardArchiveData(ArchiveRequest)");
+lconstraint(DX,"[Send Pulse archive data to dxArchiver]");
+
+inactive(SSE);
+
+step();
+message(DX,SSE,"doneSendingCandidates()");
+
+inactive(DX);
+step();
+
+# --- All signals ----
+
+active(DX);
+message(DX,SSE,"beginSendingSignals(DetectionStatistics)");
+lconstraint(DX,"[Send all signals, including");
+lconstraint(DX,"the candidates sent above]");
+
+message(DX,SSE,"" "sendCwPowerSignal(CwPowerSignal)" "OR sendPulseSignal(PulseSignalHeader, Pulse[ ])");
+step();
+
+message(DX,SSE,"doneSendingSignals()");
+inactive(DX);
+step();
+
+# --- Bad Bands ------
+
+active(DX)
+message(DX,SSE,"beginSendingBadBands(Count)");
+lconstraint(DX,"[Report Bad Bands]");
+
+message(DX,SSE,"" "sendCwBadBand(CwBadBand)" "OR sendPulseBadBand(PulseBadBand)");
+step();
+
+message(DX,SSE,"doneSendingBadBands()");
+inactive(DX);
+
+# --- CW coherent ---
+
+step();
+active(DX);
+message(DX,SSE,"beginSendingCwCoherentSignals(Count)");
+lconstraint(DX,"[CW Coherent Detection]");
+message(DX,SSE,"sendCwCoherentSignal(CwCoherentSignal)");
+step();
+
+active(SSE);
+
+message(SSE,DX,"" "requestArchiveData(ArchiveRequest)" "OR discardArchiveData(ArchiveRequest)");
+lconstraint(DX,"[Send CW archive data to dxArchiver]");
+
+
+step();
+inactive(SSE);
+
+message(DX,SSE,"doneSendingCwCoherentSignals()");
+
+inactive(DX)
+step();
+# -- wrap up ---
+
+active(DX)
+message(DX,SSE,"archiveComplete()");
+lconstraint(DX,"[Activity wrapup]");
+message(DX,SSE,"signalDetectionComplete()");
+message(DX,SSE,"dxActivityComplete(ActivityStatus)");
+
+inactive(DX);
+step();
+
+
+
+complete(SSE);
+complete(DX);
+
+.PE
+

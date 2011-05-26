@@ -2805,7 +2805,9 @@ void ObserveActivityImp::startComponents()
 	}
 	else  if(useDx()) //JR  - Added this if statement onto the else
 	{	               //previously this was just an ELSE.
-		SseArchive::SystemLog() << "***CALL startPdsm() " << endl;
+		SseArchive::SystemLog() << "***CALL startChan() " << endl;
+		// Move start Channelizers here.
+		SseArchive::SystemLog() << "***CALL startDxs() " << endl;
 		startDxs();
 	}
 	else

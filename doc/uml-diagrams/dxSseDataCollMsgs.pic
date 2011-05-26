@@ -1,0 +1,96 @@
+# $Id$
+# umlgraph/pic2plot UML sequence diagram
+# see http://www.spinellis.gr/sw/umlgraph
+
+# DX-SSE data collection messages
+
+.PS
+
+
+copy "sequence.pic";
+
+# title
+move down; move right; move right; 
+"DX - SSE Data Collection Messages" ljust
+move down;
+
+# vertical spacing between messages
+spacing = 0.30;
+
+# move objects apart horizontally
+movewid = 3.5;
+
+#define the objects
+# SSE
+boxwid = 1.2;
+object(SSE,"SSE: ActUnit");
+
+# DX
+boxwid = 0.75;
+object(DX,"DX");
+
+step();
+
+# message sequences
+
+message(SSE,DX,"sendDxActivityParameters(DxActivityParameters)");
+message(DX,SSE,"DXTuned()");
+
+message(SSE,DX,"recentRfiMask(RecentRfiMaskHeader, FrequencyBand[ ])");
+lconstraint(DX,"[If required by activity type]");
+
+message(SSE,DX,"beginSendingFollowupSignals(Count)");
+active(SSE);
+active(DX);
+lconstraint(DX,"[If this is a followup activity]");
+
+message(SSE,DX,"" "sendFollowupCwSignal(FollowUpCwSignal)" "OR sendFollowupPulseSignal(FollowupPulseSignal)");
+step();
+message(SSE,DX,"doneSendingFollowupSignals()");
+
+inactive(SSE);
+inactive(DX);
+
+step();
+message(SSE,DX,"startTime(StartActivity)");
+step();
+
+active(DX);
+message(DX,SSE,"baselineInitAccumStarted()");
+lconstraint(DX,"[Baseline Initial Accum]");
+message(DX,SSE,"baselineInitAccumComplete()");
+inactive(DX);
+
+step();
+active(DX);
+message(DX,SSE,"dataCollectionStarted()");
+lconstraint(DX,"[Data Collection]");
+
+message(DX,SSE,"sendBaseline(BaselineHeader, BaselineValue[ ])");
+lconstraint(DX,"[1 per pol for every Nth 1/2 frame]");
+
+message(DX,SSE,"sendBaselineStatistics(BaselineStatistics)");
+lconstraint(DX,"[1 per baseline]");
+
+message(DX,SSE,"" "baselineWarningLimitsExceeded(" "BaselineLimitsExceededDetails)");
+lconstraint(DX,"[check baseline statistics]");
+step();
+message(DX,SSE,"" "baselineErrorLimitsExceeded(" "BaselineLimitsExceededDetails)");
+step();
+
+# multiple args for multiline text
+message(DX,SSE,"" "sendComplexAmplitudes(ComplexAmplitudeHeader,"  "SubbandCoef1KHz[ ])");
+lconstraint(DX,"[1 per pol for each 1/2 frame]");
+
+step();
+message(DX,SSE,"dataCollectionComplete()");
+inactive(DX);
+
+step();
+
+
+complete(SSE);
+complete(DX);
+
+.PE
+

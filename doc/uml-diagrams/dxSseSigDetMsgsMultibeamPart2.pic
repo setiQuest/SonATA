@@ -1,0 +1,144 @@
+# $Id$
+# umlgraph/pic2plot UML sequence diagram
+# see http://www.spinellis.gr/sw/umlgraph
+
+# DX-SSE signal detection messages
+
+.PS
+
+
+# ---- setup & title ---
+
+copy "sequence.pic";
+
+# title
+move down; move right; move right; 
+"DX - SSE Signal Detection Messages - Multibeam Part2 " ljust
+move down;
+
+# vertical spacing between messages
+spacing = 0.30;
+
+# move objects apart horizontally
+#movewid = 3.5;
+movewid = 4.5;
+
+#define the objects
+# SSE
+boxwid = 1.2;
+object(SSE,"SSE: ActUnit");
+
+# DX
+boxwid = 0.75;
+object(DX,"DX");
+
+step();
+
+# ----  message sequences -----
+
+step();
+active(SSE);
+step();
+lconstraint(SSE,"[Wait for signal reports from all dxs]");
+inactive(SSE);
+step();
+
+
+# --- CW Power, Pulse from SSE to Dx
+# (combined list from counterpart dxs on other beams) -----
+
+message(SSE,DX,"beginSendingCandidates(Count)");
+active(SSE);
+lconstraint(DX,"[Forward CW Power, Pulse signals from");
+lconstraint(DX,"counterpart DXs on other beam(s)]");
+
+message(SSE,DX,"" "sendCandidateCwPowerSignal(CwPowerSignal)" "OR sendCandidatePulseSignal(PulseSignalHeader, Pulse[ ])");
+step();
+
+step();
+message(SSE,DX,"doneSendingCandidates()");
+
+inactive(SSE);
+
+step();
+
+# --- CW coherent from SSE to DX ---
+# (combined list from counterpart dxs on other beams) -----
+
+step();
+
+
+message(SSE,DX,"beginSendingCwCoherentSignals(Count)");
+active(SSE);
+lconstraint(DX,"[Forward CW Coherent Signals from ");
+lconstraint(DX,"counterpart DXs on other beam(s)");
+
+
+message(SSE,DX,"sendCwCoherentSignal(CwCoherentSignal)");
+step();
+
+message(SSE,DX,"doneSendingCwCoherentSignals()");
+
+inactive(SSE)
+step();
+
+
+
+# --- candidate results for counterpart dxs  ---
+
+step();
+message(DX,SSE,"beginSendingCandidateResults(Count)");
+active(DX);
+lconstraint(DX,"[Signal detection of");
+lconstraint(DX,"counterpart DX signals]");
+
+step();
+message(DX,SSE,"" "sendPulseCandidateResult(PulseSignalHeader, Pulse[ ])" "OR sendCwCoherentCandidateResult(CwCoherentSignal)");
+
+step();
+message(DX,SSE,"doneSendingCandidateResults()");
+
+inactive(SSE);
+inactive(DX);
+
+# --- archive data for local signal list & counterpart signals 
+step();
+
+active(SSE);
+active(DX);
+
+message(SSE,DX,"" "requestArchiveData(ArchiveRequest)" "OR discardArchiveData(ArchiveRequest)");
+lconstraint(DX,"[For each local candidate signal,");
+lconstraint(DX,"and for each counterpart signal,");
+lconstraint(DX,"if requested, send archive data to dxArchiver]");
+
+lconstraint(DX,"(SSE compares counterpart DX results");
+lconstraint(DX," to determine RFI)");
+
+step();
+
+inactive(SSE);
+inactive(DX);
+
+step();
+
+# -- wrap up ---
+
+active(DX)
+message(DX,SSE,"archiveComplete()");
+lconstraint(DX,"[Activity wrapup]");
+message(DX,SSE,"signalDetectionComplete()");
+message(DX,SSE,"dxActivityComplete(ActivityStatus)");
+
+inactive(DX);
+step();
+
+inactive(SSE);
+
+step();
+
+complete(SSE);
+complete(DX);
+
+.PE
+

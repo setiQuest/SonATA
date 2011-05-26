@@ -1,0 +1,238 @@
+#/usr/bin/pic2plot -Tps
+#
+# Pic macros for drawing UML sequence diagrams
+#
+# (C) Copyright 2004 Diomidis Spinellis.
+#
+# Permission to use, copy, and distribute this software and its
+# documentation for any purpose and without fee is hereby granted,
+# provided that the above copyright notice appear in all copies and that
+# both that copyright notice and this permission notice appear in
+# supporting documentation.
+#
+# THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+# MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+#
+# $Orig Id: sequence.pic 1.6 2004/05/09 08:59:19 dds Exp $
+# http://www.spinellis.gr/sw/umlgraph/
+
+# $Id: sequence.pic,v 1.3 2005/02/22 22:06:51 jane Exp $
+
+# Parameters (can be redefined)
+
+# Spacing between messages
+spacing = 0.25;
+# Active box width
+awid = .1;
+# Box height
+boxht = 0.75;
+
+# Create a new object(name,label)
+define object {
+	$1: box $2; move;
+
+	# kilsdonk 3 dec 2004
+	# disable underline since it draws a line through the
+	# label if more than 3 boxes are created
+
+	# Could also underline text with \mk\ul\ul\ul...\rt
+	#{
+	#	line from $1.w + (.1, -.07) to $1.e + (-.1, -.07);
+	#}
+
+	move to $1.e;
+	move right;
+	active_$1 = 0;
+	lifestart_$1 = $1.s.y;
+}
+
+# Create a new external actor(name,label)
+define actor {
+	$1: [
+		XSEQC: circle rad 0.06;
+		XSEQL: line from XSEQC.s down .12;
+		line from XSEQL.start - (.15,.02) to XSEQL.start + (.15,-.02);
+		XSEQL1: line from XSEQL.end left .08 down .15;
+		XSEQL2: line from XSEQL.end right .08 down .15;
+		line at XSEQC.n invis "" "" "" $2;
+	]
+	move to $1.e;
+	move right;
+	active_$1 = 0;
+	lifestart_$1 = $1.s.y - .05;
+}
+
+# Create a new placeholder object(name)
+define placeholder_object {
+	$1: box invisible;
+	move;
+	move to $1.e;
+	move right;
+	active_$1 = 0;
+	lifestart_$1 = $1.s.y;
+}
+
+define pobject {
+	placeholder_object($1);
+}
+
+# complete(name)
+# Complete the lifeline of the object with the given name
+define complete {
+	if (active_$1) then {
+		{
+		box ht (Here.y - lifestart_$1) wid awid with .s at ($1.x, lifestart_$1);
+		}
+	} else {
+		line from ($1.x, lifestart_$1) to ($1.x, Here.y) dashed;
+	}
+	lifestart_$1 = Here.y;
+}
+
+# Draw a message(from_object,to_object,label)
+define message {
+	down;
+	move spacing;
+	# Adjust so that lines and arrows do not fall into the
+	# active box.  Should be .5, but the arrow heads tend to
+	# overshoot.
+	if ($1.x <= $2.x) then {
+		off_from = awid * .6;
+		off_to = -awid * .6;
+	} else {
+		off_from = -awid * .6;
+		off_to = awid * .6;
+	}
+	if ($1.x == $2.x) then {
+		arrow from ($1.x + off_from, Here.y) right movewid then down spacing then left movewid $3 ljust " " " " " " ;
+	} else {
+		arrow from ($1.x + off_from, Here.y) to ($2.x + off_to, Here.y) $3 " ";
+	}
+}
+
+# Display a lifeline constraint(object,label)
+define lifeline_constraint {
+	box at ($1.x + awid, Here.y) invis $2 ljust " " ;
+}
+
+define lconstraint {
+	lifeline_constraint($1,$2);
+}
+
+# Display an object constraint(label)
+# for the last object drawn
+define object_constraint {
+	{ box invis with .s at last box .nw $1 ljust; }
+}
+
+define oconstraint {
+	object_constraint($1);
+}
+
+# Draw a creation message(from_object,to_object,object_label)
+define create_message {
+	down;
+	move spacing;
+	if ($1.x <= $2.x) then {
+		off_from = awid * .6;
+		off_to = -boxwid * .51;
+	} else {
+		off_from = -awid * .6;
+		off_to = boxwid * .51;
+	}
+	XSEQA: arrow from ($1.x + off_from, Here.y) to ($2.x + off_to, Here.y) "\Focreate\Fc" " ";
+	if ($1.x <= $2.x) then {
+		{ XSEQB: box $3 with .w at XSEQA.end; }
+	} else {
+		{ XSEQB: box $3 with .e at XSEQA.end; }
+	}
+	{
+		line from XSEQB.w + (.1, -.07) to XSEQB.e + (-.1, -.07);
+	}
+	lifestart_$2 = XSEQB.s.y;
+	move (spacing + boxht) / 2;
+}
+
+define cmessage {
+	create_message($1,$2,$3);
+}
+
+# Draw an X for a given object
+define drawx {
+	{
+	line from($1.x - awid, lifestart_$1 - awid) to ($1.x + awid, lifestart_$1 + awid);
+	line from($1.x - awid, lifestart_$1 + awid) to ($1.x + awid, lifestart_$1 - awid);
+	}
+}
+
+# Draw a destroy message(from_object,to_object)
+define destroy_message {
+	# troff code is \(Fo \(Fc, but they don't work in pic2plot
+	# See http://www.delorie.com/gnu/docs/plotutils/plotutils_71.html
+	message($1,$2,"\Fodestroy\Fc");
+	complete($2);
+	drawx($2);
+}
+
+define dmessage {
+	destroy_message($1,$2);
+}
+
+# An object deletes itself: delete(object)
+define delete {
+	complete($1);
+	lifestart_$1 = lifestart_$1 - awid;
+	drawx($1);
+}
+
+# Draw a message return(from_object,to_object,label)
+define return_message {
+	down;
+	move spacing;
+	# See comment in message
+	if ($1.x <= $2.x) then {
+		off_from = awid * .6;
+		off_to = -awid * .6;
+	} else {
+		off_from = -awid * .6;
+		off_to = awid * .6;
+	}
+	arrow from  ($1.x + off_from, Here.y) to ($2.x + off_to, Here.y) dashed $3 " ";
+}
+
+define rmessage {
+	return_message($1,$2,$3);
+}
+
+# Object becomes active
+define active {
+	complete($1);
+	active_$1 = 1;
+}
+
+# Object becomes inactive
+define inactive {
+	complete($1);
+	active_$1 = 0;
+}
+
+# Time step
+# Useful at the beginning and the end
+# to show object states
+define step {
+	down;
+	move spacing;
+}
+
+# Switch to asynchronous messages
+define async {
+	arrowhead = 0;
+	arrowwid = arrowwid * 2;
+}
+
+# Swtich to synchronous messages
+define sync {
+	arrowhead = 1;
+	arrowwid = arrowwid / 2;
+}
