@@ -90,13 +90,16 @@ void
 usage()
 {
 	OUTL("usage: " << pgm <<
-                " [-w XYoutfile (false)] [-s secondsToWait (" 
+                "\t[-w XYoutfile (false)] \n"
+		<< "\t\t\t[-s secondsToWait (" 
 		<< maxWait << ")] \n" << 
-		"\t\t[-d Write Data Only, no Headers (false)  ]\n "
-                 << "\t\t[-X XonlyOutfile (false)] [-Y YonlyOutfile (false)]\n"
-		<< "\t\t[-p Print first Header]\n"
-		<< "\t\t[-a IP Address x.x.x.x (" << MULTICAST_ADDR <<
-		")]  [-P Port Number (" << MULTICAST_PORT << ")]");
+		"\t\t\t[-d Write Data Only, no Headers (false)  ]\n "
+                 << "\t\t\t[-X XonlyOutfile (false)]\n"
+		<< "\t\t\t[-Y YonlyOutfile (false)]\n"
+		<< "\t\t\t[-p Print first Header]\n"
+		<< "\t\t\t[-a IP Address x.x.x.x (" << MULTICAST_ADDR <<
+		")]\n"
+		<<   "\t\t\t[-P Port Number (" << MULTICAST_PORT << ")]");
 	exit(-1);
 }
 
