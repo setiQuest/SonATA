@@ -97,6 +97,7 @@ scripts_SCRIPTS = \
 	runpacketsend-data-capture-replay.tcsh \
 	setiquest-12dxs.tcl \
 	setiquest-env-vars.tcsh \
+	lab-setiquest-env-vars.tcsh \
 	sonata-cron-begin-cygnus-exoplanets-session.sh \
 	sonata-cron-begin-cygnusx3-session.sh \
 	sonata-cron-begin-exoplanets-session.sh \
