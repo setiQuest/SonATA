@@ -46,6 +46,7 @@ class ChannelizerParameters : public SeekerParameterGroup {
   ChannelizerParameters(string command);
   ChannelizerParameters(const ChannelizerParameters& rhs);
   ChannelizerParameters& operator=(const ChannelizerParameters& rhs);
+  int32_t getDelay();
 
   ~ChannelizerParameters();
 

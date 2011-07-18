@@ -523,7 +523,7 @@ VERBOSE2( getVerboseLevel(),"tuneDxsForMuptipleBeamsOnSingleTarget()" << endl);
 	tuneDxs_->tune(dxListForIfc, outputChannels, mhzPerChannel);
       float64_t channelizerTuneFreqMhz = computeChanCenterFreq(dxListForIfc, outputChannels,
 		mhzPerChannel); 
-       int32_t delaySecs = 3;
+       int32_t delaySecs = nssParameters_.chan_->getDelay();
        nssParameters_.chan_->start( delaySecs, channelizerTuneFreqMhz, "all");
       /* 
          Assign channels to each dx, adjusting frequencies to
@@ -575,6 +575,7 @@ VERBOSE2( getVerboseLevel(),"tuneDxsForMuptipleBeamsOnSingleTarget()" << endl);
   N/2.
 
  */
+// Obsolete
 void ObsActStrategy::channelizeDxTunings(DxList & dxList,
                                           double chanzerTuneMhz,
                                           double chanzerWidthMhz)
@@ -683,7 +684,7 @@ void ObsActStrategy::pickMultipleTargetsAndTuneDxs(NssComponentTree *nssComponen
 
       float64_t channelizerTuneFreqMhz = computeChanCenterFreq(shortestDxList, outputChannels,
 		mhzPerChannel); 
-       int32_t delaySecs = 3;
+       int32_t delaySecs = nssParameters_.chan_->getDelay();
        nssParameters_.chan_->start( delaySecs, channelizerTuneFreqMhz, "all");
    copyDxTuningsFromOneBeamToTheOthers(dxListByBeamMap,
 					shortestListBeamName);
@@ -1023,7 +1024,7 @@ Activity *ObsActStrategy::getFollowupActivity(const NssParameters &nssParams,
           float64_t mhzPerChannel = chanProxy->getMhzPerChannel();
       float64_t channelizerTuneFreqMhz = 
 	computeChanCenterFreq(dxList, outputChannels, mhzPerChannel);
-       int32_t delaySecs = 3;
+       int32_t delaySecs = nssParameters_.chan_->getDelay();
        nssParameters_.chan_->start( delaySecs, channelizerTuneFreqMhz, "all");
 
    ActivityId_t actId = getNextActId();
