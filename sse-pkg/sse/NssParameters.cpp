@@ -276,15 +276,9 @@ const char * NssParameters::show() const
 	<< arch_->show("all") << endl
 	<< chan_->show("all") << endl
 	<< db_->show("all") << endl
-	<< ifc1_->show("all") << endl
-	<< ifc2_->show("all") << endl
-	<< ifc3_->show("all") << endl
 	<< dx_->show("all") << endl
 	<< sched_->show("all") << endl
-	<< tscope_->show("all") << endl
-	<< tsig1_->show("all") << endl
-	<< tsig2_->show("all") << endl
-	<< tsig3_->show("all") << endl;
+	<< tscope_->show("all") << endl;
 
    outString_ = strm.str();
    return outString_.c_str();
@@ -325,17 +319,9 @@ void NssParameters::help(ostream& os) const {
    chan_->help(os); os << endl;
    componentControl_->help(os); os << endl;
    db_->help(os); os << endl;
-   ifc_->help(os);  os << endl;
-   ifc1_->help(os);  os << endl;
-   ifc2_->help(os);  os << endl;
-   ifc3_->help(os);  os << endl;
    dx_->help(os); os << endl;
    sched_->help(os); os << endl;
    tscope_->help(os);  os << endl;
-   tsig_->help(os); os << endl;
-   tsig1_->help(os); os << endl;
-   tsig2_->help(os); os << endl;
-   tsig3_->help(os); os << endl;
 
    printMiscCommandsHelp(os); os << endl;
 }
@@ -374,17 +360,9 @@ void NssParameters::printHelpDescription(ostream &os) const
       << "   channel (channelizer)\n" 
       << "   control (component control)\n"
       << "   db (database)\n" 
-      << "   ifc (IF control immediate commands)\n" 
-      << "   ifc1 (IF control parameters for ifc1)\n" 
-      << "   ifc2 (IF control parameters for ifc2)\n" 
-      << "   ifc3 (IF control parameters for ifc3)\n" 
       << "   dx (detection module)\n" 
       << "   sched (scheduler)\n" 
       << "   tscope (telescope & RF control)\n" 
-      << "   tsig (test signal immediate commands)\n" 
-      << "   tsig1 (test signal generation parameters for tsig1)\n" 
-      << "   tsig2 (test signal generation parameters for tsig2)\n" 
-      << "   tsig3 (test signal generation parameters for tsig3)\n" 
 
       << "help misc - displays the misc. commands\n"
 
@@ -426,11 +404,9 @@ void NssParameters::printHelpParametersOverview(ostream &os) const
 
    os << "Examples: \n"
 	
-      << " ifc2 set attnl 6     Sets the Left attenuator for IF chain 2\n" 
       << " act set targetbeam1 5122    Sets the observing target to targetId 5122 on beam1\n" 
       << " dx set length 195   Sets the observation length to 195 seconds\n" 
       << " dx show             Displays current, default, min, and max values for all dx parameters\n"
-      << " tsig show gen        Prints the value of the 'gen' parameter\n" 
       << " dx default          Restore the default dx parameter settings\n"
       << endl;
 
@@ -454,7 +430,6 @@ void NssParameters::printHelpImmediateCommandsOverview(ostream &os) const
    os << "Examples: \n"
       << " dx stop dx7  - stop the activities running on dx7\n"
       << " dx stop all  -  stop the activities on all the attached dxs\n"
-      << " tsig status - show the status for all attached test signal generators\n"
       << endl;
 
    os << "Miscellaneous Commands\n"

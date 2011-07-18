@@ -1,0 +1,127 @@
+# umlgraph/pic2plot UML sequence diagram
+# see http://www.spinellis.gr/sw/umlgraph
+
+# Scheduler - create & run activity
+
+.PS
+
+
+# ---- setup & title ---
+
+copy "sequence.pic";
+
+# title
+move down; move right; move right; 
+"Scheduler - create and run activity " ljust
+move down;
+
+# vertical spacing between messages
+spacing = 0.30;
+
+# move objects apart horizontally
+movewid = 2.0;
+
+#define the objects
+boxht = 0.7
+
+boxwid = 1.5;
+object(SEEKER,"seeker");
+
+boxwid = 2.0;
+object(SCHED,"Scheduler");
+
+boxwid = 3.0;
+object(ACTSTRAT,"ActivityStrategy");
+
+boxwid = 1.8;
+object(ACT,"Activity");
+
+
+step();
+step();
+
+# ----  message sequences -----
+
+message(SEEKER,SCHED,"runStrategy(para)");
+active(SCHED);
+step(); step();
+lconstraint(SCHED,"removeCompletedStrategies()");
+lconstraint(SCHED,"[see below]");
+step();
+
+message(SCHED,ACTSTRAT,"create( )");
+active(ACTSTRAT);
+step();
+
+message(SCHED,ACTSTRAT,"start( )");
+inactive(SCHED);
+active(ACTSTRAT);
+step();
+
+lconstraint(ACTSTRAT,"[activate thread]");
+step();
+lconstraint(ACTSTRAT,"startInternal( )");
+step();
+lconstraint(ACTSTRAT,"startNextActivity( )");
+step();
+lconstraint(ACTSTRAT,"getNextActivity( )");
+step();
+lconstraint(ACTSTRAT,"pickSingleTargetAndTunePdms()");
+lconstraint(ACTSTRAT,"OR pickMultipleTargetsAndTunePdms()");
+step();
+lconstraint(ACTSTRAT,"computeChanCenterFreq() and start Channelizers");
+step();
+message(ACTSTRAT,SCHED,"getNextActivityFromFactory( )");
+step();
+message(SCHED,ACT,"create( )");
+step();
+
+message(ACTSTRAT,ACT,"start( )");
+inactive(ACTSTRAT);
+active(ACT);
+step();step();
+
+message(ACT,ACTSTRAT,"dataCollectionComplete( )");
+step();
+message(ACT,ACTSTRAT,"foundConfirmedCandidates( )");
+step();
+message(ACT,ACTSTRAT,"activityComplete( )");
+active(ACTSTRAT);
+step();
+step();
+lconstraint(ACTSTRAT,"activityComplete");
+lconstraint(ACTSTRAT,"Internal( )");
+message(ACTSTRAT,ACT,"destroy( )");
+delete(ACT);
+inactive(ACT);
+step(); step(); step();
+
+lconstraint(ACTSTRAT,"continueWithAny");
+lconstraint(ACTSTRAT,"MoreActivities( )");
+step()
+lconstraint(ACTSTRAT,"startNextActivity( )");
+step()
+lconstraint(ACTSTRAT,"OR strategyCleanup( )");
+step()
+message(ACTSTRAT,SCHED,"strategyComplete( )");
+inactive(ACTSTRAT);
+step();
+
+step(); step();
+active(ACTSTRAT);
+lconstraint(SCHED,"removeCompletedStrategies()");
+lconstraint(SCHED,"[called by runStrategy()]");
+step(); 
+message(SCHED,ACTSTRAT,"<<destroy>>");
+step();
+
+delete(ACTSTRAT);
+
+step(); step();
+
+complete(SEEKER);
+complete(SCHED);
+
+
+.PE
+

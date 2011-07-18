@@ -1,0 +1,106 @@
+# $Id$
+# umlgraph/pic2plot UML sequence diagram
+# see http://www.spinellis.gr/sw/umlgraph
+
+# DX-SSE signal detection messages
+
+.PS
+
+
+# ---- setup & title ---
+
+copy "sequence.pic";
+
+# title
+move down; move right; move right; 
+"DX - SSE Signal Detection Messages - Multibeam Part1 " ljust
+move down;
+
+# vertical spacing between messages
+spacing = 0.30;
+
+# move objects apart horizontally
+#movewid = 3.5;
+movewid = 4.0;
+
+#define the objects
+# SSE
+boxwid = 1.2;
+object(SSE,"SSE: ActUnit");
+
+# DX
+boxwid = 0.75;
+object(DX,"DX");
+
+step();
+
+# ----  message sequences -----
+
+
+message(DX,SSE,"signalDetectionStarted()");
+
+# --- CW Power, Pulse from Dx to SSE -----
+
+active(DX);
+message(DX,SSE,"beginSendingCandidates(Count)");
+lconstraint(DX,"[CW Power Detect, Pulse Detect,");
+lconstraint(DX,"Clustering, Candidate Selection]");
+
+message(DX,SSE,"" "sendCandidateCwPowerSignal(CwPowerSignal)" "OR sendCandidatePulseSignal(PulseSignalHeader, Pulse[ ])");
+step();
+
+step();
+message(DX,SSE,"doneSendingCandidates()");
+
+inactive(DX);
+step();
+
+
+# --- All signals ----
+
+message(DX,SSE,"beginSendingSignals(DetectionStatistics)");
+active(DX);
+lconstraint(DX,"[Send all signals, including");
+lconstraint(DX,"the candidates sent above]");
+
+message(DX,SSE,"" "sendCwPowerSignal(CwPowerSignal)" "OR sendPulseSignal(PulseSignalHeader, Pulse[ ])");
+step();
+
+message(DX,SSE,"doneSendingSignals()");
+inactive(DX);
+step();
+
+# --- Bad Bands ------
+
+
+message(DX,SSE,"beginSendingBadBands(Count)");
+active(DX)
+lconstraint(DX,"[Report Bad Bands]");
+
+message(DX,SSE,"" "sendCwBadBand(CwBadBand)" "OR sendPulseBadBand(PulseBadBand)");
+step();
+
+message(DX,SSE,"doneSendingBadBands()");
+inactive(DX);
+
+# --- CW coherent from DX to SSE---
+
+step();
+
+message(DX,SSE,"beginSendingCwCoherentSignals(Count)");
+active(DX);
+lconstraint(DX,"[CW Coherent Detection]");
+message(DX,SSE,"sendCwCoherentSignal(CwCoherentSignal)");
+step();
+
+message(DX,SSE,"doneSendingCwCoherentSignals()");
+
+inactive(DX)
+
+step();
+
+complete(SSE);
+complete(DX);
+
+.PE
+
