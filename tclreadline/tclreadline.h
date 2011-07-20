@@ -17,7 +17,7 @@
 
 #include <tcl.h>
 
-#define TCLRL_LIBRARY        "/usr/local/lib/tclreadline9.9.0"
+#define TCLRL_LIBRARY        "/home/sonata/sonata_install/lib/tclreadline9.9.0"
 
 /* VERSION STRINGS */
 #define TCLRL_VERSION_STR    "9.9.0"

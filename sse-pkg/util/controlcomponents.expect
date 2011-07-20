@@ -967,7 +967,7 @@ proc prepareChannelizerStartCmd { chanHost } {
 # this line can be replaced with set host [exec hostname]
 # if your installation does not have gethostip
 
-    set host [ exec gethostip -d [exec hostname] ]
+    set host [exec hostname]
 
     set cmd ""
 
@@ -1039,7 +1039,7 @@ proc prepareChannelizerRestartCmd { chanName } {
 # this line can be replaced with set host [exec hostname]
 # if your installation does not have gethostip
 
-    set host [ exec gethostip -d [exec hostname] ]
+    set host [exec hostname] 
 
     set cmd ""
 
