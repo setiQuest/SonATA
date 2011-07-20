@@ -14,7 +14,7 @@ sched set beam3 off
 sched set beginfreq 1416.45016
 sched set endfreq 1423.546
 sched set target user
-sched set followup on
+sched set followup off
 sched set catshigh nearest,habcat
 
 dx set baseinitaccum 20
@@ -44,9 +44,9 @@ dx load chan 8 dx1008
 dx load chan 9 dx1009 
 dx load chan 10 dx1010 
 dx load chan 11 dx1011 
-dx set length 134
+dx set length 150
 tscope sim
 
 db set usedb on
-db set host localhost
+db set host sse200
 db set name setiquest

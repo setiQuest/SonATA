@@ -38,7 +38,7 @@ setenv DXHOST1_DX_NAMES	"dx1000 dx1001 dx1002 dx1003 dx1004 dx1005"
 setenv DXHOST2_DX_NAMES	"dx1006 dx1007 dx1008 dx1009 dx1010 dx1011"
 
 # Command line arguments for all DXs
-setenv DX_OPTS "-f 10 -z $FILTER_DIR/LS256c10f25o70d.flt -w .546133333 -T 1024"
+setenv DX_OPTS "-f 10 -z $FILTER_DIR/LS256c10f25o70d.flt -w .546133333 -T 1024 -F 128"
 
 # Beam Specific Command line options for DXs
 setenv BEAM1_DX_OPTS "-j 51100 -J 229.1.1.1"
