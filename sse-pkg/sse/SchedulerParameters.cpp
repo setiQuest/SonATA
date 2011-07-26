@@ -577,22 +577,22 @@ bool SchedulerParameters::pipeliningEnabled() const
 
 }
   
-bool SchedulerParameters::setBeginObsFreqMhz(float32_t freqMhz)
+bool SchedulerParameters::setBeginObsFreqMhz(float64_t freqMhz)
 {
    return internal_->beginObsFreqMhz.setCurrent(freqMhz);
 }
 
-float32_t SchedulerParameters::getBeginObsFreqMhz() const
+float64_t SchedulerParameters::getBeginObsFreqMhz() const
 {
    return internal_->beginObsFreqMhz.getCurrent();
 }
 
-bool SchedulerParameters::setEndObsFreqMhz(float32_t freqMhz)
+bool SchedulerParameters::setEndObsFreqMhz(float64_t freqMhz)
 {
    return internal_->endObsFreqMhz.setCurrent(freqMhz);
 }
 
-float32_t SchedulerParameters::getEndObsFreqMhz() const
+float64_t SchedulerParameters::getEndObsFreqMhz() const
 {
    return internal_->endObsFreqMhz.getCurrent();
 }

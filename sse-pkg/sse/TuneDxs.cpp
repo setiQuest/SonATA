@@ -44,6 +44,7 @@
 #include "MysqlQuery.h"
 #include <map>
 #include <sstream>
+#include <iostream>
 #include <math.h>
 #include <algorithm>
 
@@ -361,6 +362,10 @@ void TuneDxsRange::tune(DxList &dxList, int32_t totalChannels,
 
   double firstFreqMhz = nextFreq_;
   int32_t dcChannel = totalChannels/2;
+ 
+  //cout.precision(12);
+  //cout << "FirstFreq_" << nextFreq_ << endl;
+  //cout << "Chan " << nextChan << " range  low " << range_.low_ << " high " << range_.high_ ;
 
   for (DxList::iterator dxListIndex = dxList.begin(); 
        dxListIndex != dxList.end();  ++dxListIndex)
@@ -387,6 +392,7 @@ void TuneDxsRange::tune(DxList &dxList, int32_t totalChannels,
     // Do not Round !
     float64_t centerFreq = calculateCenterFreq(dxProxy);
 
+    //cout << " centerFreq " << centerFreq << endl;
     // don't exceed the allowed bandwidth
     if ((centerFreq - firstFreqMhz) >= maxDxTuneSeparationMhz)
     {

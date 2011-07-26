@@ -27,15 +27,17 @@ setenv CHANHOST1X_OPTS "-P X  -i 50100 -j 51100 -I 228.1.50.1 -J 229.1.1.1"
 #---------------------------
 
 # Logical Host Names
-setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2"
+setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2 dxhost3"
 
 # Actual Host Names
 setenv DXHOST1 "seti003-2"
 setenv DXHOST2 "seti003-3"
+setenv DXHOST3 "seti003-4"
 
 # DX names
-setenv DXHOST1_DX_NAMES	"dx1000 dx1001 dx1002 dx1003 dx1004 dx1005" 
-setenv DXHOST2_DX_NAMES	"dx1006 dx1007 dx1008 dx1009 dx1010 dx1011"
+setenv DXHOST1_DX_NAMES	"dx1000 dx1001 dx1002 dx1003" 
+setenv DXHOST2_DX_NAMES	"dx1004 dx1005 dx1006 dx1007"
+setenv DXHOST3_DX_NAMES	"dx1008 dx1009 dx1010 dx1011"
 
 # Command line arguments for all DXs
 setenv DX_OPTS "-f 10 -z $FILTER_DIR/LS256c10f25o70d.flt -w .546133333 -T 1024 -F 128"
@@ -55,6 +57,7 @@ setenv YPOL_ONLY "-p y"
 
 setenv DXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS $XPOL_ONLY"
 setenv DXHOST2_OPTS "$DX_OPTS $BEAM1_DX_OPTS $XPOL_ONLY"
+setenv DXHOST3_OPTS "$DX_OPTS $BEAM1_DX_OPTS $XPOL_ONLY"
 
 # Backend Server Host for use with ATA
 #-------------------------------------
