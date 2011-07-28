@@ -69,11 +69,11 @@ class SchedulerParameters : public SeekerParameterGroup
    bool setTuneDxs(string value);
    TuneDxsOption getTuneDxsOption() const;
 
-   bool setBeginObsFreqMhz(float32_t freqMhz);
-   float32_t getBeginObsFreqMhz() const;
+   bool setBeginObsFreqMhz(float64_t freqMhz);
+   float64_t getBeginObsFreqMhz() const;
 
-   bool setEndObsFreqMhz(float32_t freqMhz);
-   float32_t getEndObsFreqMhz() const;
+   bool setEndObsFreqMhz(float64_t freqMhz);
+   float64_t getEndObsFreqMhz() const;
 
    ChooseTargetOption getChooseTargetOption() const;
    string getChooseTargetOptionString() const;

@@ -724,7 +724,7 @@ void SiteInternal::updateDxOnelineStatus(const string &prefix,
       if (! nameUnknown(dxName))
       {
 	 stringstream strm;
-	 strm.precision(3);           // show N places after the decimal
+	 strm.precision(6);           // show N places after the decimal
 	 strm.setf(std::ios::fixed);  // show all decimal places up to precision
 
 	 strm << prefix
