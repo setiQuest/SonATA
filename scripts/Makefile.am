@@ -95,6 +95,7 @@ scripts_SCRIPTS = \
 	runpacketsend-dx-vger-xpol.tcsh \
 	runpacketsend-setiquest.tcsh \
 	runpacketsend-data-capture-replay.tcsh \
+	lab-runpacketsend-data-capture-replay.tcsh \
 	setiquest-12dxs.tcl \
 	setiquest-env-vars.tcsh \
 	lab-setiquest-env-vars.tcsh \
