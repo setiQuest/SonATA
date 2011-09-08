@@ -1,0 +1,12 @@
+
+Using JPL Horizons to generate spacecraft and planet .xyz files:
+
+1.  Mail requests to JPL Horizons for xyz info (sends 
+         one request per target):
+
+    email-jpl-ephem-xyz-requests -send
+
+
+2.  For each mail reply, convert it to Prelude .xyz format:
+
+    convert-jpl-xyz-data < mail-file.eml > target.xyz
