@@ -6,6 +6,9 @@ act set watchdogs off
 act set targetbeam1 1991094
 act set targetbeam2 1991098
 act set targetprimary 1991094
+act set delay 20
+
+channel set delay 6
 
 sched set dxtune range
 sched set beam1 on
@@ -27,5 +30,5 @@ dx set length 141
 tscope sim
 
 db set usedb on
-db set host localhost
-db set name setiquest
+db set host sse200
+db set name sonatadb
