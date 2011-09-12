@@ -128,23 +128,6 @@ SignalClassifier::classifySignal(Activity *act, SignalDescription& sig,
 	sig.sigClass = CLASS_CAND;
 	sig.reason = PASSED_POWER_THRESH;
 
-	// test for recent RFI mask match
-	Debug(DEBUG_SIGNAL_CLASS,
-			(int32_t) operations.test(APPLY_RECENT_RFI_MASK),
-			"apply recent RFI mask");
-	Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "recent RFI mask");
-	if (act->getMode() == PRIMARY) {
-		if (operations.test(APPLY_RECENT_RFI_MASK) && recentRfi) {
-			Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "apply mask?");
-			if (recentRfi->isMasked(sig.path.rfFreq,
-					HZ_TO_MHZ(sig.path.width))) {
-				sig.sigClass = CLASS_RFI;
-				sig.reason = RECENT_RFI_MATCH;
-				Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "yep");
-			} else
-				Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "nope");
-		}
-	}
 	// test for zero-drift signal
 	if (operations.test(REJECT_ZERO_DRIFT_SIGNALS)) {
 		float64_t absDrift = fabs(sig.path.drift);
@@ -161,6 +144,23 @@ SignalClassifier::classifySignal(Activity *act, SignalDescription& sig,
 		if (absDrift > maxDrift) {
 				sig.sigClass = CLASS_RFI;
 				sig.reason = DRIFT_TOO_HIGH;
+		}
+	}
+	// test for recent RFI mask match
+	Debug(DEBUG_SIGNAL_CLASS,
+			(int32_t) operations.test(APPLY_RECENT_RFI_MASK),
+			"apply recent RFI mask");
+	Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "recent RFI mask");
+	if (act->getMode() == PRIMARY) {
+		if (operations.test(APPLY_RECENT_RFI_MASK) && recentRfi) {
+			Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "apply mask?");
+			if (recentRfi->isMasked(sig.path.rfFreq,
+					HZ_TO_MHZ(sig.path.width))) {
+				sig.sigClass = CLASS_RFI;
+				sig.reason = RECENT_RFI_MATCH;
+				Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "yep");
+			} else
+				Debug(DEBUG_SIGNAL_CLASS, (void *) recentRfi, "nope");
 		}
 	}
 
