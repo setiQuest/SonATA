@@ -303,7 +303,7 @@ DxParametersInternal::DxParametersInternal() :
    baselineWarningMeanUpperBound(
       "basewarnmeanupper", "power",
       "baseline warning mean upper bound limit",
-      1000, 0, 1e5),
+      3000, 0, 1e5),
 
    baselineWarningMeanLowerBound(
       "basewarnmeanlower", "power",
@@ -318,14 +318,14 @@ DxParametersInternal::DxParametersInternal() :
    baselineWarningMaxRange(
       "basewarnrange", "power",
       "baseline warning max range",
-      300, 0, 10e5),
+      1000, 0, 10e5),
 
    // baseline error
 
    baselineErrorMeanUpperBound(
       "baseerrormeanupper", "power",
       "baseline error mean upper bound limit",
-      2000, 0, 1e5),
+      5000, 0, 1e5),
 
    baselineErrorMeanLowerBound(
       "baseerrormeanlower", "power",
@@ -340,7 +340,7 @@ DxParametersInternal::DxParametersInternal() :
    baselineErrorMaxRange(
       "baseerrorrange", "power",
       "baseline error max range",
-      600, 0, 10e5),
+      3000, 0, 10e5),
 
    recentRfiEnable(
       "recentrfienable",  "", 
