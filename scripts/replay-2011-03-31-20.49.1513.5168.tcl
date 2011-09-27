@@ -6,11 +6,7 @@ act set watchdogs off
 act set targetbeam1 1991094
 act set targetbeam2 1991098
 act set targetprimary 1991094
-<<<<<<< HEAD
 act set delay 20
-=======
-act set delay 25
->>>>>>> 2b62717722555a9686798fb3af6de998bf7735da
 
 channel set delay 6
 
