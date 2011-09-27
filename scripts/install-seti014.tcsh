@@ -1,6 +1,6 @@
 #!/bin/tcsh
 
-foreach h ( seti003-2: seti003-3: seti003-4: )
+foreach h ( seti014-2: seti014-3: seti014-4: )
 
 set me=`whoami`
 cd
