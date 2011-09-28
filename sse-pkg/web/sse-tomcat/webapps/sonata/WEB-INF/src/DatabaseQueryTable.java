@@ -49,9 +49,11 @@ import javax.servlet.http.*;
 */
 
 public class DatabaseQueryTable extends DatabaseAccess {
-
+   
    public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, java.io.IOException  {
+      //throws ServletException, java.io.IOException  {
+      throws java.io.IOException  {
+      
       Connection conn = null;
       Statement stmt = null;
       ResultSet rs = null;
@@ -61,6 +63,7 @@ public class DatabaseQueryTable extends DatabaseAccess {
       java.io.PrintWriter out = response.getWriter();
 
       try {
+      
 	 String dbHost = request.getParameter("dbHost");
 	 String dbName = request.getParameter("dbName");
 	 String showQuery = request.getParameter("showQuery");
@@ -70,10 +73,13 @@ public class DatabaseQueryTable extends DatabaseAccess {
 
 	 String query = request.getParameter("query");
 	 stmt = conn.createStatement();
+	 
 	 rs = stmt.executeQuery(query);
+	 
 	 rsm = rs.getMetaData();
 	 int colCount = rsm.getColumnCount();
-
+	 
+ 
          if (showQuery != null) {
             out.println("<hr>");
             out.println(query);
@@ -105,8 +111,12 @@ public class DatabaseQueryTable extends DatabaseAccess {
          }
       }
       catch (Exception e) {
-
-	 throw new ServletException(e);
+         
+         out.println("<hr>");
+         out.println("<p><b>ERROR executing the query</b></p>");
+         //System.out.println("Error in DatabaseQueryTable.java");  // writes to catalina.out
+         
+	 //throw new ServletException(e);
 
       } finally {
 
@@ -129,3 +139,4 @@ public class DatabaseQueryTable extends DatabaseAccess {
    } //doGet
 
 }
+
