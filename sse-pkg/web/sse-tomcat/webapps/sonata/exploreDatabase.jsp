@@ -57,11 +57,103 @@ Description:
    <style type="text/css">
       INPUT {text-align:right}
       TD {text-align:right}
+      
+      #userQueryText {
+         margin-bottom: 5px;
+      }
+      #queryTextEntered {
+         margin-top: 5px;
+         margin-bottom: 5px;
+         padding: 5px;
+      }
+      #clearButton {
+         display:block;
+      }
    </style>
+
+   <script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+   
+   <script type="text/javascript">
+      var html5_storage = supports_html5_storage();
+      
+      // handles "User Query" UI
+      function queryHandler() {
+         var val = $("#queryTypeField").val();
+         
+         if (val == "User Query") {
+            var lastUserQuery = "";
+            if (html5_storage) {
+               lastUserQuery = localStorage.getItem("lastUserQuery");  
+            }
+            
+            $("#userQueryText").append('<div id="queryHeader"><b>Enter Query: </b></div>');
+            $("#userQueryText").append('<textarea name="queryTextEntered" id="queryTextEntered" rows="20" cols="100"></textarea>');
+            if (lastUserQuery) {
+	            $("#queryTextEntered").val(lastUserQuery);
+	         }
+            $("#userQueryText").append('<input id="clearButton" type="button" value="Clear Query" onClick="clearQueryHandler()" />');
+         } else {
+            $("#userQueryText").html('');
+         }
+      }
+ 
+      /*
+      Checks the first word that the user entered for "User Query".
+      Only select, desc(ribe), show are allowed
+      */
+      function enterQueryHandler() {
+         var val = $("#queryTypeField").val();
+         if (val != "User Query")  { 
+            $("#userQueryText").hide();
+            return; 
+         }
+          
+         var acceptedCmd = new Array("select", "desc", "describe", "show");
+         var text = $("#queryTextEntered").val();
+         var words = text.split(" ");
+         var firstWord = words[0].toLowerCase();
+         var accepted = false;
+         for (var i=0; i<acceptedCmd.length; i++) {
+            if (firstWord == acceptedCmd[i]) {
+               accepted = true;
+               break;
+            }
+         }
+         if (accepted == true) {
+            if (html5_storage) {
+               localStorage.setItem("lastUserQuery", text);
+            }
+         } else {
+            alert("ERROR: \"" + firstWord + "\" is not accepted!");
+            $("#hiddenQueryStatus").val("UserQueryError");
+            $("#queryTypeField").val('');
+         }
+      }
+
+      function clearQueryHandler() {
+         $("#queryTextEntered").val("");
+         document.getElementById("queryTextEntered").focus();
+      }
+      
+      function supports_html5_storage() {
+        try {
+          return 'localStorage' in window && window['localStorage'] !== null;
+        } catch (e) {
+          return false;
+        }
+      }
+
+   </script>
 </head>
 
 <body onload='document.location="#contentTop"'>
 
+<script type="text/javascript">
+   $(document).ready(function() {
+      queryHandler();
+   });
+</script>
+ 
 <div id="header">
 <%@ include file="header.jspf" %>
 <br>
@@ -127,6 +219,7 @@ Description:
 <c:set var="queryTypeTargetHistFreqPlot" value="Target Hist Freq Plot"/>
 <c:set var="queryTypeTargetCatalog" value="Target Catalog"/>
 <c:set var="queryTypeTargetCatPlot" value="Target Cat RA/Dec Plot"/>
+<c:set var="queryTypeUserQuery" value="User Query"/>
 
 <c:set var="queryTypeDefault" value="${queryTypeObsHist}"/>
 <%-- -------------------------------- --%>
@@ -263,6 +356,8 @@ text fields.
 <form onsubmit="return false">
 <input type=hidden name="restoreDefaults" value="false">
 <input type=hidden name="submitted" value="true">
+<input id="hiddenQueryStatus" name="hiddenQueryStatus" type="hidden" value="" />
+
 <table>
     <tr>
        <%-- min/max date --%>
@@ -403,7 +498,7 @@ text fields.
        <%-- query type --%>
        <th align=${colNameAlign}>Query Type:</th>
        <td>
-       <select name=queryTypeField size=1>
+       <select name=queryTypeField id="queryTypeField" size=1>
           <option ${queryTypeValue == queryTypeConfirmCand ? 'selected' : ''}>
               ${queryTypeConfirmCand}
           <option ${queryTypeValue == queryTypeCand ? 'selected' : ''}>
@@ -450,6 +545,8 @@ text fields.
               ${queryTypeTargetHistPlot}
           <option ${queryTypeValue == queryTypeTargetHistFreqPlot ? 'selected' : ''}>
               ${queryTypeTargetHistFreqPlot}
+          <option ${queryTypeValue == queryTypeUserQuery ? 'selected' : ''}>
+              ${queryTypeUserQuery}
        </select>
        </td>
     </tr>
@@ -457,8 +554,21 @@ text fields.
 
  </table>
  <br>
+ 
+ <div id="userQueryText">
+    <!--
+    <div id="queryHeader"><b>Enter Query: </b></div>
+    <textarea name="queryTextEntered" id="queryTextEntered" rows="20" cols="100"></textarea>
+    <input id="clearButton" type="button" value="Clear Query" onClick="clearQueryHandler()" />
+    -->
+ </div>
+
+ <script type="text/javascript">
+   $("select#queryTypeField").change(queryHandler);
+ </script>
+ 
  <input type=button value="Execute Query" 
-       onclick="this.form.restoreDefaults.value=false; this.form.submit()">
+       onclick="this.form.restoreDefaults.value=false; enterQueryHandler(); this.form.submit()">
 
  <input type=button value="Restore Defaults" 
        onclick="this.form.restoreDefaults.value=true; this.form.submit()">
@@ -473,9 +583,11 @@ text fields.
    </c:if>
 </c:if>
 
+
 <%-- ok to run query? --%>
 <c:if test="${param.restoreDefaults != 'true' && param.submitted &&
    formValid=='true'}">
+
 
 <%-- save entered params in session for later reuse --%>
 <c:set var="dbQueryValuesSaved" scope="session" value="true"/>
@@ -1194,6 +1306,14 @@ Target History Plot:
       && dxTuneFreq <= '${param.maxRfFreqMhzField}')
    "/>
 </c:when>
+<c:when test="${param.queryTypeField == queryTypeUserQuery}">
+
+User Query:
+
+<c:set var='queryText' value='<%= request.getParameter("queryTextEntered") %>' />
+</c:when>
+
+
 <%-- ---------------------------------------- --%>
 <c:otherwise>
    Query type: '${param.queryTypeField}' not yet implemented.
@@ -1202,60 +1322,71 @@ Target History Plot:
 <%-- ---------------------------------------- --%>
 </c:choose>
 
+
+
 <%-- run the query, using the selected output format --%>
 
+<%--
 <c:choose>
- 
-   <%-- Plot --%>
-   <c:when test="${outputFormat == 'plot'}">
+--%>
+<%-- the request parameters are made available in the implicit object param --%>
+<c:if test="${param.hiddenQueryStatus != 'UserQueryError'}">
+   
+   <c:choose>
 
-   ${queryText}<br>
+      <%-- Plot --%>
+      <c:when test="${outputFormat == 'plot'}">
 
-      <img src="
-      <c:url value="servlet/DatabaseScatterPlot">
-         <c:param name="dbHost" value="${param.dbHostField}"/>
-         <c:param name="dbName" value="${param.dbNameField}"/>
-         <c:param name="query" value="${queryText}"/>
-         <c:param name="title" value="${plotTitle}"/>
-         <c:param name="showQuery" value=""/>
-      </c:url>
-      ">
-   </c:when>
+      ${queryText}<br>
 
-   <%-- Table --%>
-   <c:otherwise>
-      <c:choose>
-      <c:when test="${outputFormat == tableFormatHtml}">
-         <c:set var="servletToRun" value="DatabaseQueryTable"/>
-         <c:set var="separator" value=""/>
+         <img src="
+         <c:url value="servlet/DatabaseScatterPlot">
+            <c:param name="dbHost" value="${param.dbHostField}"/>
+            <c:param name="dbName" value="${param.dbNameField}"/>
+            <c:param name="query" value="${queryText}"/>
+            <c:param name="title" value="${plotTitle}"/>
+            <c:param name="showQuery" value=""/>
+         </c:url>
+         ">
       </c:when>
-      <c:when test="${outputFormat == tableFormatTabs}">
-         <c:set var="servletToRun" value="DatabaseQueryAsciiTable"/>
-         <% String tab="\t"; pageContext.setAttribute("tab", tab); %>
-         <c:set var="separator" value="${tab}"/>
-      </c:when>
-      <c:when test="${outputFormat == tableFormatCommas}">
-         <c:set var="servletToRun" value="DatabaseQueryAsciiTable"/>
-         <c:set var="separator" value=","/>
-      </c:when>
+
+      <%-- Table --%>
       <c:otherwise>
-         Table Format: '${outputFormat} is not yet implemented.
-         <c:set var="servletToRun" value=""/>
-         <c:set var="separator" value=""/>
+         <c:choose>
+         <c:when test="${outputFormat == tableFormatHtml}">
+            <c:set var="servletToRun" value="DatabaseQueryTable"/>
+            <c:set var="separator" value=""/>
+         </c:when>
+         <c:when test="${outputFormat == tableFormatTabs}">
+            <c:set var="servletToRun" value="DatabaseQueryAsciiTable"/>
+            <% String tab="\t"; pageContext.setAttribute("tab", tab); %>
+            <c:set var="separator" value="${tab}"/>
+         </c:when>
+         <c:when test="${outputFormat == tableFormatCommas}">
+            <c:set var="servletToRun" value="DatabaseQueryAsciiTable"/>
+            <c:set var="separator" value=","/>
+         </c:when>
+         <c:otherwise>
+            Table Format: '${outputFormat} is not yet implemented.
+            <c:set var="servletToRun" value=""/>
+            <c:set var="separator" value=""/>
+         </c:otherwise>
+         </c:choose>
+
+         <c:import url="servlet/${servletToRun}">
+            <c:param name="dbHost" value="${param.dbHostField}"/>
+            <c:param name="dbName" value="${param.dbNameField}"/>
+            <c:param name="showQuery" value=""/>
+            <c:param name="showRowCount" value=""/> 
+            <c:param name="query" value="${queryText}"/>
+            <c:param name="separator" value="${separator}"/>
+         </c:import>
+
       </c:otherwise>
-      </c:choose>
+   </c:choose>
 
-      <c:import url="servlet/${servletToRun}">
-         <c:param name="dbHost" value="${param.dbHostField}"/>
-         <c:param name="dbName" value="${param.dbNameField}"/>
-         <c:param name="showQuery" value=""/>
-         <c:param name="showRowCount" value=""/> 
-         <c:param name="query" value="${queryText}"/>
-         <c:param name="separator" value="${separator}"/>
-      </c:import>
+</c:if>
 
-   </c:otherwise>
-</c:choose>
 
 <%--
 <c:catch var="queryException">
@@ -1269,9 +1400,9 @@ Please check form values above and try again.<br>
 
 </c:if> <%-- ok to run query --%>
 
-
 <div id="contentBottom"></div>
 </div>
 
 </body>
 </html>
+
