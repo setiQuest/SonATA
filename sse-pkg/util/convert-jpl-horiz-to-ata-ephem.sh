@@ -1,6 +1,7 @@
+#!/bin/sh
 ################################################################################
 #
-# File:    permRfiMask.tcl
+# File:    convert-jpl-horiz-to-ata-ephem
 # Project: OpenSonATA
 # Authors: The OpenSonATA code is the result of many programmers
 #          over many years
@@ -28,51 +29,45 @@
 #
 ################################################################################
 
-# NSS Permanent RFI Mask for Hat Creek
-# Values generated on Dec 2006 using Ants 3dY, 3eY.
-# Preliminary cutoff selection by Peter Backus.
-# Note: all values are in MHz
 
-# band center freq & width
-set bandcovered  { 6000.00 12000.0 }
+# convert ephemeris data from
+# jpl horizons in this format:
+#    yyyy-mm-dd hh:mm:ss (utc), <xxx>,<xxx>, ra, dec, azdeg, eldeg, ...
+# to output format in ata ephem:
+#    timeInNanosecs azdeg eldeg 0.0000000000E00
+#
+# Note: must first edit date format from Horizons, changing month
+#   from abbreviation to number (eg, May -> 05)
 
-# mask elements
-# center freq & width
+#set -x
+
+# extract comma separated fields
+IFS=","
+
+gnuDate="/usr/local/bin/date"
+
+# assume infinite distance
+lastAtaField="0.0000000000E00"
+
+# convert to atomic time (TAI) (i.e., account for leap seconds)
+atomOffsetSecs=34
+
+while read dateStr foo1 foo2 ra dec azDeg elDeg remainder
+do
+   #Use GNU date to convert to unix timestamp (secs since epoch):
+   #eg % date --date "2000-01-01 12:00 UTC" +'%s'
+
+   timeInSecs=`$gnuDate --date "$dateStr UTC" "+%s"`
+
+   #echo "timeInSecs = $timeInSecs"
+
+   timeInSecs=`expr $timeInSecs + $atomOffsetSecs`
+
+   # convert time to nanoseconds
+   timeInNanoSecs="${timeInSecs}000000000"
+
+   echo "$timeInNanoSecs $azDeg $elDeg $lastAtaField"
+
+done
 
 
-# Center  	Width  	Min  	        Max
-# 1542.613 	44.045 	1520.591 	1564.636
-# 1575.285 	8.192 	1571.189 	1579.381
-# 1584.706 	0.819 	1584.296 	1585.116
-# 1599.548 	12.480 	1593.307 	1605.788
-# 1681.153 	1.638 	1680.334 	1681.972
-# 1684.840 	0.819 	1684.430 	1685.249
-# 1689.461 	5.146 	1686.887 	1692.034
-
-# Total  	73.140 MHz 	 	
-
-set masks  {
-1542.613  	44.04
-1575.285 	8.192
-1584.706 	0.819
-1599.548 	12.480
-1681.153 	1.638
-1684.840 	0.819
-1689.461 	5.146
-3040.4096 .8192
-3041.2288 .8192
-3046.144 .8192
-3036.9632 .8192
-3049.4208 .8192
-3053.5168 .8192
-3054.336 .8192
-3057.6128 .8192
-3058.432 .8192
-3124.7861 .8192
-3215.716 .8192
-3216.535 .8192
-3221.450 .8192
-3222.269 .8192
-3223.089 .8192
-3223.908 .8192
-}

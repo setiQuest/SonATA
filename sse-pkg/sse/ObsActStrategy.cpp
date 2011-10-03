@@ -71,6 +71,7 @@
 #include <algorithm>
 #include <memory>
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 static const double AssumedCommensalCalFreqMhz = 1420;
@@ -1331,7 +1332,11 @@ TuneDxs* ObsActStrategy::getTuneDxs(int verboseLevel) const
    {
    case SchedulerParameters::TUNE_DXS_RANGE:
 
-      return new TuneDxsRangeCenter(
+	   //cout.precision(12);
+	 //cout << "beginfreq " << nssParameters_.sched_->getBeginObsFreqMhz()
+      	//	<< " endfreq " << nssParameters_.sched_->getEndObsFreqMhz()
+	//	<< endl;
+	return new TuneDxsRangeCenter(
 	 verboseLevel,
 	 Range(nssParameters_.sched_->getBeginObsFreqMhz(),
 	       nssParameters_.sched_->getEndObsFreqMhz()));

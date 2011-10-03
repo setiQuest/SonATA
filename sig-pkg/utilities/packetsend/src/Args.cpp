@@ -109,7 +109,7 @@ Args::parse(int argc, char **argv)
 			done = true;
 			break;
 		case '?':
-			cout << usage;
+			cout << usage;;
 			exit(1);
 		case 'b':
 			burst = atoi(optarg);

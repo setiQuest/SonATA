@@ -36,6 +36,9 @@
 LDADD=
 
 bin_SCRIPTS = \
+	email-jpl-ephem-xyz-requests.sh\
+	convert-jpl-xyz-data.sh \
+	convert-jpl-horiz-to-ata-ephem.sh \
 	compareDxData.sh \
 	controlcomponents.expect \
 	daily-error-summary.sh \

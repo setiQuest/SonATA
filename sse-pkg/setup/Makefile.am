@@ -76,20 +76,14 @@ dist_setup_DATA = \
 	expectedSonATAComponents-beam2-800KHz-24dx.cfg \
 	expectedSonATAComponents-jane-test.cfg \
 	earth.xyz \
-	pioneer10.xyz \
 	voyager1.xyz \
 	moon.xyz \
-	venus.xyz \
 	mars.xyz \
 	jupiter.xyz \
 	saturn.xyz \
 	rosetta.xyz \
 	newhorizons.xyz \
-	dawn.xyz \
 	deepimpact.xyz \
-	stardust.xyz \
-	phoenixlander.xyz \
-	ulysses.xyz \
 	cassini.xyz \
 	kepler.xyz \
 	ifAttnDbOffset.cfg

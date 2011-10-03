@@ -59,7 +59,7 @@ create table TargetCat
   catalog       enum("none", "spacecraft", "habcat", "nearest", "exoplanets",
                 "galsurvey", "tycho2subset", "tycho2remainder",
                 "caldelay", "calphase", "radecgrid", "cygnusx3", "antisolar",
-		"quietsky") not null,
+		"quietsky", "explorer") not null,
   ra2000Hours   double not null default -99, 
   dec2000Deg    double not null default -99, 
   pmRaMasYr     double not null default 0,  -- proper motion, RA, milliArcsec per yr

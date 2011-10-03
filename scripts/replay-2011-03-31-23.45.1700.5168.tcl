@@ -27,4 +27,4 @@ tscope sim
 
 db set usedb on
 db set host localhost
-db set name setiquest
+db set name sonatadb

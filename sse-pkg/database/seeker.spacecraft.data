@@ -87,10 +87,10 @@ insert into TargetCat(targetId, catalog, autoschedule, aliases) values (163, 'sp
 insert into Spacecraft(targetId, name, autoDetect, ephemFilename) values (163, 'Hayabusa', 'No', '');
 
 insert into TargetCat(targetId, catalog, autoschedule, aliases) values (164, 'spacecraft', 'No', 'Stardust');
-insert into Spacecraft(targetId, name, xmit1FreqMhz, autoDetect, ephemFilename) values (164, 'Stardust', 8415.000, 'Yes', 'stardust.xyz');
+insert into Spacecraft(targetId, name, xmit1FreqMhz, autoDetect, ephemFilename) values (164, 'Stardust', 8415.000, 'Yes', '');
 
 insert into TargetCat(targetId, catalog, autoschedule, aliases) values (165, 'spacecraft', 'No', 'Dawn');
-insert into Spacecraft(targetId, name, xmit1FreqMhz, autoDetect, ephemFilename) values (165, 'Dawn', 8435.370, 'Yes', 'dawn.xyz');
+insert into Spacecraft(targetId, name, xmit1FreqMhz, autoDetect, ephemFilename) values (165, 'Dawn', 8435.370, 'Yes', '');
 
 insert into TargetCat(targetId, catalog, autoschedule, aliases) values (166, 'spacecraft', 'No', 'DeepImpact');
 insert into Spacecraft(targetId, name, xmit1FreqMhz, autoDetect, ephemFilename) values (166, 'DeepImpact', 8435.370, 'Yes', 'deepimpact.xyz');
