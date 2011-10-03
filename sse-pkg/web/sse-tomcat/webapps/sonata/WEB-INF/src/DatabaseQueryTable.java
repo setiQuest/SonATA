@@ -114,7 +114,10 @@ public class DatabaseQueryTable extends DatabaseAccess {
          
          out.println("<hr>");
          out.println("<p><b>ERROR executing the query</b></p>");
-         //System.out.println("Error in DatabaseQueryTable.java");  // writes to catalina.out
+       
+         String msg = e.getMessage();
+         //System.out.println("Error in DatabaseQueryTable.java: msg=\n" + msg);  // writes to catalina.out
+         out.println("<p>" + msg + "</p>");
          
 	 //throw new ServletException(e);
 
