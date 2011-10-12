@@ -119,6 +119,7 @@ scripts_SCRIPTS = \
 	sonata-start-rfiscan-2550-2750-full-array.tcl \
 	sonata-start-rfiscan-3040-3240-full-array.tcl \
 	sonata-start-rosetta-4l-obs.tcl \
+	sonata-start-rosetta-1a-beam2-obs.tcl \
 	sonata-start-rosetta-full-array-obs.tcl \
 	sonata-start-waterhole2x-2840-3040MHz-obs.tcl \
 	sonata-start-waterhole2x-3040-3240MHz-obs.tcl \
