@@ -141,6 +141,7 @@ scripts_SCRIPTS = \
 	tscope-setup-1beam-4l.tcl \
 	tscope-setup-2beam-4l.tcl \
 	tscope-setup-3beam-4l.tcl \
+	tscope-setup-3beam-good-ants.tcl \
 	tscope-setup-1beam-vger-full.tcl \
 	tscope-setup-beam2-4l.tcl \
 	vger-demo-dualpol.tcl \
@@ -183,4 +184,5 @@ scripts_SCRIPTS = \
 	replay-2011-03-31-22.01.1528.5168.tcl \
 	replay-2011-03-31-22.22.1518.5168.tcl \
 	replay-2011-03-31-23.27.1695.5168.tcl \
+	3beam-dualpol-rosetta.tcl \
 	data-capture-replay-env-vars.tcsh

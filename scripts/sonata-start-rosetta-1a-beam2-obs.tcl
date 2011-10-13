@@ -2,7 +2,7 @@
 # sonata-start-rosetta-1a-beam2.obs.tcl
 
 # send out "taking the array" email
-sh echo " SonATA taking array" | mailx -s 'SonATA taking array for Rosetta Test' -r ata-staff@seti.org ata-staff@seti.org
+sh echo " SonATA taking array" | mailx -s 'SonATA taking array for Rosetta Test' -r jane@seti.org ata-staff@seti.org
 
 # connect to telescope array
 #tscope setup
@@ -17,8 +17,8 @@ sched set beam3 off
 sched set tasks prepants,bfreset,bfautoatten,bfinit,caldelay,obs
 
 # 24 dxs 800 KHz
-sched set beginfreq 8418.0 
-sched set endfreq 8438.1
+sched set beginfreq 8412.0 
+sched set endfreq 8432.1
 sched set dxtune range
 sched set rftune auto
 sched set target user
@@ -41,7 +41,7 @@ tscope set antsypol 1a
  tscope assign beamxd2 1a
  tscope assign beamyd2 1a
 
-act set targetbeam1 160
+act set targetbeam2 160
 act set targetprimary 160
 act set type target
 act set candarch confirmed
