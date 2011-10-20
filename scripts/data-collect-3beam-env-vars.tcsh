@@ -13,7 +13,7 @@ setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost2x chanhost3x"
 #setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
 
 # Actual Channelizer Host Names
-setenv CHANHOST1X "seti000-1"
+setenv CHANHOST1X "seti000-2"
 setenv CHANHOST1X_NAME "chan1x"
 setenv CHANHOST2X "seti001-1"
 setenv CHANHOST2X_NAME "chan2x"
@@ -40,7 +40,7 @@ setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2 dxhost3"
 #setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2 dxhost3"
 
 # Actual Host Names
-setenv DXHOST1 "seti000-2"
+setenv DXHOST1 "seti000-1"
 setenv DXHOST2 "seti001-2"
 setenv DXHOST3 "seti002-2"
 

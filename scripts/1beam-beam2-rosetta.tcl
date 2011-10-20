@@ -1,12 +1,12 @@
 
-# 3 beam
+# 1 beam
+
+# 1beam-beam2-rosetts.tcl
 
 
-
-
-sched set beam1 on
+sched set beam1 off
 sched set beam2 on
-sched set beam3 on
+sched set beam3 off
 
 # 24 dxs 800 KHz
 sched set beginfreq 8418.0 
@@ -18,7 +18,7 @@ sched set pipe on
 sched set followup on
 sched set catshigh spacecraft,habcat
 sched set catslow tycho2subset,tycho2remainder
-sched set multitarget on
+sched set multitarget off
 
 db set host sse100
 db set name sonatadb
@@ -38,7 +38,7 @@ act set multitargetnulls off
 dx set length 94
 dx set datareqsubchan 178
 dx set baseinitaccum 20
-dx set basewarn off
-dx set baseerror off
+dx set basewarn on
+dx set baseerror on
 
 

@@ -16,10 +16,10 @@ RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanho
 export RUNSSE_CHAN_HOSTS
 
 # Actual Channelizer Host Names
-CHANHOST1X="seti000-1"
+CHANHOST1X="seti000-2"
 CHANHOST2X="seti001-1"
 CHANHOST3X="seti002-1"
-CHANHOST1Y="seti000-1"
+CHANHOST1Y="seti000-2"
 CHANHOST2Y="seti001-1"
 CHANHOST3Y="seti002-1"
 export CHANHOST1X
@@ -68,7 +68,7 @@ RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8
 export RUNSSE_DX_HOSTS
 
 # Actual Host Names
-DXHOST1="seti000-2"
+DXHOST1="seti000-1"
 DXHOST2="seti000-3"
 DXHOST3="seti000-4"
 DXHOST4="seti001-2"

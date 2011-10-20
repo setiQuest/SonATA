@@ -142,6 +142,10 @@ scripts_SCRIPTS = \
 	tscope-setup-2beam-4l.tcl \
 	tscope-setup-3beam-4l.tcl \
 	tscope-setup-3beam-good-ants.tcl \
+	exoplanets-1420-1750.tcl \
+	tscope-setup-3beam-1410-1750-good-ants.tcl \
+	sonata-start-rosetta-beam2-good-ants.obs.tcl \
+	1beam-beam2-rosetta.tcl
 	tscope-setup-1beam-vger-full.tcl \
 	tscope-setup-beam2-4l.tcl \
 	vger-demo-dualpol.tcl \
