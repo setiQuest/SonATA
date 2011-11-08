@@ -12,7 +12,7 @@ act set candarch confirmed
 act set multitargetnulls off
 
 sched set beginfreq 1410.0 
-sched set endfreq 1730.0
+sched set endfreq 1471.0
 sched set dxtune range
 sched set rftune auto
 sched set target user

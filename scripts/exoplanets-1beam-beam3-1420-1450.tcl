@@ -3,7 +3,7 @@
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Exoplanets' -r jjordan@seti.org ata-staff@seti.org
+sh echo "SonATA taking array" | mailx -s 'SonATA taking ant4l and bf3 for Exoplanets' -r jjordan@seti.org ata-staff@seti.org
 
 #exec setAlarm ARM,sonata,exoplanets
 
@@ -52,7 +52,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {exoplanets} current 
+db set name {sonatadb} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -63,7 +63,7 @@ dx set badbandpulsetriplim 5000.000000000 current
 dx set bandwidth 1536 current 
 dx set basedecay 0.899999976 current 
 dx set baseerrormeanlower 30.000000000 current 
-dx set baseerrormeanupper 2000.000000000 current 
+dx set baseerrormeanupper 5000.000000000 current 
 dx set baseerror off current 
 dx set baseerrorrange 600.000000000 current 
 dx set baseerrorstddev 80.000000000 current 
@@ -108,8 +108,8 @@ dx set trainsignifthresh -40.000000000 current
 dx set tripletthresh 48.000000000 current 
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
-sched set beam1 {on} current 
-sched set beam2 {on} current 
+sched set beam1 {off} current 
+sched set beam2 {off} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
@@ -127,7 +127,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 1471.000000000 current 
+sched set endfreq 1450.2 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -137,7 +137,7 @@ sched set minfollowups 12 current
 sched set mindxbw 20.000000000 current 
 sched set mintargetsep 2.500000000 current 
 sched set moonavoid 10.000000000 current 
-sched set multitarget {on} current 
+sched set multitarget {off} current 
 sched set dxoverlap 0.001000000 current 
 sched set dxround 0.100000000 current 
 sched set dxtune {range} current 

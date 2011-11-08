@@ -1,7 +1,7 @@
 
 # 3 beam
 
-# 3beam-dualpol-rosetta.tcl
+# 3beam-dualpol-amc-7.tcl
 
 
 
@@ -10,8 +10,8 @@ sched set beam2 on
 sched set beam3 on
 
 # 24 dxs 800 KHz
-sched set beginfreq 8418.0 
-sched set endfreq 8438.1
+sched set beginfreq 3699.0 
+sched set endfreq 3719.1
 sched set dxtune range
 sched set rftune auto
 sched set target user
@@ -25,11 +25,7 @@ db set host sse100
 db set name sonatadb
 db set usedb on
 
-act set targetbeam1 160
-act set targetbeam2 160
-act set targetbeam3 160
-act set targetprimary 160
-act set type target
+act set type rftestzerodrift
 act set candarch confirmed
 act set delay 20
 act set multitargetnulls off
@@ -42,4 +38,4 @@ dx set baseinitaccum 20
 dx set basewarn off
 dx set baseerror off
 
-
+tscope point 1a azel 201.0271 41.1912

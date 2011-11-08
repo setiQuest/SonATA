@@ -28,7 +28,7 @@ setenv CHANHOST2Y_NAME "chan2y"
 setenv CHANHOST3Y_NAME "chan3y"
 
 # Command line options for all Channelizers
-setenv CHANOPTS "-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1"
+setenv CHANOPTS "-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1 -p"
 
 # Beam Specific Command Line options for Channelizers
 setenv CHANHOST1X_OPTS "-P X  -i 50000 -j 51000 -I 226.1.50.1 -J 227.1.1.1"

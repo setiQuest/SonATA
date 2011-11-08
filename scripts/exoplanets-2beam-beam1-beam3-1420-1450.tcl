@@ -1,9 +1,9 @@
-# sonata-start-exoplanets-obs.tcl
+#exoplanets-2beam-beam1-beam3-1420-1450.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Exoplanets' -r jjordan@seti.org ata-staff@seti.org
+sh echo "SonATA taking array" | mailx -s 'SonATA taking bf1 & bf3 for Exoplanets' -r jjordan@seti.org ata-staff@seti.org
 
 #exec setAlarm ARM,sonata,exoplanets
 
@@ -23,7 +23,7 @@ act set earthephem {earth.xyz} current
 act set emailactstat {off} current 
 act set emailaddr {observing@seti.org} current 
 act set freqinvert {never} current 
-act set multitargetnulls {on} current 
+act set multitargetnulls {off} current 
 act set nulldepth 7.000000000 current 
 act set offactnulls {projection} current 
 act set pointprimary {on} current 
@@ -52,7 +52,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {exoplanets} current 
+db set name {sonatadb} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -63,7 +63,7 @@ dx set badbandpulsetriplim 5000.000000000 current
 dx set bandwidth 1536 current 
 dx set basedecay 0.899999976 current 
 dx set baseerrormeanlower 30.000000000 current 
-dx set baseerrormeanupper 2000.000000000 current 
+dx set baseerrormeanupper 5000.000000000 current 
 dx set baseerror off current 
 dx set baseerrorrange 600.000000000 current 
 dx set baseerrorstddev 80.000000000 current 
@@ -109,7 +109,7 @@ dx set tripletthresh 48.000000000 current
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
-sched set beam2 {on} current 
+sched set beam2 {off} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
@@ -127,7 +127,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 1471.000000000 current 
+sched set endfreq 1450.2 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 

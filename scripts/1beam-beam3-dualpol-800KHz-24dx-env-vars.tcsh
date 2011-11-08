@@ -1,6 +1,6 @@
 #!/bin/tcsh
 
-# 1beam-dualpol-800KHz-24dx-env-vars.tcsh
+# 1beam-beam3-dualpol-800KHz-24dx-env-vars.tcsh
 
 setenv FILTER_DIR "${HOME}/sonata_install/filters"
 setenv SSE_SETUP "${HOME}/sonata_install/setup"
@@ -10,15 +10,15 @@ setenv SSE_SETUP "${HOME}/sonata_install/setup"
 #------------------------------------
 
 # Logical Channelizer Host Names
-setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost1y"
+setenv RUNSSE_CHAN_HOSTS "chanhost3x chanhost3y"
 #setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
 
 # Actual Channelizer Host Names
-setenv CHANHOST1X "seti000-2"
-setenv CHANHOST1Y "seti000-2"
+setenv CHANHOST3X "seti002-1"
+setenv CHANHOST3Y "seti002-1"
 # Channelizer Names
-setenv CHANHOST1X_NAME "chan1x"
-setenv CHANHOST1Y_NAME "chan1y"
+setenv CHANHOST3X_NAME "chan3x"
+setenv CHANHOST3Y_NAME "chan3y"
 
 # Command line options for all Channelizers
 setenv CHANOPTS "-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1 -p"
@@ -35,7 +35,7 @@ setenv CHANHOST3Y_OPTS "-P Y  -i 50005 -j 53000 -I 226.3.50.2 -J 227.3.1.1"
 #---------------------------
 
 # Logical Host Names
-setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2 dxhost3"
+setenv RUNSSE_DX_HOSTS	"dxhost7 dxhost8 dxhost9"
 
 # Actual Host Names
 setenv DXHOST1 "seti000-1"
@@ -93,4 +93,4 @@ setenv DXHOST9_OPTS "$DX_OPTS $BEAM3_DX_OPTS"
 setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST tumulus
 
 # switch the expected components config file to match
-${HOME}/sonata_install/scripts/switchConfigFile-1beam-800KHz-24dxs.tcsh
+${HOME}/sonata_install/scripts/switchConfigFile-1beam-beam3-800KHz-24dxs.tcsh

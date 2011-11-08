@@ -141,11 +141,19 @@ scripts_SCRIPTS = \
 	tscope-setup-1beam-4l.tcl \
 	tscope-setup-2beam-4l.tcl \
 	tscope-setup-3beam-4l.tcl \
+	tscope-setup-3beam-1a.tcl \
+	tscope-setup-2beam-1a.tcl \
+	3beam-dualpol-amc-7.tcl \
+	rosetta-3beam-1a.tcl \
 	tscope-setup-3beam-good-ants.tcl \
 	exoplanets-1420-1750.tcl \
-	tscope-setup-3beam-1410-1750-good-ants.tcl \
+	exoplanets-1beam-1420-1450.tcl \
+	tscope-setup-3beam-1410-1471-good-ants.tcl \
+	switch-beams-env-vars.tcsh \
+	mars-3beam-8405-8445.tcl \
+	mars-2beam-8405-8445.tcl \
 	sonata-start-rosetta-beam2-good-ants.obs.tcl \
-	1beam-beam2-rosetta.tcl
+	1beam-beam2-rosetta.tcl \
 	tscope-setup-1beam-vger-full.tcl \
 	tscope-setup-beam2-4l.tcl \
 	vger-demo-dualpol.tcl \
@@ -189,4 +197,13 @@ scripts_SCRIPTS = \
 	replay-2011-03-31-22.22.1518.5168.tcl \
 	replay-2011-03-31-23.27.1695.5168.tcl \
 	3beam-dualpol-rosetta.tcl \
+	2beam-dualpol-beam1-beam3-800KHz-48dx-env-vars.tcsh \
+	tscope-setup-2beam-beam1-beam3-1a.tcl \
+	tscope-setup-2beam-beam1-beam3-4l.tcl \
+	tscope-setup-1beam-1a.tcl \
+	exoplanets-2beam-beam1-beam3-1420-1450.tcl \
+	switchConfigFile-1beam-beam3-800KHz-24dxs.tcsh \
+	1beam-beam3-dualpol-800KHz-24dx-env-vars.tcsh \
+	exoplanets-1beam-beam3-1420-1450.tcl \
+	tscope-setup-1beam-beam3-4l.tcl \
 	data-capture-replay-env-vars.tcsh
