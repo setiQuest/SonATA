@@ -1,0 +1,7 @@
+-- bf delay calibration integration times (assumes 1420 MHz freq) --
+-- lowFreqMhz,highFreqMhz,fluxJy,timeSecs
+1200,1500,197,300
+1200,1500,198,200
+1200,1500,875,100
+1200,1500,1500,30
+1200,1500,2477,30

@@ -23,9 +23,9 @@ act set earthephem {earth.xyz} current
 act set emailactstat {off} current 
 act set emailaddr {observing@seti.org} current 
 act set freqinvert {never} current 
-act set multitargetnulls {on} current 
+act set multitargetnulls {off} current 
 act set nulldepth 7.000000000 current 
-act set offactnulls {projection} current 
+act set offactnulls {none} current 
 act set pointprimary {on} current 
 act set prevactid 0 current 
 act set primarybempos {targetid} current 

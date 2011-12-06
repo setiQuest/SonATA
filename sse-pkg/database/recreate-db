@@ -1,7 +1,7 @@
 #!/bin/sh
 ################################################################################
 #
-# File:    recreate-db
+# File:    create-db-kepler
 # Project: OpenSonATA
 # Authors: The OpenSonATA code is the result of many programmers
 #          over many years
@@ -34,7 +34,7 @@
 
 # Set these as needed:
 dbhost="localhost"
-dbname="galsurvey"
+dbname="kepler"
 
 if [ "$dbhost" = "" ]
 then
@@ -51,7 +51,8 @@ fi
 #set -x
 
 # location of catalog data files
-catalogDir="../../sse-data/catalogs/observing"
+
+catalogDir="~/peter/catalogs/observing"
 
 sourceFile()
 {

@@ -25,7 +25,7 @@ act set emailaddr {observing@seti.org} current
 act set freqinvert {never} current 
 act set multitargetnulls {off} current 
 act set nulldepth 7.000000000 current 
-act set offactnulls {projection} current 
+act set offactnulls {none} current 
 act set pointprimary {on} current 
 act set prevactid 0 current 
 act set primarybempos {targetid} current 
@@ -137,7 +137,7 @@ sched set minfollowups 12 current
 sched set mindxbw 20.000000000 current 
 sched set mintargetsep 2.500000000 current 
 sched set moonavoid 10.000000000 current 
-sched set multitarget {on} current 
+sched set multitarget {off} current 
 sched set dxoverlap 0.001000000 current 
 sched set dxround 0.100000000 current 
 sched set dxtune {range} current 

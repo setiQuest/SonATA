@@ -1618,7 +1618,11 @@ void Tscope::reportTargetTracking()
       // immediately considered off if any of the pointings are wrong
       tracking_ = false;
       sseProxy_.trackingOff();
-      reportErrorToSse("lost target tracking, invalid pointing");
+      stringstream currentAzEl;
+      currentAzEl << "lost target Tracking, invalid pointing. AZ "
+	      << statusMultibeam_.primaryPointing[TSCOPE_BEAMXC1].azDeg << " DEC " 
+	      << statusMultibeam_.primaryPointing[TSCOPE_BEAMXC1].elDeg;
+      reportErrorToSse(currentAzEl.str().c_str());
 #if 0
       // debug
       printPointingRequestsAndStatus("debug of 'lost target tracking, invalid pointing'");

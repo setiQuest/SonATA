@@ -30,10 +30,14 @@ scriptsdir = $(prefix)/scripts/
 scripts_SCRIPTS = \
 	cleanup-chan-dx.tcsh \
 	1beam-dualpol-800KHz-24dx-env-vars.tcsh \
+	1beam-beam2-dualpol-800KHz-24dx-env-vars.tcsh \
+	tscope-setup-1beam-beam2-1a.tcl \
+	mars-express-1beam-beam2-8419-8439.tcl \
 	switchConfigFile-1beam-beam2-800KHz-24dxs.tcsh \
 	1beam-beam2-seti001-800KHz-24dx-env-vars.tcsh \
 	2beam-dualpol-800KHz-48dx-env-vars.tcsh \
 	3beam-dualpol-800KHz-72dx-env-vars-batch.sh \
+	2beam-beam1-beam3-dualpol-800KHz-48dx-env-vars-batch.sh \
 	3beam-dualpol-800KHz-72dx-env-vars.tcsh \
 	3beam-xpol-800KHz-72dx-env-vars.tcsh \
 	data-collect-2beam-env-vars.tcsh \
@@ -111,6 +115,8 @@ scripts_SCRIPTS = \
 	sonata-start-cygnus-exoplanets-obs-noncommensal.tcl \
 	sonata-start-cygnusx3-obs.tcl \
 	sonata-start-exoplanets-obs.tcl \
+	sonata-start-exoplanets-3beam-8500-8700-obs.tcl \
+	sonata-start-exoplanets-beam1-beam3-obs.tcl \
 	sonata-start-rfiscan-1400-1750-full-array.tcl \
 	sonata-start-rfiscan-1750-1950-full-array.tcl \
 	sonata-start-rfiscan-1950-2150-full-array.tcl \
@@ -146,6 +152,7 @@ scripts_SCRIPTS = \
 	3beam-dualpol-amc-7.tcl \
 	rosetta-3beam-1a.tcl \
 	tscope-setup-3beam-good-ants.tcl \
+	tscope-setup-3beam-good-ants-8405-8445.tcl \
 	exoplanets-1420-1750.tcl \
 	exoplanets-1beam-1420-1450.tcl \
 	tscope-setup-3beam-1410-1471-good-ants.tcl \
@@ -202,8 +209,19 @@ scripts_SCRIPTS = \
 	tscope-setup-2beam-beam1-beam3-4l.tcl \
 	tscope-setup-1beam-1a.tcl \
 	exoplanets-2beam-beam1-beam3-1420-1450.tcl \
+	exoplanets-2beam-beam1-beam3-1410-1650.tcl \
+	mars-2beam-beam1-beam3-8405-8445.tcl \
 	switchConfigFile-1beam-beam3-800KHz-24dxs.tcsh \
 	1beam-beam3-dualpol-800KHz-24dx-env-vars.tcsh \
 	exoplanets-1beam-beam3-1420-1450.tcl \
 	tscope-setup-1beam-beam3-4l.tcl \
+	switchConfigFile-2beam-beam1-beam3-800KHz-48dxs.tcsh \
+	2beam-dualpol-beam1-seti001-beam3-seti002-800KHz-48dx-env-vars.tcsh \
+	vger-2beam-beam1-beam3.tcl \
+	kepler-2beam-beam1-beam3.tcl \
+	tscope-setup-2beam-beam1-beam3-good-ants-1410-1650.tcl \
+	exoplanets-3beam-1520-1540.tcl \
+	tscope-setup-3beam-good-ants-1520-1540.tcl \
+	sonata-cron-begin-kepler-session.sh \
+	sonata-start-kepler-3beam-8500-8700-obs.tcl \
 	data-capture-replay-env-vars.tcsh
