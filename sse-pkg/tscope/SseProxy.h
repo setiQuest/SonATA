@@ -57,6 +57,7 @@ class SseProxy : public NssProxy
   void stopComplete();
   void trackingOn();
   void trackingOff();
+  void cancelTimer();
   void ready();
 
  private:

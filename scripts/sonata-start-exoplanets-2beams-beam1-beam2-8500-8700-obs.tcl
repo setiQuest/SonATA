@@ -1,11 +1,11 @@
-# sonata-start-kepler-3beam-8500-8700-obs.tcl
+# sonata-start-exoplanets-3beam-8500-8700-obs.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Kepler' -r jjordan@seti.org ata-staff@seti.org
+sh echo "SonATA taking array. Using Beam 1 and 2." | mailx -s 'SonATA taking array for exoplanets' -r jrichards@seti.org ata-staff@seti.org
 
-exec setAlarm ARM,sonata,Kepler
+exec setAlarm ARM,sonata,exoplanets
 
 # connect to the backend server
 tscope setup
@@ -54,7 +54,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {kepler} current 
+db set name {exoplanets} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -64,10 +64,10 @@ dx set badbandpulselim 300.000000000 current
 dx set badbandpulsetriplim 5000.000000000 current 
 dx set bandwidth 1536 current 
 dx set basedecay 0.899999976 current 
-dx set baseerrormeanlower 500.000000000 current 
+dx set baseerrormeanlower 350.000000000 current 
 dx set baseerrormeanupper 8000.000000000 current 
 dx set baseerror on current 
-dx set baseerrorrange 600.000000000 current 
+dx set baseerrorrange 700.000000000 current 
 dx set baseerrorstddev 100.000000000 current 
 dx set baseinitaccum 20 current 
 dx set baselines {on} current 
@@ -77,7 +77,7 @@ dx set basesubave 1 current
 dx set basewarnmeanlower 500.000000000 current 
 dx set basewarnmeanupper 7000.000000000 current 
 dx set basewarn on current 
-dx set basewarnrange 700.000000000 current 
+dx set basewarnrange 500.000000000 current 
 dx set basewarnstddev 75.000000000 current 
 dx set clustfreqtol 339.000000000 current 
 dx set coherentdetlim 0.000000000 current 
@@ -112,15 +112,15 @@ dx set zerodrifttol 0.007000000 current
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
 sched set beam2 {on} current 
-sched set beam3 {on} current 
+sched set beam3 {off} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
 sched set beginfreq 8500.000000000 current 
-sched set catshigh {keplerHZ,exokepler} current 
+sched set catshigh {exoplanets,habcat} current 
 sched set catshighmaxcounts 20000 current 
-sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
+sched set catslow {tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 
@@ -196,8 +196,8 @@ tscope assign beamxc1 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
 tscope assign beamyc1 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
 tscope assign beamxd1 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
 tscope assign beamyd1 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
-tscope assign beamxd2 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
-tscope assign beamyd2 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
+#tscope assign beamxd2 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
+#tscope assign beamyd2 1a,1b,1d,1f,1h,1k,2f,2j,3d,4k,5b
 
 # begin observing
 

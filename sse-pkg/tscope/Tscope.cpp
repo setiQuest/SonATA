@@ -1382,6 +1382,7 @@ void Tscope::reportStatusToSse()
          }
          else
          {
+	sseProxy_.cancelTimer();
             getSseProxy().sendMsgToSse(
                SEVERITY_INFO, 
                "Primary beam is ready.  Now running beamformer cmd: "
@@ -1615,14 +1616,21 @@ void Tscope::reportTargetTracking()
    }
    else if (tracking_ && !allGoodPosition)
    {
-      // immediately considered off if any of the pointings are wrong
-      tracking_ = false;
-      sseProxy_.trackingOff();
-      stringstream currentAzEl;
-      currentAzEl << "lost target Tracking, invalid pointing. AZ "
+      // This is not true anymore: immediately considered off if any of the pointings are wrong
+      // allow for a few fluctuations in & out of tracking before
+      // reporting an error
+      // JR - Dec 14, 2011 - We have determined that we can wait 10 times till we report
+      // lost tracking - if an antenna is not tracking.
+      if (++notTrackingTargetCount_ >= maxNotTrackingTargetCount)
+      {
+        tracking_ = false;
+        sseProxy_.trackingOff();
+        stringstream currentAzEl;
+        currentAzEl << "lost target Tracking, invalid pointing. AZ "
 	      << statusMultibeam_.primaryPointing[TSCOPE_BEAMXC1].azDeg << " DEC " 
 	      << statusMultibeam_.primaryPointing[TSCOPE_BEAMXC1].elDeg;
-      reportErrorToSse(currentAzEl.str().c_str());
+        reportErrorToSse(currentAzEl.str().c_str());
+     }
 #if 0
       // debug
       printPointingRequestsAndStatus("debug of 'lost target tracking, invalid pointing'");

@@ -3177,6 +3177,8 @@ void ObserveActivityImp::startTelescopes()
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
 			"startTelescopes() nscopes: " << tscopeList.size() << endl;);
 
+	SseArchive::SystemLog() << "Act " << getId() << ": " <<
+			"startTelescopes() nscopes: " << tscopeList.size() << endl;
 	try 
 	{
 		for (TscopeList::iterator it = tscopeList.begin(); 
@@ -4851,6 +4853,13 @@ if (! isMultitargetObservation() && dxMeanSkyFreqMhz < 0)
 }
 
 
+void ObserveActivityImp::tscopeCancelTimer(TscopeProxy* tscopeProxy)
+{
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
+			"tscopeCancelTimer received from " << tscopeProxy->getName() << endl;);
+
+		tscopeReadyTimeout_.cancelTimer();
+}
 
 
 void ObserveActivityImp::tscopeReady(TscopeProxy* tscopeProxy)
@@ -4872,6 +4881,9 @@ void ObserveActivityImp::tscopeReady(TscopeProxy* tscopeProxy)
 				<< " tscopeReady messages received" << endl;);
 	}
 
+		SseArchive::SystemLog() << "Act " << getId() << ": "
+			<< nTscopesStarted_  
+			<< " Tscopes Started " << endl;
 	if (nTscopesReady_ == nTscopesStarted_)
 	{
 

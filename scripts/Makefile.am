@@ -224,4 +224,9 @@ scripts_SCRIPTS = \
 	tscope-setup-3beam-good-ants-1520-1540.tcl \
 	sonata-cron-begin-kepler-session.sh \
 	sonata-start-kepler-3beam-8500-8700-obs.tcl \
+	sonata-start-vger-3beam-8412-8432-obs.tcl \
+	sonata-cron-switch-to-exoplanets.sh \
+	sonata-switch-to-exoplanets.tcl \
+	sonata-start-exoplanets-2beams-beam1-beam2-8500-8700-obs.tcl \
+	sonata-start-kepler-2beams-beam1-beam2-8500-8700-obs.tcl \
 	data-capture-replay-env-vars.tcsh

@@ -3,7 +3,7 @@
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Kepler' -r jjordan@seti.org ata-staff@seti.org
+sh echo "SonATA taking array. Observing with Beam 1 and 2" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
 
 exec setAlarm ARM,sonata,Kepler
 
@@ -112,7 +112,7 @@ dx set zerodrifttol 0.007000000 current
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
 sched set beam2 {on} current 
-sched set beam3 {on} current 
+sched set beam3 {off} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
@@ -169,9 +169,13 @@ tscope set antlistsource param
 #tscope set antsxpol 1a,1c,1d,1f,2a,2e,2f,2g,2j,2m,3d,5b,5c,5e
 #tscope set antsypol 1a,1c,1d,2a,2e,5b,5c,5e
 # Billy's antlist 2011-12-08
+#JR - removed 3d, it was returning goofy values.
 tscope set antsprimary 1a,1b,1c,1d,1f,1g,1h,1k,2c,2f,2g,2j,3d,3j,3l,4j,4k,5b,5c,5g
 tscope set antsxpol 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
 tscope set antsypol 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
+#tscope set antsprimary 1a,1b,1c,1d,1f,1g,1h,1k,2c,2f,2g,2j,3d,3j,3l,4j,4k,5b,5c,5g
+#tscope set antsxpol 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
+#tscope set antsypol 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
 #tscope set antlistsource {antgroup} current 
 #tscope set antsprimary {antgroup} current 
 #tscope set antsxpol {antgroup} current 
@@ -196,8 +200,8 @@ tscope assign beamxc1 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
 tscope assign beamyc1 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
 tscope assign beamxd1 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
 tscope assign beamyd1 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
-tscope assign beamxd2 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
-tscope assign beamyd2 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
+#tscope assign beamxd2 1a,1c,1f,1k,2g,2j,3d,3j,3l,5c,5g
+#tscope assign beamyd2 1a,1b,1d,1f,1h,1k,2c,2f,2j,3d,4k,5b
 
 # begin observing
 

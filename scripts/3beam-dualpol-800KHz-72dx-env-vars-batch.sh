@@ -43,7 +43,7 @@ export CHANHOST2Y_NAME
 export CHANHOST3Y_NAME
 
 # Command line options for all Channelizers
-CHANOPTS="-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1"
+CHANOPTS="-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1 -p"
 export CHANOPTS
 
 # Beam Specific Command Line options for Channelizers
