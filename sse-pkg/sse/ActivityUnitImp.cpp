@@ -609,7 +609,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
    // for that signal.
 
    float highestSnr = -1.0;
-   double dataRequestRfFreqMhz = -1;
+      FollowUpSignalInfo & firstSig = *infoList.begin();
+      double dataRequestRfFreqMhz = firstSig.followUpSignal.rfFreq;
 
    sigSummary.precision(PrintPrecision);    
    sigSummary.setf(std::ios::fixed);  // show all decimal places up to precision

@@ -3,7 +3,7 @@
 # sonata-start-rfiscan-1400-1750-full-array-obs.tcl
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Rfi Scan' -r jane@seti.org jane@seti.org
+sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Rfi Scan' -r jjordan@seti.org jjordan@seti.org
 
 # connect to telescope array
 tscope setup

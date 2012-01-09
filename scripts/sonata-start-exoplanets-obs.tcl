@@ -3,7 +3,7 @@
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Exoplanets' -r peter@seti.org atauser@seti.org
+sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Exoplanets' -r jjordan@seti.org ata-staff@seti.org
 
 exec setAlarm ARM,sonata,exoplanets
 
@@ -124,7 +124,7 @@ sched set catslow {tycho2subset,tycho2remainder} current
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 
-sched set comcal {on} current 
+sched set comcal {off} current 
 sched set declowerlimit -90.000000000 current 
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 

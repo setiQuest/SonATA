@@ -13,10 +13,10 @@ setenv RUNSSE_CHAN_HOSTS "chanhost2x chanhost2y chanhost3x chanhost3y"
 #setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
 
 # Actual Channelizer Host Names
-setenv CHANHOST1X "seti000-1"
+setenv CHANHOST1X "seti000-2"
 setenv CHANHOST2X "seti001-1"
 setenv CHANHOST3X "seti002-1"
-setenv CHANHOST1Y "seti000-1"
+setenv CHANHOST1Y "seti000-2"
 setenv CHANHOST2Y "seti001-1"
 setenv CHANHOST3Y "seti002-1"
 # Channelizer Names
@@ -28,7 +28,7 @@ setenv CHANHOST2Y_NAME "chan2y"
 setenv CHANHOST3Y_NAME "chan3y"
 
 # Command line options for all Channelizers
-setenv CHANOPTS "-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1"
+setenv CHANOPTS "-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1 -p"
 
 # Beam Specific Command Line options for Channelizers
 setenv CHANHOST1X_OPTS "-P X  -i 50000 -j 51000 -I 226.1.50.1 -J 227.1.1.1"
@@ -47,7 +47,7 @@ setenv RUNSSE_DX_HOSTS	"dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
 #setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
 
 # Actual Host Names
-setenv DXHOST1 "seti000-2"
+setenv DXHOST1 "seti000-1"
 setenv DXHOST2 "seti000-3"
 setenv DXHOST3 "seti000-4"
 setenv DXHOST4 "seti001-2"

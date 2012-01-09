@@ -113,6 +113,7 @@ public:
 
   // incoming messages from other components
   virtual void tscopeReady(TscopeProxy* tscopeProxy);
+  virtual void tscopeCancelTimer(TscopeProxy* tscopeProxy);
   virtual void testSigReady(TestSigProxy* testSigProxy);
   virtual void ifcReady(IfcProxy* ifcProxy);
 

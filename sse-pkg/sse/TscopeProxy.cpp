@@ -560,6 +560,15 @@ void TscopeProxy::sendTscopeReadyToActivity()
       activity_->tscopeReady(this);
    }
 }
+void TscopeProxy::sendTscopeCancelTimerToActivity()
+{
+   ACE_Guard<ACE_Recursive_Thread_Mutex> guard(activityPtrMutex_);
+
+   if (activity_)
+   {
+      activity_->tscopeCancelTimer(this);
+   }
+}
 
 void TscopeProxy::notifyInputDisconnected()
 {
@@ -654,6 +663,13 @@ void TscopeProxy::handleIncomingMessage(SseInterfaceHeader *hdr,
 
       VERBOSE2(getVerboseLevel(), "Tscope ready.");
       sendTscopeReadyToActivity();
+
+      break;
+
+   case TSCOPE_CANCEL_TIMER:
+
+      VERBOSE2(getVerboseLevel(), "Tscope Cancel Timer.");
+      sendTscopeCancelTimerToActivity();
 
       break;
 

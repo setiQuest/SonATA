@@ -16,10 +16,10 @@ RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanho
 export RUNSSE_CHAN_HOSTS
 
 # Actual Channelizer Host Names
-CHANHOST1X="seti000-1"
+CHANHOST1X="seti000-2"
 CHANHOST2X="seti001-1"
 CHANHOST3X="seti002-1"
-CHANHOST1Y="seti000-1"
+CHANHOST1Y="seti000-2"
 CHANHOST2Y="seti001-1"
 CHANHOST3Y="seti002-1"
 export CHANHOST1X
@@ -43,7 +43,7 @@ export CHANHOST2Y_NAME
 export CHANHOST3Y_NAME
 
 # Command line options for all Channelizers
-CHANOPTS="-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1"
+CHANOPTS="-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1 -p"
 export CHANOPTS
 
 # Beam Specific Command Line options for Channelizers
@@ -68,7 +68,7 @@ RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8
 export RUNSSE_DX_HOSTS
 
 # Actual Host Names
-DXHOST1="seti000-2"
+DXHOST1="seti000-1"
 DXHOST2="seti000-3"
 DXHOST3="seti000-4"
 DXHOST4="seti001-2"

@@ -49,7 +49,10 @@ echo "Lost Target Tracking"
 echo `grep "Activity failed: lost target tracking" *$1* | wc -l`
 echo "Timed out waiting for Telescope Ready"
 echo `grep "timed out waiting for tscope ready" *$1* | wc -l`
-echo " "
+echo "No targets remain after Culling by min target separation"
+echo `grep "no targets remain" *$1* | wc -l`
+echo "No targets are available within the observing constraints"
+echo `grep "No targets are available" *$1* | wc -l `
 echo "Dx failures"
 echo "-----------"
 echo "Activities with Dx Failures"
@@ -104,9 +107,12 @@ echo `grep "Baseline Error limits exceeded" *$1* | grep "mean" | wc -l`
 #echo " "
 echo "Baseline warning limits exceeded: range too large"
 echo `grep "Baseline warning limits exceeded" *$1* | grep "large" |  wc -l`
-#echo " "
-echo "Baseline error limits exceeded: range too large"
-echo `grep "Baseline Error limits exceeded" *$1* | grep "large" | wc -l`
+echo "Beam1"
+echo `grep "Baseline warning limits exceeded" *$1* | grep "large" | grep dx1 | wc -l`
+echo "Beam2"
+echo `grep "Baseline warning limits exceeded" *$1* | grep "large" | grep dx2 |  wc -l`
+echo "Beam3"
+echo `grep "Baseline warning limits exceeded" *$1* | grep "large" | grep dx3 | wc -l`
 #echo " "
 echo "Database error: Unknown column nan (zero baselines)"
 echo `grep "MySQL error: Unknown column" *$1* | wc -l `

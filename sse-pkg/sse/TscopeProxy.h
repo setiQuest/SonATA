@@ -125,6 +125,7 @@ class TscopeProxy : public SharedProxy
    void sendDisconnectErrorToActivity();
    void forwardErrorToActivity(NssMessage & nssMessage);
    void sendTscopeReadyToActivity();
+   void sendTscopeCancelTimerToActivity();
 
    void setStatus(const TscopeStatusMultibeam & status);
    void setIntrinsics(const TscopeIntrinsics & intrinsics);

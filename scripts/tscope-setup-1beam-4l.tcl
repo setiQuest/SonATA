@@ -1,8 +1,9 @@
 # 1 beams
 
+sh echo "SonATA taking array" | mailx -s 'SonATA taking ant4l and bf1 for Testing' -r jjordan@seti.org ata-staff@seti.org
 
-sched set beginfreq 8420.2 
-sched set endfreq 8426.2
+sched set beginfreq 1410.0 
+sched set endfreq 1450.0
 sched set beam1 on
 sched set beam2 off
 sched set beam3 off

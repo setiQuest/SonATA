@@ -1,5 +1,7 @@
 # 3 beams
 
+# tscope-setup-3beam-4l.tcl
+
 act set targetbeam1 160
 act set targetbeam2 160
 act set targetbeam3 160

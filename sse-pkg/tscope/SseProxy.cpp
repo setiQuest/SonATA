@@ -153,6 +153,12 @@ void SseProxy::ready()
    sendMessage(code);
 }
 
+void SseProxy::cancelTimer() 
+{
+   TscopeMessageCode code = TSCOPE_CANCEL_TIMER;
+   sendMessage(code);
+}
+
 // --- utilities -----
 
 // send a marshalled message to the SSE

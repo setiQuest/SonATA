@@ -83,6 +83,7 @@ class ObserveActivity : public Activity
   // incoming messages from other components
   virtual void ifcReady(IfcProxy* ifcProxy) = 0;
   virtual void tscopeReady(TscopeProxy* tscopeProxy) = 0;
+  virtual void tscopeCancelTimer(TscopeProxy* tscopeProxy) = 0;
   virtual void testSigReady(TestSigProxy* testSigProxy) = 0;
 
   virtual void ifcError(IfcProxy * ifcProxy, NssMessage &nssMessage) = 0;
