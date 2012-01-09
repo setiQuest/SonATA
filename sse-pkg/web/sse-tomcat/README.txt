@@ -31,7 +31,7 @@
 This is the base directory for the sonata web server files,
 to be run under the jakarta tomcat web server.
 
-INATALLING TOMCAT
+INSTALLING TOMCAT
 
 mkdir ~/tomcat
 cd ~/tomcat
