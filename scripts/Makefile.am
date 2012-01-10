@@ -229,4 +229,7 @@ scripts_SCRIPTS = \
 	sonata-switch-to-exoplanets.tcl \
 	sonata-start-exoplanets-2beams-beam1-beam2-8500-8700-obs.tcl \
 	sonata-start-kepler-2beams-beam1-beam2-8500-8700-obs.tcl \
+	switchConfigFile-3beam-800KHz-69dxs-3zx.tcsh \
+	3beam-dualpol-800KHz-69dx-3zx-env-vars.tcsh \
+	3beam-dualpol-800KHz-69dx-3zx-env-vars-batch.sh \
 	data-capture-replay-env-vars.tcsh

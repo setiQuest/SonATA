@@ -954,6 +954,85 @@ if { $found == 0 } { puts " No match " }
 
 }
 
+# Prepare a start command for the zx with the given name.
+proc prepareZxStartCmd { zxName } {
+    
+    global outchan_
+    global useXterm_
+    global env
+    puts $outchan_ "starting $zxName"
+
+# Wait a second or two between starting zxs
+    exec sleep 2
+
+    set host [ exec hostname ]
+    # puts $outchan_ "hostname is $host"
+
+    set cmd ""
+
+# toupper = to upper case
+    set envOverrideVar [ string toupper RUNSSE_ZX_HOSTS ]
+    if [info exists env(${envOverrideVar})] {
+        set knownZxHosts $env($envOverrideVar)
+    }
+    
+
+	# start the real zx
+	    
+	# find which host this zx will run on
+		set sfx "_ZX_NAMES"
+
+        set found 0
+	foreach zxhost $knownZxHosts {
+		set hostZxNames [ format "%s%s" $zxhost $sfx ]
+    			set envOverrideVar1 [ string toupper "$hostZxNames" ]
+    			if [info exists env(${envOverrideVar1})] {
+        			set hostZxs $env($envOverrideVar1)
+    			}
+			foreach zxname $hostZxs {
+			   if { $zxname == $zxName } {
+				set found 1
+                                set zxHost $zxhost
+ 	set envOverrideVar1 [ string toupper "$zxhost" ]
+    		if [info exists env(${envOverrideVar1})] {
+       		set currentzxhost_ $env($envOverrideVar1)
+    		}
+				break
+				}
+			    }
+		  }
+if { $found == 0 } { puts " No match " }
+
+        set opts "_OPTS"
+	set hostZxOpts [ format "%s%s" $zxHost $opts ]
+    			set envOverrideVar1 [ string toupper "$hostZxOpts" ]
+    			if [info exists env(${envOverrideVar1})] {
+        			set ZxOptions $env($envOverrideVar1)
+    			}
+	set zxCmd "cd ~/sonata_install/bin; sudo ./dx -H ${host} -Q ${zxName} ${ZxOptions}"
+	# Assumes ssh is set up for remote login without password for
+	# the current user.
+	# Note the use of the "-t" flag with ssh, so that
+	# the remote process will terminate when killed on this end.
+
+	# when using xterm, need extra quotes around zxCmd to get the command
+	# to execute correctly
+	if { $useXterm_ } {
+	    set cmd "ssh -t -l [exec whoami] $currentzxhost_ '$zxCmd'"
+	} else {
+
+	    # use -t option twice to force use of pseudoterminal,
+	    # so that zx software starts correctly, and can be terminated
+	    # on the zx by killing the ssh process on the seeker host
+
+	    set cmd "[prepareSshCommand] -l [exec whoami] $currentzxhost_ $zxCmd"
+	}
+
+
+	startComponent $zxName $cmd
+
+}
+
 
 # Prepare a start command for a channelizer
 proc prepareChannelizerStartCmd { chanHost } {
@@ -1185,6 +1264,72 @@ puts $currentdxhost_
     	}
 
 }
+# Prepare a start command for all the zxs assigned to the zxhost
+proc prepareZxHostStartCmd { zxHost } {
+    
+    global outchan_
+    global useXterm_
+    global env
+    puts $outchan_ "starting $zxHost"
+
+
+    set host [ exec hostname ]
+
+    set cmd ""
+
+# toupper = to upper case
+    
+ 	set envOverrideVar1 [ string toupper "$zxHost" ]
+    		if [info exists env(${envOverrideVar1})] {
+       		set currentzxhost_ $env($envOverrideVar1)
+    		}
+puts $currentzxhost_
+	# start the real zx
+	    
+	# find which host this zx will run on
+	set sfx "_ZX_NAMES"
+
+        set found 0
+	set hostZxNames [ format "%s%s" $zxHost $sfx ]
+    			set envOverrideVar1 [ string toupper "$hostZxNames" ]
+    			if [info exists env(${envOverrideVar1})] {
+        			set hostZxs $env($envOverrideVar1)
+    			}
+        set opts "_OPTS"
+	set hostZxOpts [ format "%s%s" $zxHost $opts ]
+    			set envOverrideVar1 [ string toupper "$hostZxOpts" ]
+    			if [info exists env(${envOverrideVar1})] {
+        			set ZxOptions $env($envOverrideVar1)
+    			}
+	foreach zxname $hostZxs {
+# Wait a second or two between starting zxs
+    exec sleep 1
+
+# For testing on segin, setting zx to X polarization only
+
+	set zxCmd "cd ~/sonata_install/bin; sudo ./dx -H ${host} -Q ${zxname} ${ZxOptions}"
+	# Assumes ssh is set up for remote login without password for
+	# the current user.
+	# Note the use of the "-t" flag with ssh, so that
+	# the remote process will terminate when killed on this end.
+
+	# when using xterm, need extra quotes around zxCmd to get the command
+	# to execute correctly
+	if { $useXterm_ } {
+	    set cmd "ssh -t -l [exec whoami] $currentzxhost_ '$zxCmd'"
+	} else {
+
+	    # use -t option twice to force use of pseudoterminal,
+	    # so that zx software starts correctly, and can be terminated
+	    # on the zx by killing the ssh process on the seeker host
+
+	    set cmd "[prepareSshCommand] -l [exec whoami] $currentzxhost_ $zxCmd"
+	}
+	startComponent $zxname $cmd
+
+    	}
+
+}
 
 proc sendError { errorText } {
     global outchan_
@@ -1233,6 +1378,10 @@ proc start { args } {
 	    "dxhost*" { set cmd [prepareDxHostStartCmd $name] }
 
 	    "dx*" { set cmd [prepareDxStartCmd $name] }
+
+	    "zxhost*" { set cmd [prepareZxHostStartCmd $name] }
+
+	    "zx*" { set cmd [prepareZxStartCmd $name] }
 
 	    "chanhost*" { set cmd [prepareChannelizerStartCmd $name] }
 
