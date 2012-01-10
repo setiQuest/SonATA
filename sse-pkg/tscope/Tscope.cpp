@@ -1627,7 +1627,7 @@ void Tscope::reportTargetTracking()
         sseProxy_.trackingOff();
         stringstream currentAzEl;
         currentAzEl << "lost target Tracking, invalid pointing. AZ "
-	      << statusMultibeam_.primaryPointing[TSCOPE_BEAMXC1].azDeg << " DEC " 
+	      << statusMultibeam_.primaryPointing[TSCOPE_BEAMXC1].azDeg << " EL " 
 	      << statusMultibeam_.primaryPointing[TSCOPE_BEAMXC1].elDeg;
         reportErrorToSse(currentAzEl.str().c_str());
      }
