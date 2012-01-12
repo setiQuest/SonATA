@@ -61,6 +61,7 @@ INTERACTIVE="true"
 DEBUG="false"
 SONATA="true"
 NODXS="false"
+NOZXS="false"
 NOCHANS="false"
 NODX="true"
 
@@ -457,6 +458,21 @@ then
            for dxhost in ${hostlist}
            do
 	       addComponentToStartList $dxhost
+       
+           done
+         fi
+
+  # Start the Zx Hosts
+	if [ "$NOZXS" = "true" ]
+	then
+           nop=1
+        else 
+
+           hostlist=${RUNSSE_ZX_HOSTS}
+
+           for zxhost in ${hostlist}
+           do
+	       addComponentToStartList $zxhost
        
            done
          fi
