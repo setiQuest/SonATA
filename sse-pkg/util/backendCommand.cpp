@@ -325,11 +325,15 @@ int main(int argc, char *argv[])
       while(count > 0)
       {
         memset(buf, 0, sizeof(buf));
-        count = readWithSelect(fd, 1000, buf, sizeof(buf));
+        count = readWithSelect(fd, 500, buf, sizeof(buf));
         if(count > 0)
         {
   	  fprintf(stdout, "%s", buf);
         }
+	if(count < 0)
+	{
+		break;
+	}
       }
       close(fd);
     }
