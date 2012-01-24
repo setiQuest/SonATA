@@ -681,7 +681,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
       <<  "  MHz  <----- " << endl;
 
    sendScienceDataRequestFreq(dataRequestRfFreqMhz);
-	   int subchan = getSubchannel( dxActParam_.scienceDataRequest.rfFreq);
+	   int subchan = getSubchannel(
+			   dxActParam_.scienceDataRequest.scienceData.rfFreq);
 	   scienceDataArchive_->setCurrentDataRequestSubchannel(subchan);
 
    SseArchive::SystemLog() << sigSummary.str() << endl;
@@ -690,8 +691,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 
 void ActivityUnitImp::sendScienceDataRequestFreq(double rfFreqMhz)
 {
-   dxActParam_.scienceDataRequest.requestType = REQ_FREQ;
-   dxActParam_.scienceDataRequest.rfFreq = rfFreqMhz;
+   dxActParam_.scienceDataRequest.scienceData.requestType = REQ_FREQ;
+   dxActParam_.scienceDataRequest.scienceData.rfFreq = rfFreqMhz;
    dxProxy_->dxScienceDataRequest(dxActParam_.scienceDataRequest);
 }
 
@@ -962,13 +963,15 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
       if ( maskSizeToUse == 0 )
       {
 	 maxCompampSubchannels = 1;
-	 if (dxActParam_.scienceDataRequest.requestType == REQ_SUBCHANNEL)
+	 if (dxActParam_.scienceDataRequest.scienceData.requestType == REQ_SUBCHANNEL)
 	 {
-         compampSubchannels.push_back(dxActParam_.scienceDataRequest.subchannel);
+         compampSubchannels.push_back(
+        		 dxActParam_.scienceDataRequest.scienceData.subchannel);
 	 }
 	  else
 	  {
-	    int subchan = getSubchannel( dxActParam_.scienceDataRequest.rfFreq);
+	    int subchan = getSubchannel(
+	    		dxActParam_.scienceDataRequest.scienceData.rfFreq);
 
 	      compampSubchannels.push_back(subchan);
 	       }
@@ -2264,12 +2267,13 @@ void ActivityUnitImp::initialize()
    dxProxy_->sendDxActivityParameters(dxActParam_);
     
    // Tell the Science Data Archive which subchannel is for the Monitor
-   if (dxActParam_.scienceDataRequest.requestType == REQ_SUBCHANNEL)
+   if (dxActParam_.scienceDataRequest.scienceData.requestType == REQ_SUBCHANNEL)
 	   scienceDataArchive_->setCurrentDataRequestSubchannel(
-			   dxActParam_.scienceDataRequest.subchannel);
+			   dxActParam_.scienceDataRequest.scienceData.subchannel);
    else 
    {
-	   int subchan = getSubchannel( dxActParam_.scienceDataRequest.rfFreq);
+	   int subchan = getSubchannel(
+			   dxActParam_.scienceDataRequest.scienceData.rfFreq);
 	   scienceDataArchive_->setCurrentDataRequestSubchannel(subchan);
    }
 
