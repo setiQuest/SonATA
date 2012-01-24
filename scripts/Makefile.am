@@ -50,6 +50,8 @@ scripts_SCRIPTS = \
 	jane-beam2-xpol-800KHz-24dx-env-vars.tcsh \
 	jane-kepler-1beam-20MHz.tcl \
 	jane-test.tcl \
+	test.tcl \
+	restart-kepler.tcl \
 	jon-kepler1.tcl \
 	jon-kepler2.tcl \
 	kepler-demo-dualpol.tcl \

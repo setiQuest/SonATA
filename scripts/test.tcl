@@ -1,17 +1,17 @@
 tscope sim
  sched set beam2 on
- dx set length 93
+ dx set length 25
  sched set dxtune range
  sched set multitarget on
  db set name sonatadb
  act set rfiagelimit 365 max
- act set rfiagelimit 365 
+ act set rfiagelimit 80 
  db set usedb on
  db set host localhost
  sched set target user
  act set type target
- sched set beginfreq 1410
- sched set endfreq 1430
- act set targetbeam1 131
- act set targetbeam2 131
- act set targetprimary 131
+ sched set beginfreq 8401.4
+ sched set endfreq 8421.4
+ act set targetbeam1 144
+ act set targetbeam2 144
+ act set targetprimary 144

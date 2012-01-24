@@ -111,8 +111,8 @@ setenv ZXHOST2_ZX_NAMES "zx2900"
 setenv ZXHOST3_ZX_NAMES "zx3900"
 
 # Command line arguments for all ZXs
-#setenv ZX_OPTS "-Z"
-setenv ZX_OPTS "  "	# blank for now
+setenv ZX_OPTS "-Z"
+#setenv ZX_OPTS "  "	# blank for now
 
 
 # Set up command line arguments for each ZX_HOST
@@ -121,9 +121,9 @@ setenv ZX_OPTS "  "	# blank for now
 # BEAM3 setenv ZX_HOSTn_OPTS "$DX_OPTS $BEAM3_DX_OPTS"
 # XPOL_ONLY or YPOL_ONLY if appropriate
 
-setenv ZXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS ZX_OPTS"
-setenv ZXHOST2_OPTS "$DX_OPTS $BEAM2_DX_OPTS ZX_OPTS"
-setenv ZXHOST3_OPTS "$DX_OPTS $BEAM3_DX_OPTS ZX_OPTS"
+setenv ZXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS $ZX_OPTS"
+setenv ZXHOST2_OPTS "$DX_OPTS $BEAM2_DX_OPTS $ZX_OPTS"
+setenv ZXHOST3_OPTS "$DX_OPTS $BEAM3_DX_OPTS $ZX_OPTS"
 
 # Backend Server Host for use with ATA
 #-------------------------------------
