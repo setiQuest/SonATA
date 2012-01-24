@@ -251,11 +251,14 @@ SseInputTask::routine()
 		case DX_SCIENCE_DATA_REQUEST:
 			(static_cast<DxScienceDataRequest *> (data))->demarshall();
 			break;
-#ifdef notdef
-		case SEND_DOPPLER_PARAMETERS:
-			(static_cast<DopplerParameters *> (data))->demarshall();
+		case BEGIN_SENDING_REQUESTED_COMPAMP_SUBCHANNELS:
+			(static_cast<Count *> (data))->demarshall();
 			break;
-#endif
+		case SEND_REQUESTED_COMPAMP_SUBCHANNEL:
+			(static_cast<DxScienceData *> (data))->demarshall();
+			break;
+		case DONE_SENDING_REQUESTED_COMPAMP_SUBCHANNELS:
+			break;
 		case BEGIN_SENDING_FOLLOW_UP_SIGNALS:
 			(static_cast<Count *> (data))->demarshall();
 			break;

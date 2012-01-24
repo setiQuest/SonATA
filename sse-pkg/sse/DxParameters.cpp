@@ -103,6 +103,7 @@ struct DxParametersInternal
    ChoiceParameter<string> dataRequestType;
    RangeParameter<int32_t> dataRequestSubchannel;          // request subchannel directly
    RangeParameter<float64_t> dataRequestFreq;    
+   RangeParameter<int32_t> dataRequestMaxCompampSubchannels;          // Max # of subchannels 
 
    // allow manual override of dx bandwidth
    ChoiceParameter<string> manualBandwidth;
@@ -282,6 +283,11 @@ DxParametersInternal::DxParametersInternal() :
       "request subchannel containing freq",
       DefaultDxSkyFreqMhz + 0.800100, 0, 
       AtaInformation::AtaMaxSkyFreqMhz),
+
+   dataRequestMaxCompampSubchannels(
+      "datareqmaxcompampsubchan", "Max # of subchannels ",
+      "Max # of subchannels",
+      1, 0, 10),
 
    manualBandwidth(
       "manualbw",  "", 
@@ -473,13 +479,14 @@ void DxParametersInternal::updateGeneralDxActParam(DxActivityParameters &ap)
    if (sendComplexAmplitudes.getCurrent() == ChoiceOff)
       ap.scienceDataRequest.sendComplexAmplitudes = SSE_FALSE;
 
-   ap.scienceDataRequest.requestType = REQ_FREQ;
+   ap.scienceDataRequest.scienceData.requestType = REQ_FREQ;
    Assert(dataRequestType.isValid(DataReqSubchannel));
    if (dataRequestType.getCurrent() == DataReqSubchannel)
-      ap.scienceDataRequest.requestType = REQ_SUBCHANNEL;
+      ap.scienceDataRequest.scienceData.requestType = REQ_SUBCHANNEL;
 
-   ap.scienceDataRequest.subchannel = dataRequestSubchannel.getCurrent();
-   ap.scienceDataRequest.rfFreq = dataRequestFreq.getCurrent();
+   ap.scienceDataRequest.scienceData.subchannel
+         = dataRequestSubchannel.getCurrent();
+   ap.scienceDataRequest.scienceData.rfFreq = dataRequestFreq.getCurrent();
 
    ap.baselineSubchannelAverage = baselineSubchannelAverage.getCurrent(); 
    ap.baselineInitAccumHalfFrames = 
@@ -625,6 +632,8 @@ void DxParameters::addParameters()
    addParam(internal_->dataRequestType);
    addParam(internal_->dataRequestSubchannel);
    addParam(internal_->dataRequestFreq);
+   addParam(internal_->dataRequestMaxCompampSubchannels);
+
 
    addParam(internal_->manualBandwidth);
    addParam(internal_->bandwidth);
@@ -689,6 +698,10 @@ double DxParameters::getRecentRfiMaskElementWidthMinHz() const
 int DxParameters::getRecentRfiMaskSizeMax() const
 {
    return internal_->recentRfiMaskSizeMax.getCurrent();
+}
+int DxParameters::getDataRequestMaxCompampSubchannels() const
+{
+   return internal_->dataRequestMaxCompampSubchannels.getCurrent();
 }
 
 
@@ -874,8 +887,8 @@ protected:
       dataRequest.sendComplexAmplitudes = SSE_TRUE;
 
       // now override to force a frequency request
-      dataRequest.requestType = REQ_FREQ;
-      dataRequest.rfFreq = rfFreqMhz_;
+      dataRequest.scienceData.requestType = REQ_FREQ;
+      dataRequest.scienceData.rfFreq = rfFreqMhz_;
 
       proxy->dxScienceDataRequest(dataRequest);
       return "";
@@ -911,8 +924,8 @@ protected:
       dataRequest.sendComplexAmplitudes = SSE_TRUE;
 
       // now override to force a subchannel request
-      dataRequest.requestType = REQ_SUBCHANNEL;
-      dataRequest.subchannel = subchannel_;
+      dataRequest.scienceData.requestType = REQ_SUBCHANNEL;
+      dataRequest.scienceData.subchannel = subchannel_;
 
       proxy->dxScienceDataRequest(dataRequest);
       return "";

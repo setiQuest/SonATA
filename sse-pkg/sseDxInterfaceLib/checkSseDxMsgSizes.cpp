@@ -117,6 +117,11 @@ void dumpStructInfo()
     OFFSETOF(PulseParameters, tripletThreshold);
     OFFSETOF(PulseParameters, singletThreshold);
 
+    SIZEOF(DxScienceData);
+    OFFSETOF(DxScienceData, requestType);
+    OFFSETOF(DxScienceData, subchannel);
+    OFFSETOF(DxScienceData, rfFreq);
+
     SIZEOF(DxScienceDataRequest);
     OFFSETOF(DxScienceDataRequest, sendBaselines);
     OFFSETOF(DxScienceDataRequest, sendBaselineStatistics);
@@ -124,9 +129,7 @@ void dumpStructInfo()
     OFFSETOF(DxScienceDataRequest, checkBaselineErrorLimits);
     OFFSETOF(DxScienceDataRequest, baselineReportingHalfFrames);
     OFFSETOF(DxScienceDataRequest, sendComplexAmplitudes);
-    OFFSETOF(DxScienceDataRequest, requestType);
-    OFFSETOF(DxScienceDataRequest, subchannel);
-    OFFSETOF(DxScienceDataRequest, rfFreq);
+    OFFSETOF(DxScienceDataRequest, scienceData);
 
     SIZEOF(BaselineLimits);
     OFFSETOF(BaselineLimits, meanUpperBound);

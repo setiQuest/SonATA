@@ -91,6 +91,9 @@ private:
 	void sendStatus(Msg *msg);
 	void defineActivity(Msg *msg);
 	void sendScienceData(Msg *msg);
+	void startRequestedSubchannels(Msg *msg);
+	void sendRequestedSubchannel(Msg *msg);
+	void endRequestedSubchannels(Msg *msg);
 	void startFollowUpSignals(Msg *msg);
 	void addFollowUpCwSignal(Msg *msg);
 	void addFollowUpPulseSignal(Msg *msg);

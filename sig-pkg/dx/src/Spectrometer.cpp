@@ -89,7 +89,7 @@ Spectrometer::Spectrometer(): hanning(true), zeroDCBin(false),
 	respQ = sse->getInputQueue();
 	Assert(respQ);
 
-	Args *args = Args::getInstance();
+	args = Args::getInstance();
 	Assert(args);
 	hanning = args->useHanning();
 }
@@ -136,23 +136,25 @@ Spectrometer::setup(Activity *act)
 	}
 	Assert(cdData);
 
-	// allocate CW buffer
-	size = channel->getCwBytesPerSubchannel(RES_1HZ);
-	if (cwData && cwDataSize < size) {
-		fftwf_free(cwData);
-		cwData = 0;
-	}
-	if (!cwData) {
-		cwData = static_cast<uint64_t *> (fftwf_malloc(size));
-		cwDataSize = size;
-	}
-	Assert(cwData);
+	if (!args->zxMode()) {
+		// allocate CW buffer
+		size = channel->getCwBytesPerSubchannel(RES_1HZ);
+		if (cwData && cwDataSize < size) {
+			fftwf_free(cwData);
+			cwData = 0;
+		}
+		if (!cwData) {
+			cwData = static_cast<uint64_t *> (fftwf_malloc(size));
+			cwDataSize = size;
+		}
+		Assert(cwData);
 
-	// clear the pulse map
-	channel->clearPulseList();
+		// clear the pulse map
+		channel->clearPulseList();
 
-	// set up the spectrometry library and allocate spectrum buffers
-	setupSpectra();
+		// set up the spectrometry library and allocate spectrum buffers
+		setupSpectra();
+	}
 
 	// set the internal input half frame counter; this is used to
 	// check that input always arrives in the correct order.
@@ -393,64 +395,67 @@ Spectrometer::processSubchannel(Polarization pol, int32_t subchannel,
 		loadCdPattern(pol, subchannel, hf);
 	storeCdData(pol, subchannel, hf);
 
-	// now create the spectra if we have enough half frames
-	if ((int32_t) hfBufs.size() < spectraHalfFrames)
-		return;
+	// do spectrometer processing only if this a DX, not a ZX
+	if (!args->zxMode()) {
+		// now create the spectra if we have enough half frames
+		if ((int32_t) hfBufs.size() < spectraHalfFrames)
+			return;
 
-	ComplexFloat32 *hfD[spectraHalfFrames];
-	for (int32_t i = 0; i < spectraHalfFrames; ++i)
-		hfD[i] = static_cast<ComplexFloat32 *> (channel->getHfData(pol,
-				subchannel, hfBufs[i]));
-	spectra.computeSpectra(hfD, resSpectra.buf);
+		ComplexFloat32 *hfD[spectraHalfFrames];
+		for (int32_t i = 0; i < spectraHalfFrames; ++i)
+			hfD[i] = static_cast<ComplexFloat32 *> (channel->getHfData(pol,
+					subchannel, hfBufs[i]));
+		spectra.computeSpectra(hfD, resSpectra.buf);
 
-	// do all resolutions
-	// The data must be rearranged to be in increasing frequency order,
-	// because it is returned from Spectra in ordinary FFT order (index 0
-	// = DC, index n-1 = -1.  We want index 0 = -n/2, index n/2 = 0,
-	// index n-1 = n/2-1.  So DC is in the middle
-	for (int32_t i = 0; i < resolutions; ++i) {
-		Resolution res = resInfo[i].res;
-		int32_t specLen = resInfo[i].specLen;
-		int32_t nSpectra = resInfo[i].nSpectra;
+		// do all resolutions
+		// The data must be rearranged to be in increasing frequency order,
+		// because it is returned from Spectra in ordinary FFT order (index 0
+		// = DC, index n-1 = -1.  We want index 0 = -n/2, index n/2 = 0,
+		// index n-1 = n/2-1.  So DC is in the middle
+		for (int32_t i = 0; i < resolutions; ++i) {
+			Resolution res = resInfo[i].res;
+			int32_t specLen = resInfo[i].specLen;
+			int32_t nSpectra = resInfo[i].nSpectra;
 
 #ifdef notdef
-		// handle the spectra individually; the number of spectra depends
-		// upon the resolution and whether the spectra are overlapped;
-		// the length of each spectrum depends upon the resolution.  We
-		// also remove the unused bins at this time
-		int32_t h = channel->getTotalBinsPerSubchannel((Resolution) i) / 2;
+			// handle the spectra individually; the number of spectra depends
+			// upon the resolution and whether the spectra are overlapped;
+			// the length of each spectrum depends upon the resolution.  We
+			// also remove the unused bins at this time
+			int32_t h = channel->getTotalBinsPerSubchannel((Resolution) i) / 2;
 #ifdef notdef
-		int32_t d = channel->getTotalBinsPerSubchannel((Resolution) i) - h;
+			int32_t d = channel->getTotalBinsPerSubchannel((Resolution) i) - h;
 #endif
-		size_t len = h * sizeof(ComplexFloat32);
-		ComplexFloat32 tmp[TOTAL_BINS_PER_SUBCHANNEL_1HZ];
-		ComplexFloat32 *data = resSpectra.buf[i];
-		for (int32_t j = 0; j < nSpectra; ++j) {
-			memcpy(tmp, data, len);
-			memcpy(data, data + h, len);
-			memcpy(data + h, tmp, len);
-			data += specLen;
-		}
-#endif
-		for (int32_t j = 0; j < nSpectra; ++j) {
-			ComplexFloat32 *data = resSpectra.buf[i] + j * specLen;
-			// do pulse thresholding for the resolution
-			if (!masked) {
-				storePulseData(pol, res, subchannel, resSpectra.spectrum[i] + j,
-						obs.pulseThreshold, data);
+			size_t len = h * sizeof(ComplexFloat32);
+			ComplexFloat32 tmp[TOTAL_BINS_PER_SUBCHANNEL_1HZ];
+			ComplexFloat32 *data = resSpectra.buf[i];
+			for (int32_t j = 0; j < nSpectra; ++j) {
+				memcpy(tmp, data, len);
+				memcpy(data, data + h, len);
+				memcpy(data + h, tmp, len);
+				data += specLen;
 			}
-			// test for CW resolution
-			if (res == obs.cwResolution) {
-				if (obs.cwOutputOption == normal) {
-					if (masked)
-						zeroCwData();
-					else
-						computeCwData(res, data);
+#endif
+			for (int32_t j = 0; j < nSpectra; ++j) {
+				ComplexFloat32 *data = resSpectra.buf[i] + j * specLen;
+				// do pulse thresholding for the resolution
+				if (!masked) {
+					storePulseData(pol, res, subchannel, resSpectra.spectrum[i] + j,
+							obs.pulseThreshold, data);
 				}
-				else if (obs.cwOutputOption == tagged_data)
-					loadCwPattern(pol, res, subchannel,
-							resSpectra.spectrum[i] + j);
-				storeCwData(pol, res, subchannel, resSpectra.spectrum[i] + j);
+				// test for CW resolution
+				if (res == obs.cwResolution) {
+					if (obs.cwOutputOption == normal) {
+						if (masked)
+							zeroCwData();
+						else
+							computeCwData(res, data);
+					}
+					else if (obs.cwOutputOption == tagged_data)
+						loadCwPattern(pol, res, subchannel,
+								resSpectra.spectrum[i] + j);
+					storeCwData(pol, res, subchannel, resSpectra.spectrum[i] + j);
+				}
 			}
 		}
 	}
