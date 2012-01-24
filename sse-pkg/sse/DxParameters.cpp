@@ -479,13 +479,14 @@ void DxParametersInternal::updateGeneralDxActParam(DxActivityParameters &ap)
    if (sendComplexAmplitudes.getCurrent() == ChoiceOff)
       ap.scienceDataRequest.sendComplexAmplitudes = SSE_FALSE;
 
-   ap.scienceDataRequest.requestType = REQ_FREQ;
+   ap.scienceDataRequest.scienceData.requestType = REQ_FREQ;
    Assert(dataRequestType.isValid(DataReqSubchannel));
    if (dataRequestType.getCurrent() == DataReqSubchannel)
-      ap.scienceDataRequest.requestType = REQ_SUBCHANNEL;
+      ap.scienceDataRequest.scienceData.requestType = REQ_SUBCHANNEL;
 
-   ap.scienceDataRequest.subchannel = dataRequestSubchannel.getCurrent();
-   ap.scienceDataRequest.rfFreq = dataRequestFreq.getCurrent();
+   ap.scienceDataRequest.scienceData.subchannel
+         = dataRequestSubchannel.getCurrent();
+   ap.scienceDataRequest.scienceData.rfFreq = dataRequestFreq.getCurrent();
 
    ap.baselineSubchannelAverage = baselineSubchannelAverage.getCurrent(); 
    ap.baselineInitAccumHalfFrames = 
@@ -886,8 +887,8 @@ protected:
       dataRequest.sendComplexAmplitudes = SSE_TRUE;
 
       // now override to force a frequency request
-      dataRequest.requestType = REQ_FREQ;
-      dataRequest.rfFreq = rfFreqMhz_;
+      dataRequest.scienceData.requestType = REQ_FREQ;
+      dataRequest.scienceData.rfFreq = rfFreqMhz_;
 
       proxy->dxScienceDataRequest(dataRequest);
       return "";
@@ -923,8 +924,8 @@ protected:
       dataRequest.sendComplexAmplitudes = SSE_TRUE;
 
       // now override to force a subchannel request
-      dataRequest.requestType = REQ_SUBCHANNEL;
-      dataRequest.subchannel = subchannel_;
+      dataRequest.scienceData.requestType = REQ_SUBCHANNEL;
+      dataRequest.scienceData.subchannel = subchannel_;
 
       proxy->dxScienceDataRequest(dataRequest);
       return "";
