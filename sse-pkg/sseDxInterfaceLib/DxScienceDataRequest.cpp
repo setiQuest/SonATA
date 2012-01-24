@@ -81,13 +81,29 @@ string SseDxMsg::sciDataRequestTypeToString(
 
 }
 
-
-
 static void marshallReqType(SciDataRequestType &requestType)
 {
     requestType = static_cast<SciDataRequestType>(htonl(requestType));
 }
 
+ostream& operator << (ostream &strm, const DxScienceData &data)
+{
+    strm << "Dx Science Data: " << endl;
+    strm << "--------------------------" << endl;
+
+    Assert(data.requestType >= 0 &&
+	   data.requestType < ARRAY_LENGTH(SciDataRequestTypeNames));
+    strm << "  requestType:                 " <<
+	SciDataRequestTypeNames[data.requestType] << endl;
+
+    strm << "  subchan:                     "
+	 << data.subchannel <<  endl;
+
+    strm << "  rfFreq:                      "
+	 << data.rfFreq << " MHz" << endl;
+    strm << endl;
+    return strm;
+}
 
 ostream& operator << (ostream &strm, const DxScienceDataRequest &dataRequest)
 {
@@ -112,20 +128,28 @@ ostream& operator << (ostream &strm, const DxScienceDataRequest &dataRequest)
     strm << "  sendComplexAmplitudes:       " 
 	 << boolToOnOffString(dataRequest.sendComplexAmplitudes) <<endl;;
 
-    Assert(dataRequest.requestType >= 0 &&
-	   dataRequest.requestType < ARRAY_LENGTH(SciDataRequestTypeNames));
-    strm << "  requestType:                 " << 
-	SciDataRequestTypeNames[dataRequest.requestType] << endl;
-
-    strm << "  subchan:                     " 
-	 << dataRequest.subchannel <<  endl;
-
-    strm << "  rfFreq:                      " 
-	 << dataRequest.rfFreq << " MHz" << endl;
-    strm << endl;
-
+    strm << dataRequest.scienceData << endl;
     return strm;
+}
 
+DxScienceData::DxScienceData()
+    :
+    requestType(REQ_FREQ),
+    subchannel(0),
+    rfFreq(0.0)
+{
+}
+
+void DxScienceData::marshall()
+{
+    marshallReqType(requestType);
+    NTOHL(subchannel);
+    NTOHD(rfFreq);
+}
+
+void DxScienceData::demarshall()
+{
+    marshall();
 }
 
 DxScienceDataRequest::DxScienceDataRequest()
@@ -135,10 +159,7 @@ DxScienceDataRequest::DxScienceDataRequest()
     checkBaselineWarningLimits(SSE_FALSE),
     checkBaselineErrorLimits(SSE_FALSE),
     baselineReportingHalfFrames(0),
-    sendComplexAmplitudes(SSE_FALSE),
-    requestType(REQ_FREQ),
-    subchannel(0),
-    rfFreq(0.0)
+    sendComplexAmplitudes(SSE_FALSE)
 {
 }
 
@@ -150,9 +171,7 @@ void DxScienceDataRequest::marshall()
     SseMsg::marshall(checkBaselineErrorLimits); // bool_t
     SseMsg::marshall(sendComplexAmplitudes);  // bool_t
     HTONL(baselineReportingHalfFrames);
-    marshallReqType(requestType);
-    NTOHL(subchannel);
-    NTOHD(rfFreq);
+    scienceData.marshall();
 }
 
 void DxScienceDataRequest::demarshall()

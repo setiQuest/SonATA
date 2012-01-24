@@ -1731,14 +1731,14 @@ void DxProxy::beginSendingRequestedCompampSubchannels(int activityId,
     VERBOSE2(getVerboseLevel(), getName() << 
 	    ": DxProxy: beginSendingRequestedCompampSubchannels to dx" << endl;);
 
-//    DxMessageCode code = BEGIN_SENDING_REQUESTED_COMPAMP_SUBCHANNELS;
+    DxMessageCode code = BEGIN_SENDING_REQUESTED_COMPAMP_SUBCHANNELS;
     int dataLength = sizeof(nSubchannels);
 
     Count marshall = nSubchannels;
     marshall.marshall();
 
 
-    //sendMessage(code, activityId, dataLength, &marshall);
+    sendMessage(code, activityId, dataLength, &marshall);
 
 }
 void DxProxy::sendRequestedCompampSubchannel(int activityId, 
@@ -1747,19 +1747,22 @@ void DxProxy::sendRequestedCompampSubchannel(int activityId,
     VERBOSE2(getVerboseLevel(),     getName() << 
 		    ": DxProxy: sendRequestedCompampSubchannel msg to dx" << endl;);
 
-//    DxMessageCode code = SEND_REQUESTED_COMPAMP_SUBCHANNEL;
-    int dataLength = sizeof(subchannelNumber);
+    DxMessageCode code = SEND_REQUESTED_COMPAMP_SUBCHANNEL;
+    DxScienceData scienceData;
+    int dataLength = sizeof(scienceData);
+    scienceData.requestType = REQ_SUBCHANNEL;
+    scienceData.subchannel = subchannelNumber;
+    scienceData.marshall();
 
-	unsigned int marshall = htonl(subchannelNumber);
-    //sendMessage(code, activityId, dataLength, &marshall); 
+    sendMessage(code, activityId, dataLength, &scienceData);
 }
 void DxProxy::doneSendingRequestedCompampSubchannels(int activityId)
 {
     VERBOSE2(getVerboseLevel(),     getName() << 
 		    ": DxProxy: doneSendingRequestedCompampSubchannels" << endl;);
 
-//    DxMessageCode code = DONE_SENDING_REQUESTED_COMPAMP_SUBCHANNELS;
-    //sendMessage(code, activityId);
+    DxMessageCode code = DONE_SENDING_REQUESTED_COMPAMP_SUBCHANNELS;
+    sendMessage(code, activityId);
 }
 // outgoing messages to dx
 // ------------------------------------

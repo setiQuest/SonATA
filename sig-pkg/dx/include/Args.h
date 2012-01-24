@@ -100,14 +100,17 @@ public:
 	bool zeroDCBins() {
 		return (flags.zeroDCBin);
 	}
+	bool zxMode() {
+		return (flags.zxMode);
+	}
 	int32_t getSubchannels() {
 		return (subchannels);
 	}
 	int32_t getCacheRows() {
 		return (dadd.cacheRows);
 	}
-	string getDxName() {
-		return (dxName);
+	string getName() {
+		return (name);
 	}
 	string getHost() {
 		return (host);
@@ -150,6 +153,9 @@ public:
 	const FilterSpec& getFilter() {
 		return (filter);
 	}
+	const int32_t getRequestedSubchannels() {
+		return (requestedSubchannels);
+	}
 
 private:
 	static Args *instance;
@@ -168,6 +174,7 @@ private:
 		bool suppressBaselines;			// suppress baseline reports
 		bool test;						// run timing test on startup
 		bool zeroDCBin;					// zero the DC bins in CWD
+		bool zxMode;					// run as ZX rather than DX
 		bool customFilter;				// use a custom filter file
 
 		Flags(): onePol(false), taggedData(false),
@@ -175,7 +182,7 @@ private:
 				logSseMsgs(false), hanning(true), cwStats(true),
 				logHits(true), loadSlice(false), loadSubchannel(false),
 				suppressBaselines(false), test(false), zeroDCBin(false),
-				customFilter(false)
+				zxMode(false), customFilter(false)
 				{}
 	} flags;
 	struct Dadd {
@@ -185,7 +192,7 @@ private:
 		Dadd(): cacheEfficient(true), cacheRows(DADD_CACHE_ROWS) {}
 	} dadd;
 
-	string dxName;						// name of this dx
+	string name;						// name of this detector
 	string host;						// host name
 	string mcAddr;						// multicast base address
 	string filterFile;					// filter file
@@ -196,6 +203,7 @@ private:
 	int32_t usableSubchannels;			// # of usable subchannels
 	int32_t maxFrames;					// max # of frames in an activity
 	int32_t foldings;					// # of foldings in DFB filter
+	int32_t requestedSubchannels;		// # of requested subchannels
 	float64_t oversampling;				// percentage of oversampling
 	float64_t chanOversampling;			// percentage of channel oversampling
 	float64_t chanBandwidth;			// nominal channel bandwidth

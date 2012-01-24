@@ -39,6 +39,7 @@
 #include <bitset>
 #include "BirdieMask.h"
 #include "PermRfiMask.h"
+#include "RecentRfiMask.h"
 #include "TestSignalMask.h"
 
 namespace dx {
@@ -53,11 +54,19 @@ public:
 	SubchannelMask(SubchannelMaskBitset *mask_ = 0);
 	~SubchannelMask();
 
+	void init(Activity *act);
+
 	void createSubchannelMask(Activity *act);
+	void maskSubchannel(int32_t subchannel);
+	void maskSubchannel(const DxScienceData *scienceData);
 //	int32_t getSubchannelMaskLen() { return (mask.size()); }
 	void getSubchannelMask(SubchannelMaskBitset *mask_);
 	bool isSubchannelMasked(int32_t subchannel);
+	bool noSubchannelsMasked();
 	bool allSubchannelsMasked();
+	int32_t getCount() { return (mask.count()); }
+
+	void applyRecentRfiMask(RecentRfiMask *recentRfiMask, float64_t centerFreq);
 
 private:
 	int32_t subchannels;

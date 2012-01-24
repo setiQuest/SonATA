@@ -176,6 +176,17 @@ public:
 	bool isSubchannelMasked(int32_t subchannel_);
 	bool allSubchannelsMasked();
 
+	void setRequestedSubchannelCount(int32_t count) {
+		initRequestedSubchannelMask();
+		requestedSubchannels = count;
+	}
+	int32_t getRequestedSubchannelCount() { return (requestedSubchannels); }
+	int32_t getRequestedSubchannels() { return (requestMask.getCount()); }
+	void initRequestedSubchannelMask();
+	void addRequestedSubchannel(const DxScienceData *scienceData);
+	void createRequestedSubchannelMask();
+	bool isSubchannelRequested(int32_t subchannel_);
+
 	// detection functions
 	void resetDetectionStatistics();
 	void setDetectionStatistics(const DetectionStatistics& stats_);
@@ -238,6 +249,7 @@ public:
 private:
 	int32_t resolutions;				// # of active resolutions
 	int32_t candidatesOverMax;			// # of candidates over maximum
+	int32_t requestedSubchannels;		// # of subchannels to be requested
 	int32_t followupSignals;
 	uint32_t frames;					// # of frames
 	uint32_t halfFrames;				// # of half frames
@@ -269,6 +281,7 @@ private:
 	SignalList signalList;
 	SignalList badBandList;
 	SubchannelMask subchannelMask;
+	SubchannelMask requestMask;
 	ObsData obsData;
 	SuperClusterer *superClusterer;
 

@@ -113,6 +113,7 @@ Activity::setup(const DxActivityParameters& params_)
 	setRcvrBirdieMask(state->getRcvrBirdieMask());
 	setRecentRfiMask(state->getRecentRfiMask());
 	setTestSignalMask(state->getTestSignalMask());
+	initRequestedSubchannelMask();
 	initDoneMask();
 	resetDetectionStatistics();
 	setCandidatesOverMax(0);
@@ -458,7 +459,10 @@ void
 Activity::initDoneMask()
 {
 	lock();
-	doneMask.set();
+	if (args->zxMode())
+		doneMask.set(COLLECT_BIT);
+	else
+		doneMask.set();
 	unlock();
 }
 
@@ -488,6 +492,9 @@ Activity::getDoneMask()
 	return (mask);
 }
 
+/**
+ * Subchannel mask functions.
+ */
 void
 Activity::createSubchannelMask()
 {
@@ -511,6 +518,54 @@ bool
 Activity::allSubchannelsMasked()
 {
 	return (subchannelMask.allSubchannelsMasked());
+}
+
+/**
+ * Functions for requested subchannel mask. (ZX only)
+ *
+ * Description:\n
+ * 	The requested subchannel mask is the list of subchannels which have
+ * 	been requested for transmission by the SSE.\n\n
+ * Notes:\n
+ * 	This mask is used in an inverted sense: when a mask bit is set, we
+ * 	will transmit the subchannel complex amplitudes to the SSE.
+ */
+void
+Activity::initRequestedSubchannelMask()
+{
+	requestMask.init(this);
+}
+
+void
+Activity::addRequestedSubchannel(const DxScienceData *scienceData)
+{
+	requestMask.maskSubchannel(scienceData);
+}
+
+void
+Activity::createRequestedSubchannelMask()
+{
+	requestMask.init(this);
+	if (args->zxMode()) {
+		requestMask.applyRecentRfiMask(getRecentRfiMask(), getSkyFreq());
+		// if there are no subchannels masked, use the science data request
+		if (requestMask.noSubchannelsMasked()) {
+			const DxScienceData &scienceData =
+					params.scienceDataRequest.scienceData;
+			int32_t subchannel = scienceData.subchannel;
+			if (scienceData.requestType == REQ_FREQ)
+				subchannel = channel.getSubchannel(scienceData.rfFreq);
+			if (subchannel < 0 || subchannel >= getUsableSubchannels())
+				subchannel = 0;
+			requestMask.maskSubchannel(subchannel);
+		}
+	}
+}
+
+bool
+Activity::isSubchannelRequested(int32_t subchannel_)
+{
+	return (requestMask.isSubchannelMasked(subchannel_));
 }
 
 /**

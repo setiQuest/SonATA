@@ -171,8 +171,8 @@ State::init()
 	intrinsics.hzPerSubchannel = MHZ_TO_HZ(getSubchannelWidthMHz());
 	// test for specific host name on command line
 	gethostname(intrinsics.host, sizeof(intrinsics.host));
-	if (args->getDxName().length())
-		strcpy(intrinsics.name, args->getDxName().c_str());
+	if (args->getName().length())
+		strcpy(intrinsics.name, args->getName().c_str());
 	else
 		strcpy(intrinsics.name, intrinsics.host);
 	strcpy(intrinsics.channelBase.addr, args->getMcAddr().c_str());
