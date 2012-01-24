@@ -5,3 +5,4 @@ currentTimeInSecs
 bintail
 systemStatusToCurses
 setAlarm
+backendCommand
