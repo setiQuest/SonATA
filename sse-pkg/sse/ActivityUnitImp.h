@@ -359,6 +359,9 @@ class ActivityUnitImp : public ActivityUnit
   void detachSelfFromDxProxy();
   void releaseResources();
   void sendStopMsgToDx();
+  int getSubchannel(double freq);
+  void sendRequestedCompampSubchannels(const vector<int> &compampSubchannels);
+
 
 
   // Variables
@@ -385,6 +388,7 @@ class ActivityUnitImp : public ActivityUnit
   DbParameters & dbParam_;
   MYSQL *dbConn_;
   bool useDb_;
+  bool zxMode_;
 
   int beamNumber_;
   TargetId targetId_;

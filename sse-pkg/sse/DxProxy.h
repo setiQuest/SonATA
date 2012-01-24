@@ -99,6 +99,11 @@ public:
     void discardArchiveData(int activityId,
 			    const ArchiveRequest &archiveRequest);
 
+    // outgoing messages to ZXs
+    void beginSendingRequestedCompampSubchannels(int activityId, const Count &nSubchannels);
+    void sendRequestedCompampSubchannel(int activityId, const int subchannelNumber);
+    void doneSendingRequestedCompampSubchannels(int activityId);
+
     // outgoing messages
     // -----------------
     void beginSendingFollowUpSignals(int activityId, const Count &nSignals);
