@@ -225,6 +225,9 @@ enum DxMessageCode {
     SEND_PULSE_BAD_BAND,
     SEND_CW_BAD_BAND,
     DONE_SENDING_BAD_BANDS,
+    BEGIN_SENDING_REQUESTED_COMPAMP_SUBCHANNELS,
+    SEND_REQUESTED_COMPAMP_SUBCHANNEL,
+    DONE_SENDING_REQUESTED_COMPAMP_SUBCHANNELS,
     DX_MESSAGE_CODE_END   // keep this as the last enum value
 };
 
@@ -342,7 +345,6 @@ struct FrequencyMaskHeader
 // FrequencyMaskHeader is followed by this array:
 // FrequencyBand frequencyBandArray[numberOfFreqBands];
 
-
 // variable length structure
 struct RecentRfiMaskHeader
 {
@@ -358,8 +360,19 @@ struct RecentRfiMaskHeader
 // RecentRfiMaskHeader is followed by this array:
 // FrequencyBand frequencyBandArray[numberOfFreqBands];
 
-
 enum SciDataRequestType {REQ_FREQ, REQ_SUBCHANNEL};
+
+struct DxScienceData
+{
+    SciDataRequestType requestType;
+    int32_t subchannel;
+    float64_t rfFreq;
+
+    DxScienceData();
+    void marshall();
+    void demarshall();
+    friend ostream& operator << (ostream &strm, const DxScienceData &data);
+};
 
 struct DxScienceDataRequest
 {
@@ -369,9 +382,7 @@ struct DxScienceDataRequest
     bool_t checkBaselineErrorLimits;
     int32_t baselineReportingHalfFrames; // # halfFrames between baselines
     bool_t sendComplexAmplitudes;
-    SciDataRequestType requestType;  // request compAmps by freq or subchannel
-    int32_t subchannel;     // request subchannel directly
-    float64_t rfFreq;    // request subchannel containing this rf freq
+    DxScienceData scienceData;
 
     DxScienceDataRequest();
     void marshall();
