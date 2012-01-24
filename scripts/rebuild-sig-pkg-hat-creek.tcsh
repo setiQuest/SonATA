@@ -14,4 +14,5 @@ make -j25 install
 
 cd ${HOME}/SonATA/scripts
 
+./reconfig
 make install
