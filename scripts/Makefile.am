@@ -79,6 +79,9 @@ scripts_SCRIPTS = \
 	kes-sirocco-test-800KHz-500MHz.tcl \
 	kes-sirocco-test.tcl \
 	kes-sirocco-xpol-400KHz-64f-env-vars.tcsh \
+	kes-bedlam-1beam-xpol-800KHz-1dx-1zx-env-vars.tcsh \
+	kes-bedlam-1beam-xpol-800KHz-env-vars.tcsh \
+	kes-switchConfigFile-1beam-800KHz-1dx-1zx.tcsh \
 	kes-switchConfigFile-2beam-2dx.tcsh \
 	kes-tscope-vger-full-array-2.tcl \
 	kes-tscope-vger-full-array-beam1.tcl \
