@@ -160,7 +160,7 @@ sched set targetwait {on} current
 sched set tasks {autoselectants,prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
 sched set tscopemaxfailures 10 current 
 sched set tscopereadypause 25 current 
-sched set zenithavoid 3.000000000 current 
+sched set zenithavoid 5.000000000 current 
 tscope set antlistsource {antgroup} current 
 tscope set antsmaxsefd 20000 current 
 tscope set antsprimary {antgroup} current 

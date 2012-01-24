@@ -303,17 +303,17 @@ DxParametersInternal::DxParametersInternal() :
    baselineWarningMeanUpperBound(
       "basewarnmeanupper", "power",
       "baseline warning mean upper bound limit",
-      3000, 0, 1e5),
+      7000, 0, 1e5),
 
    baselineWarningMeanLowerBound(
       "basewarnmeanlower", "power",
       "baseline warning mean lower bound limit",
-      60, 0, 1e5),
+      500, 0, 1e5),
 
    baselineWarningStdDevPercent(
       "basewarnstddev", "percent",
       "baseline warning std dev",
-      50, 1, 100),
+      75, 1, 100),
 
    baselineWarningMaxRange(
       "basewarnrange", "power",
@@ -325,17 +325,17 @@ DxParametersInternal::DxParametersInternal() :
    baselineErrorMeanUpperBound(
       "baseerrormeanupper", "power",
       "baseline error mean upper bound limit",
-      5000, 0, 1e5),
+      8000, 0, 1e5),
 
    baselineErrorMeanLowerBound(
       "baseerrormeanlower", "power",
       "baseline error mean lower bound limit",
-      30, 0, 1e5),
+      500, 0, 1e5),
 
    baselineErrorStdDevPercent(
       "baseerrorstddev", "percent",
       "baseline error std dev",
-      80, 1, 100),
+      100, 1, 200),
 
    baselineErrorMaxRange(
       "baseerrorrange", "power",

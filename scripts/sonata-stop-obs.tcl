@@ -15,7 +15,7 @@ sh sleep 2
 # send out "finished with array" email
 sh echo "SonATA done with the array " | mailx -s 'SonATA finished with array' -r jjordan@seti.org ata-staff@seti.org
 
-exec setAlarm ARM,sonata,"Array is free"
+exec setAlarm ARM,sonata,"Done"
 
 # disconnect from telescope array
 tscope cleanup
