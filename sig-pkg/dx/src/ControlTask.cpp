@@ -205,6 +205,15 @@ ControlTask::handleMsg(Msg *msg)
 	case DX_TUNED:
 		sendTuned(msg);
 		break;
+	case BEGIN_SENDING_REQUESTED_COMPAMP_SUBCHANNELS:
+		startRequestedSubchannels(msg);
+		break;
+	case SEND_REQUESTED_COMPAMP_SUBCHANNEL:
+		addRequestedSubchannel(msg);
+		break;
+	case DONE_SENDING_REQUESTED_COMPAMP_SUBCHANNELS:
+		endRequestedSubchannels(msg);
+		break;
 	case BEGIN_SENDING_FOLLOW_UP_SIGNALS:
 		startFollowupSignals(msg);
 		break;
@@ -234,7 +243,10 @@ ControlTask::handleMsg(Msg *msg)
 		Debug(DEBUG_CONTROL, (int32_t) msg->getActivityId(),
 				"DATA_COLLECTION_COMPLETE, act");
 		sendCollectionComplete(msg);
-		startDetection(msg);
+		if (cmdArgs->zxMode())
+			sendActivityComplete(msg);
+		else
+			startDetection(msg);
 		break;
 	case SIGNAL_DETECTION_STARTED:
 		Debug(DEBUG_CONTROL, (int32_t) msg->getActivityId(),
@@ -506,6 +518,69 @@ ControlTask::sendTuned(Msg *msg)
 	respQ->send(resp);
 }
 
+/**
+ * Start requested complex amplitude subchannels
+ */
+void
+ControlTask::startRequestedSubchannels(Msg *msg)
+{
+	int32_t activityId = msg->getActivityId();
+	Activity *act;
+
+	Assert(msg->getDataLength() == sizeof(Count));
+
+	// make sure the activity exists and is ready to start
+	if (!(act = state->findActivity(activityId))) {
+		LogError(ERR_NSA, activityId, "activity %d not defined", activityId);
+		return;
+	}
+
+	Count *count = static_cast<Count *> (msg->getData());
+	act->setRequestedSubchannelCount(count->count);
+}
+
+/**
+ * Add a requested subchannel
+ */
+void
+ControlTask::addRequestedSubchannel(Msg *msg)
+{
+	int32_t activityId = msg->getActivityId();
+	Activity *act;
+
+	Assert(msg->getDataLength() == sizeof(DxScienceData));
+
+	// make sure the activity exists and is ready to start
+	if (!(act = state->findActivity(activityId))) {
+		LogError(ERR_NSA, activityId, "activity %d not defined", activityId);
+		return;
+	}
+	DxScienceData *scienceData = static_cast<DxScienceData *> (msg->getData());
+	act->addRequestedSubchannel(scienceData);
+}
+
+/**
+ * End requested subchannels
+ */
+void
+ControlTask::endRequestedSubchannels(Msg *msg)
+{
+	int32_t activityId = msg->getActivityId();
+	Activity *act;
+
+	// make sure the activity exists and is ready to start
+	if (!(act = state->findActivity(activityId))) {
+		LogError(ERR_NSA, activityId, "activity %d not defined", activityId);
+		return;
+	}
+
+	if (act->getRequestedSubchannels() != act->getRequestedSubchannelCount()) {
+		LogWarning(ERR_ISC, activityId,
+			"specified count = %d, actual = %d",
+			act->getRequestedSubchannelCount(),
+			act->getRequestedSubchannels());
+	}
+}
 //
 // startFollowupSignals: begin list of followup signals
 //
@@ -634,6 +709,14 @@ ControlTask::startActivity(Msg *msg)
 	act->setRcvrBirdieMask(state->getRcvrBirdieMask());
 	act->setRecentRfiMask(state->getRecentRfiMask());
 	act->setTestSignalMask(state->getTestSignalMask());
+
+#ifdef notdef
+	if (cmdArgs->zxMode() && !act->getRequestedSubchannels()) {
+		DxScienceData scienceData = act->getScienceData()->scienceData;
+		++scienceData.subchannel;
+		act->addRequestedSubchannel(&scienceData);
+	}
+#endif
 
 	Msg *cMsg = msgList->alloc();
 	msg->forward(cMsg);
