@@ -140,6 +140,15 @@ CmdTask::handleMsg(Msg *msg)
 	case DX_SCIENCE_DATA_REQUEST:
 		sendScienceData(msg);
 		break;
+	case BEGIN_SENDING_REQUESTED_COMPAMP_SUBCHANNELS:
+		startRequestedSubchannels(msg);
+		break;
+	case SEND_REQUESTED_COMPAMP_SUBCHANNEL:
+		sendRequestedSubchannel(msg);
+		break;
+	case DONE_SENDING_REQUESTED_COMPAMP_SUBCHANNELS:
+		endRequestedSubchannels(msg);
+		break;
 	case BEGIN_SENDING_FOLLOW_UP_SIGNALS:
 		startFollowUpSignals(msg);
 		break;
@@ -354,6 +363,33 @@ CmdTask::sendStatus(Msg *msg)
 //
 void
 CmdTask::defineActivity(Msg *msg)
+{
+	Msg *cMsg = msgList->alloc();
+	msg->forward(cMsg);
+	controlQ->send(cMsg);
+}
+
+/**
+ * Start sending requested subchannels
+ */
+void
+CmdTask::startRequestedSubchannels(Msg *msg)
+{
+	Msg *cMsg = msgList->alloc();
+	msg->forward(cMsg);
+	controlQ->send(cMsg);
+}
+
+void
+CmdTask::sendRequestedSubchannel(Msg *msg)
+{
+	Msg *cMsg = msgList->alloc();
+	msg->forward(cMsg);
+	controlQ->send(cMsg);
+}
+
+void
+CmdTask::endRequestedSubchannels(Msg *msg)
 {
 	Msg *cMsg = msgList->alloc();
 	msg->forward(cMsg);
