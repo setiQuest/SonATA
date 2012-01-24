@@ -354,7 +354,10 @@ static const char *codeNames[] =
     "begin_sending_bad_bands",
     "send_pulse_bad_band",
     "send_cw_bad_band",
-    "done_sending_bad_bands"
+    "done_sending_bad_bands",
+    "begin_sending_requested_compamp_subchannels",
+    "send_requested_compamp_subchannel",
+    "done_sending_requested_compamp_subchannels"
 };
 
 

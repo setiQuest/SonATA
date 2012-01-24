@@ -91,7 +91,8 @@ bin_PROGRAMS = \
 	currentTimeInSecs \
 	bintail \
     systemStatusToCurses \
-    setAlarm
+    setAlarm \
+    backendCommand
 
 fileModTimeInSecs_SOURCES = \
 	fileModTimeInSecs.cpp
@@ -107,6 +108,9 @@ systemStatusToCurses_SOURCES = \
 
 setAlarm_SOURCES = \
 	setAlarm.cpp
+
+backendCommand_SOURCES = \
+	backendCommand.cpp
 
 # cause the scripts to get distributed and
 # installed when "make dist" is used

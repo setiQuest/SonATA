@@ -34,7 +34,19 @@
 
 #include "sseDxInterface.h"
 #include <string>
+#include <list>
+#include <vector>
 using std::string;
+using std::vector;
+
+struct compampFile
+{
+	int subchanNumber;
+	Polarization pol;
+	string filename;
+} typedef CompampSubchannelFile;
+
+    typedef std::list<CompampSubchannelFile> CompampSubchannelFileList;
 
 class ScienceDataArchive
 {
@@ -54,6 +66,12 @@ class ScienceDataArchive
 
     void truncateOutputFiles();
 
+    void prepareCompampSubchannelFiles(const string &archiveFilenamePrefix,
+		    const string &dxName, const int targetId,
+		     const vector<int> & compampSubchannels);
+
+    string getLiveFilename( Polarization pol, int subchan);
+    void setCurrentDataRequestSubchannel( int subchan);
 
  private:
     // Disable copy construction & assignment.
@@ -68,12 +86,19 @@ class ScienceDataArchive
     string nssCompampsOutFilenameL_;
     string nssCompampsOutFilenameR_;
 
+// Container for the list of compamp Subchannels
+    CompampSubchannelFileList compampSubchannelFileList_;
+
+    // The Raw files appear not to be used
     string nssCompampsRaw1HzOutFilenameL_;
     string nssCompampsRaw1HzOutFilenameR_;
+    // The monitor files go to ~/sonata_archive/confirmdata
     string nssCompampsMonitorOutFilenameL_;
     string nssCompampsMonitorOutFilenameR_;
     string nssBaselinesMonitorOutFilenameL_;
     string nssBaselinesMonitorOutFilenameR_;
+
+    int currentDataRequestSubchannel_;
 };
 
 #endif // ScienceDataArchive_H

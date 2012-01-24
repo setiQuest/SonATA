@@ -56,6 +56,21 @@ SubchannelMask::~SubchannelMask()
 {
 }
 
+/**
+ * Initialize a subchannel mask.
+ *
+ * Description:\n
+ * 	Resets all the mask bits, and sets the number of subchannels and the
+ *	subchannel bandwidth.
+ */
+void
+SubchannelMask::init(Activity *act)
+{
+	Assert(act);
+	subchannels = act->getUsableSubchannels();
+	subchannelBandwidth = act->getSubchannelWidthMHz();
+	mask.reset();
+}
 //
 // createSubchannelMask: create the DSP subchannel mask
 //
@@ -121,6 +136,25 @@ SubchannelMask::createSubchannelMask(Activity *act)
 }
 
 /**
+ * Mask a subchannel.
+ */
+void
+SubchannelMask::maskSubchannel(int32_t subchannel)
+{
+	if (subchannel >= 0 && subchannel < subchannels)
+		mask.set(subchannel);
+}
+
+void
+SubchannelMask::maskSubchannel(const DxScienceData *scienceData)
+{
+	int32_t subchannel = scienceData->subchannel;
+	if (scienceData->requestType == REQ_FREQ)
+		subchannel = computeSubchannel(scienceData->rfFreq);
+	maskSubchannel(subchannel);
+}
+
+/**
  * Return the subchannel mask.
  */
 void
@@ -137,6 +171,15 @@ bool
 SubchannelMask::isSubchannelMasked(int32_t subchannel)
 {
 	return (mask.test(subchannel));
+}
+
+/**
+ * Test whether any subchannels are masked.
+ */
+bool
+SubchannelMask::noSubchannelsMasked()
+{
+	return (mask.none());
 }
 
 /**
@@ -226,6 +269,27 @@ SubchannelMask::applyTestSignalMask(TestSignalMask *testSignalMask,
 		computeSubchannelRange(freqBand, first, last);
 		for (int32_t i = first; i <= last; ++i)
 			mask.reset(i);
+	}
+}
+
+void
+SubchannelMask::applyRecentRfiMask(RecentRfiMask *recentRfiMask,
+		float64_t centerFreq)
+{
+	if (!recentRfiMask)
+		return;
+	for (FrequencyBand *band = recentRfiMask->getFirst(); band;
+			band = recentRfiMask->getNext()) {
+		FrequencyBand freqBand = *band;
+		Debug(DEBUG_SUBCHANNEL, centerFreq, "rf center freq");
+		Debug(DEBUG_SUBCHANNEL, freqBand.centerFreq, "mask center freq");
+		freqBand.centerFreq -= centerFreq;
+		int32_t first, last;
+		computeSubchannelRange(freqBand, first, last);
+		Debug(DEBUG_SUBCHANNEL, first, "first subchannel");
+		Debug(DEBUG_SUBCHANNEL, last, "last subchannel");
+		for (int32_t i = first; i <= last; ++i)
+			mask.set(i);
 	}
 }
 

@@ -277,6 +277,7 @@ ActivityUnitImp::ActivityUnitImp (
    dbParam_(activity->getDbParameters()),
    dbConn_(0),
    useDb_(false),
+   zxMode_(false),
    beamNumber_(-1),
    targetId_(-1),
    detachedSelfFromDxProxy_(false),
@@ -294,7 +295,9 @@ ActivityUnitImp::ActivityUnitImp (
       // if one is not already open
       dbConn_ = dbParam_.getDb();
    }
-
+	// Am I a Zx ?
+    if (dxProxy->getName().compare(0, 2, "zx") == 0 ) zxMode_ = true;
+    
    beamNumber_ = obsActivity_->getBeamNumberForDxName(dxProxy->getName());
    siteName_ = obsActivity_->getSiteName();
    targetId_ = obsActivity_->getTargetIdForBeam(beamNumber_);
@@ -678,6 +681,9 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
       <<  "  MHz  <----- " << endl;
 
    sendScienceDataRequestFreq(dataRequestRfFreqMhz);
+	   int subchan = getSubchannel(
+			   dxActParam_.scienceDataRequest.scienceData.rfFreq);
+	   scienceDataArchive_->setCurrentDataRequestSubchannel(subchan);
 
    SseArchive::SystemLog() << sigSummary.str() << endl;
 }
@@ -685,8 +691,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 
 void ActivityUnitImp::sendScienceDataRequestFreq(double rfFreqMhz)
 {
-   dxActParam_.scienceDataRequest.requestType = REQ_FREQ;
-   dxActParam_.scienceDataRequest.rfFreq = rfFreqMhz;
+   dxActParam_.scienceDataRequest.scienceData.requestType = REQ_FREQ;
+   dxActParam_.scienceDataRequest.scienceData.rfFreq = rfFreqMhz;
    dxProxy_->dxScienceDataRequest(dxActParam_.scienceDataRequest);
 }
 
@@ -948,6 +954,75 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
       int maskSizeToUse = adjustRecentRfiMaskSize(
 	 maskCenterFreqMhz.size());
       
+      // create list of subchannels for compamp data request
+      //
+      if (zxMode_)
+      {
+      vector<int> compampSubchannels;
+      unsigned int maxCompampSubchannels(getObsAct()->getDxParameters().getDataRequestMaxCompampSubchannels());
+      if ( maskSizeToUse == 0 )
+      {
+	 maxCompampSubchannels = 1;
+	 if (dxActParam_.scienceDataRequest.scienceData.requestType == REQ_SUBCHANNEL)
+	 {
+         compampSubchannels.push_back(
+        		 dxActParam_.scienceDataRequest.scienceData.subchannel);
+	 }
+	  else
+	  {
+	    int subchan = getSubchannel(
+	    		dxActParam_.scienceDataRequest.scienceData.rfFreq);
+
+	      compampSubchannels.push_back(subchan);
+	       }
+      }
+      else
+      {
+           if ( (unsigned int)maxCompampSubchannels > maskSizeToUse)
+	      maxCompampSubchannels = maskSizeToUse;
+	   double subchannelWidthMhz = dxProxy_->getIntrinsics().hzPerSubchannel/SseAstro::HzPerMhz;
+	   double lowFreq = dxProxy_->getDxSkyFreq() - 
+			   dxProxy_->getBandwidthInMHz()/2.0;
+	   double highFreq = dxProxy_->getDxSkyFreq() + 
+			   dxProxy_->getBandwidthInMHz()/2.0;
+       for (unsigned int signalIndex=0; compampSubchannels.size() < maxCompampSubchannels;
+		               ++signalIndex)
+	        {
+			double centerFreq = maskCenterFreqMhz[signalIndex];
+			double maskWidth = maskWidthMhz[signalIndex];
+			int nSubchan = maskWidth/subchannelWidthMhz;
+			if (nSubchan > 1 )
+			{
+				// use all the subchannels in the mask entry
+				double subchannelFreq = centerFreq - .5*maskWidth + 
+						subchannelWidthMhz/2 ;
+				while (subchannelFreq < lowFreq ) subchannelFreq += subchannelWidthMhz;
+
+				while (subchannelFreq < centerFreq + .5*maskWidth )
+				{
+				if (subchannelFreq > highFreq) break;
+				int subchan = getSubchannel( subchannelFreq );
+				compampSubchannels.push_back(subchan);
+				if (compampSubchannels.size() >= maxCompampSubchannels) break;
+				subchannelFreq += subchannelWidthMhz;
+				}
+			}
+			else
+			{
+			int subchan = getSubchannel(centerFreq);
+
+			compampSubchannels.push_back(subchan);
+			}
+		}
+      }
+       // Send compamp subchannels to the Science Data Archive
+       scienceDataArchive_->prepareCompampSubchannelFiles(
+		        getOutputFilePrefix(),
+			      dxProxy_->getName(), targetId_,
+		       compampSubchannels);
+       // Send compamp subchannels to the ZX
+       	sendRequestedCompampSubchannels(compampSubchannels);
+      }
       if (maskSizeToUse == 0)
       {
 	 VERBOSE2(verboseLevel_,"Recent RFI mask is empty for " 
@@ -962,6 +1037,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 			     bandCoveredWidthMhz,
 			     maskCenterFreqMhz, maskWidthMhz, 
 			     maskSizeToUse);
+
    }
    catch (SseException &except)
    {
@@ -982,6 +1058,33 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
    }	
 }
 
+void ActivityUnitImp::sendRequestedCompampSubchannels(
+		const vector<int> & compampSubchannels)
+{
+	// Send begin sending compampSubchannels
+	// with size of list
+	//
+	
+   Count nSubchannels;
+   nSubchannels.count = compampSubchannels.size();  
+
+	dxProxy_->beginSendingRequestedCompampSubchannels(getActivityId(),
+	 		nSubchannels );
+
+	// Send each compampSubchannel
+	//
+       for (unsigned int index=0; index < compampSubchannels.size();
+		               ++index)
+	        {
+	        dxProxy_->sendRequestedCompampSubchannel(getActivityId(),
+				compampSubchannels[index]);
+		}
+
+	// Send done sendings compampSubchannels
+	//
+	dxProxy_->doneSendingRequestedCompampSubchannels(getActivityId());
+
+}
 /*
   Dx has a max upper limit on the size of the recent rfi mask
   that it will accept.  If the current mask size is 
@@ -2162,7 +2265,18 @@ void ActivityUnitImp::initialize()
    // remember that dx Act param already contains initial 
    // DxScienceDataRequest
    dxProxy_->sendDxActivityParameters(dxActParam_);
-  
+    
+   // Tell the Science Data Archive which subchannel is for the Monitor
+   if (dxActParam_.scienceDataRequest.scienceData.requestType == REQ_SUBCHANNEL)
+	   scienceDataArchive_->setCurrentDataRequestSubchannel(
+			   dxActParam_.scienceDataRequest.scienceData.subchannel);
+   else 
+   {
+	   int subchan = getSubchannel(
+			   dxActParam_.scienceDataRequest.scienceData.rfFreq);
+	   scienceDataArchive_->setCurrentDataRequestSubchannel(subchan);
+   }
+
    if (getObsAct()->getDbParameters().useDb())
    {
       recordDxSettingsInDatabase();
@@ -2643,7 +2757,7 @@ void ActivityUnitImp::reclassifyCandidateSignal(
 	 if (! actOpsBitEnabled(MULTITARGET_OBSERVATION))
 	 {
 	    descrip.reason = RECONFIRM;
-	 }
+ }
       }
       else if (descrip.sigClass == CLASS_RFI)
       {
@@ -4454,3 +4568,29 @@ void ActivityUnitImp::updateObsSummarySignalCounts(SignalClassReason reason){
    if ( reason == TOO_MANY_CANDIDATES)
       getObsSummaryStats().unknownSignals++;
 }
+
+//
+// getSubchannel: compute the subchannel containing the specified
+//              frequency
+//
+// Notes:
+//              Computes the subchannel containing the specified frequency.
+//              The subchannel will be computed even if it lies outside
+//              the frequency range of the DX.
+//              This is the subchannel relative to the assigned bandwidth
+//              of the DX, which may be different from the absolute
+//              subchannel, which is based on the maximum bandwidth of the
+//              DX
+//
+int ActivityUnitImp::getSubchannel(double freq)
+{
+        int subchannel;
+	   double lowFreq = dxProxy_->getDxSkyFreq() - 
+			   dxProxy_->getBandwidthInMHz()/2.0;
+	   double subchannelWidthMhz = dxProxy_->getIntrinsics().hzPerSubchannel/SseAstro::HzPerMhz;
+
+        subchannel = static_cast<int32_t> ((freq - lowFreq)
+                                        / subchannelWidthMhz);
+        return (subchannel);
+}
+

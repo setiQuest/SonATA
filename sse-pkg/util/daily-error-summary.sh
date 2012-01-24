@@ -63,6 +63,8 @@ echo `grep "Segment" *$1* | grep dx | wc -l`
 #echo " "
 echo "Channelizer Segmentation Faults"
 echo `grep "Segment" *$1* | grep chan | wc -l`
+echo "Channelizer ChannelPacketVector Errors"
+echo `grep "ChannelPacketVector" *$1* | grep chan | wc -l`
 #echo " "
 echo "Channelizer Fatal Error"
 echo `grep "Fatal error Beam" *$1* | grep chan | wc -l`

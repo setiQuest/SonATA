@@ -78,6 +78,9 @@ dist_setup_DATA = \
 	expectedSonATAComponents-96dxs.cfg \
 	expectedSonATAComponents-beam2-800KHz-24dx.cfg \
 	expectedSonATAComponents-jane-test.cfg \
+	expectedSonATAComponents-3beam-800KHz-69dx-3zx.cfg \
+	kes-expectedSonATAComponents-1beam-800KHz-1dx-1zx.cfg \
+	kes-expectedSonATAComponents-2beam-2dx.cfg \
 	earth.xyz \
 	voyager1.xyz \
 	moon.xyz \

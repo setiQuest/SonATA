@@ -59,6 +59,7 @@ class DxParameters : public SeekerParameterGroup {
   bool recentRfiEnable() const;
   double getRecentRfiMaskElementWidthMinHz() const;
   int getRecentRfiMaskSizeMax() const;
+  int getDataRequestMaxCompampSubchannels() const;
 
   // immediate commands
   const char *names() const;

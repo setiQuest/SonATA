@@ -226,7 +226,7 @@ Spectrometer::sendBaselineMsg(Polarization pol, DxMessageCode code,
 }
 
 /**
- * Send complex amplitudes for a single subchannel.
+ * Send complex amplitudes for the waterfall subchannel.
  */
 void
 Spectrometer::sendComplexAmplitudes(Polarization pol, int32_t hf)
@@ -236,11 +236,39 @@ Spectrometer::sendComplexAmplitudes(Polarization pol, int32_t hf)
 
 	const DxActivityParameters& params = activity->getActivityParams();
 	const DxScienceDataRequest& scienceData =  params.scienceDataRequest;
+	int32_t subchannel = -1;
+	if (scienceData.sendComplexAmplitudes)
+		subchannel = sendSubchannelData(pol, hf, scienceData.scienceData);
 
-	if (!scienceData.sendComplexAmplitudes)
-		return;
+	// if this is a ZX, send requested subchannels to the SSE, but don't
+	// resend the science data subchannel
+	if (args->zxMode()) {
+		int32_t end = channel->getUsableSubchannels();
+		for (int32_t i = 0; i < end; ++i) {
+			if (activity->isSubchannelRequested(i) && i != subchannel) {
+				DxScienceData scienceData;
+				scienceData.requestType = REQ_SUBCHANNEL;
+				scienceData.subchannel = i;
+				sendSubchannelData(pol, hf, scienceData);
+			}
+		}
+	}
+}
 
-	int32_t subchannel;
+/**
+ * Send complex amplitudes for a subchannel.
+ *
+ * Description:\n
+ * 	Sends one half-frame of complex amplitude data to the SSE.  This can
+ * 	be either the single requested subchannel used by the SSE to display
+ * 	a waterfall plot, or one of the ZX requested subchannels.  Returns the
+ *	subchannel number.
+ */
+int32_t
+Spectrometer::sendSubchannelData(Polarization pol, int32_t hf,
+		const DxScienceData &scienceData)
+{
+	int32_t subchannel = -1;
 	switch (scienceData.requestType) {
 	case REQ_FREQ:
 		// select subchannel by frequency
@@ -253,7 +281,7 @@ Spectrometer::sendComplexAmplitudes(Polarization pol, int32_t hf)
 						channel->getHighFreq());
 				warningSent = true;
 			}
-			return;
+			return (subchannel);
 		}
 		break;
 	case REQ_SUBCHANNEL:
@@ -265,15 +293,16 @@ Spectrometer::sendComplexAmplitudes(Polarization pol, int32_t hf)
 						scienceData.subchannel, 0, subchannels - 1);
 				warningSent = true;
 			}
-			return;
+			return (subchannel);
 		}
 		break;
 	default:
 		LogError(ERR_IRT, activity->getActivityId(),
 				"activity %d, request type %d", activity->getActivityId(),
 				scienceData.requestType);
-		return;
+		return (subchannel);
 	}
+
 	size_t len = sizeof(ComplexAmplitudeHeader) + sizeof(SubchannelCoef1KHz);
 	MemBlk *blk = partitionSet->alloc(len);
 	Assert(blk);
@@ -302,6 +331,7 @@ Spectrometer::sendComplexAmplitudes(Polarization pol, int32_t hf)
 	Msg *msg = msgList->alloc(SEND_COMPLEX_AMPLITUDES,
 			activity->getActivityId(), caHdr, len, blk);
 	respQ->send(msg);
+	return (subchannel);
 }
 
 /**
