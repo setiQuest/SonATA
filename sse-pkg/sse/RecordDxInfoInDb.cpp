@@ -91,18 +91,18 @@ string RecordDxScienceDataRequest::stmt(MYSQL* db,
 
 	   << "requestType = '"
 	   << SseDxMsg::sciDataRequestTypeToString(
-	      scienceDataRequest_.requestType)
+	      scienceDataRequest_.scienceData.requestType)
 	   << "'"
 	   << " " << conjunction << " "
 
-	   << "subchan = " << scienceDataRequest_.subchannel
+	   << "subchan = " << scienceDataRequest_.scienceData.subchannel
 	   << " " << conjunction << " ";
 
    sqlstmt.precision(PrintPrecision);
    sqlstmt.setf(std::ios::fixed);  // show all decimal places up to precision
 
    sqlstmt << "rfFrequency = " 
-	   << scienceDataRequest_.rfFreq;
+	   << scienceDataRequest_.scienceData.rfFreq;
 
    return sqlstmt.str();
 }
