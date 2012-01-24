@@ -1738,7 +1738,7 @@ void DxProxy::beginSendingRequestedCompampSubchannels(int activityId,
     marshall.marshall();
 
 
-    //sendMessage(code, activityId, dataLength, &marshall);
+    sendMessage(code, activityId, dataLength, &marshall);
 
 }
 void DxProxy::sendRequestedCompampSubchannel(int activityId, 
@@ -1748,10 +1748,13 @@ void DxProxy::sendRequestedCompampSubchannel(int activityId,
 		    ": DxProxy: sendRequestedCompampSubchannel msg to dx" << endl;);
 
     DxMessageCode code = SEND_REQUESTED_COMPAMP_SUBCHANNEL;
-    int dataLength = sizeof(subchannelNumber);
+    DxScienceData scienceData;
+    int dataLength = sizeof(scienceData);
+    scienceData.requestType = REQ_SUBCHANNEL;
+    scienceData.subchannel = subchannelNumber;
+    scienceData.marshall();
 
-	unsigned int marshall = htonl(subchannelNumber);
-    sendMessage(code, activityId, dataLength, &marshall);
+    sendMessage(code, activityId, dataLength, &scienceData);
 }
 void DxProxy::doneSendingRequestedCompampSubchannels(int activityId)
 {
