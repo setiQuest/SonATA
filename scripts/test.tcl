@@ -15,7 +15,8 @@ tscope sim
  sched set target user
  act set type target
  sched set beginfreq 8401.4
- sched set endfreq 8421.4
+ sched set endfreq 8461.4
+ sched set pipeline on
  act set targetbeam1 144
  act set targetbeam2 144
  act set targetprimary 144

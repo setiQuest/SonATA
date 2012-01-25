@@ -240,6 +240,7 @@ void ScienceDataArchive::storeComplexAmplitudes(
     {
 	ComplexAmplitudes compamp;
 	extractSubchannel(compamp, hdr, subchannelArray[0]);
+	    compamp.marshall(); 
 	    writeCompAmpsToNssFile(compamp, liveFilename );
     }
 }
