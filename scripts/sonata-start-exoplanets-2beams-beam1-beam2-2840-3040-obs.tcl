@@ -1,4 +1,4 @@
-# sonata-start-exoplanets-2beams-beam1-beam2-8500-8700-obs.tcl
+# sonata-start-exoplanets-2beams-beam1-beam2-2840-3040-obs.tcl
 #
 # SSE seeker commands to start observing
 
@@ -84,7 +84,7 @@ dx set coherentdetlim 0.000000000 current
 dx set compamps {on} current 
 dx set cwclustdeltafreq 2 current 
 dx set cwthresh 0.000000000 current 
-dx set daddres 4 current 
+dx set daddres 2 current 
 dx set daddthresh 7.5 current 
 dx set datareqfreq 1420.800100000 current 
 dx set datareqsubchan 1536 max
@@ -117,7 +117,7 @@ sched set beam4 {off} current
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 8500.000000000 current 
+sched set beginfreq 2840.000000000 current 
 sched set catshigh {exoplanets,habcat} current 
 sched set catshighmaxcounts 20000 current 
 sched set catslow {tycho2subset,tycho2remainder} current 
@@ -129,7 +129,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 8700.000000000 current 
+sched set endfreq 3055.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 

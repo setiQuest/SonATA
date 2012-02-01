@@ -70,6 +70,7 @@ using namespace std;
 
 // names of database tables used to store signals
 static const string CandidateSignalTableName("CandidateSignals");
+static const string SetiLiveCandidateSignalTableName("ZxCandidateSignals");
 static const string CandidatePulseTrainTableName("CandidatePulseTrains");
 static const string SignalTableName("Signals");
 static const string PulseTrainTableName("PulseTrains");
@@ -131,6 +132,32 @@ private:
    ActivityUnitImp *actUnit_;
    int previousActId_;
    FollowUpSignalInfoList &infoList_;
+};
+
+class LookUpCandidatesFromSetiLive: public DbQuery
+{
+public:
+   LookUpCandidatesFromSetiLive(ActivityUnitImp *activityUnit,
+                               MYSQL *callerDbConn,
+                               int ActId,
+                               SetiLiveSignalInfoList &infoList);
+   virtual ~LookUpCandidatesFromSetiLive();
+
+protected:
+   string prepareQuery();
+   void processQueryResults();
+
+private:
+   void processCandidates(SetiLiveSignalInfoList &infoList,
+			  int & duplicateCount);
+
+   enum colIndices_ { activityIdCol, rfFreqCol, sigClassCol, reasonCol,
+                      driftCol, resCol, actStartTimeSecsCol, dxNumberCol,
+                      signalIdNumberCol, typeCol, pfaCol, snrCol, nRequestedCols};
+
+   ActivityUnitImp *actUnit_;
+   int actId_;
+   SetiLiveSignalInfoList &infoList_;
 };
 
 class LookUpCandidatesFromCounterpartDxs: public DbQuery
@@ -978,8 +1005,8 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
       }
       else
       {
-           if ( (unsigned int)maxCompampSubchannels > maskSizeToUse)
-	      maxCompampSubchannels = maskSizeToUse;
+           if ( maxCompampSubchannels > (unsigned int)maskSizeToUse)
+	      maxCompampSubchannels = (unsigned int)maskSizeToUse;
 	   double subchannelWidthMhz = dxProxy_->getIntrinsics().hzPerSubchannel/SseAstro::HzPerMhz;
 	   double lowFreq = dxProxy_->getDxSkyFreq() - 
 			   dxProxy_->getBandwidthInMHz()/2.0;
@@ -2594,6 +2621,11 @@ void ActivityUnitImp::signalDetectionComplete(DxProxy* dx)
                         << SseUtil::currentIsoDateTime()
                         << "\n" << endl;
 
+   if (zxMode_)
+   {
+   getObsAct()->doneSendingCwCoherentSignals(this);
+   getObsAct()->doneSendingCandidateResults(this);
+   }
    getObsAct()->signalDetectionComplete(this);
 
 }
@@ -3344,7 +3376,6 @@ void ActivityUnitImp::dxActivityComplete(DxProxy* dx,
 //-------------------------------
 
 
-
 // ------------------------------------------------
 
 LookUpCandidatesFromPrevAct::LookUpCandidatesFromPrevAct(
@@ -3554,6 +3585,219 @@ void LookUpCandidatesFromPrevAct::processCandidates(
 	 VERBOSE2(getVerboseLevel(),"followup candidate too close to previous "
 		  << "candidate, discarded: \n"
 		  << sigInfo.followUpSignal;);
+      }
+   }
+}
+
+// ------------------------------------------------
+
+LookUpCandidatesFromSetiLive::LookUpCandidatesFromSetiLive(
+   ActivityUnitImp *activityUnit,
+   MYSQL *callerDbConn,
+   int actId,
+   SetiLiveSignalInfoList &infoList)
+   :
+   DbQuery(callerDbConn, activityUnit->getActivityId(), 
+	   activityUnit->getVerboseLevel()),
+   actUnit_(activityUnit),
+   actId_(actId),
+   infoList_(infoList)
+{
+   setNumberOfRequestedCols(nRequestedCols);
+   setContext(actUnit_->getDxName());
+   setSubclassName("LookUpCandidatesFromSetiLive");
+}
+
+LookUpCandidatesFromSetiLive::~LookUpCandidatesFromSetiLive()
+{
+}
+
+string LookUpCandidatesFromSetiLive::prepareQuery()
+{
+   stringstream sqlStmt;
+
+   sqlStmt.precision(PrintPrecision);    
+   sqlStmt.setf(std::ios::fixed);  // show all decimal places up to precision
+
+   // get the confirmed candidates on this target in this dx's freq range:
+   // TBD: add grid candidate reasons 
+
+   sqlStmt << "SELECT activityId, rfFreq, sigClass, reason, drift, res,"
+	   << " UNIX_TIMESTAMP(activityStartTime), dxNumber, signalIdNumber,"
+	   << " type, pfa, snr"
+	   << " FROM " << SetiLiveCandidateSignalTableName
+	   << " WHERE activityId = " << actId_
+	   << " AND targetId = " << actUnit_->targetId_
+	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
+	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
+	   << " AND sigClass = '"
+	   << SseDxMsg::signalClassToString(CLASS_CAND)
+	   << "'"
+	   << " AND (reason = '"
+	   << SseDxMsg::signalClassReasonToBriefString(CONFIRM)
+	   << "'"
+	   << " OR reason = '"
+	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
+	   << "'"
+	   << ")";
+
+   /*
+     If this is an OFF observation, then only get candidates
+     that this dx saw originally.  This avoids a problem where
+     adjacent, overlapped dxs try to look for a signal that they
+     did not see in the previous ON, and don't see again in the OFF,
+     thus keeping it alive as a candidate even when the original dx 
+     sees it in the OFF and thus resolves it as RFI.
+   */
+   if (actUnit_->actOpsBitEnabled(OFF_OBSERVATION))
+   {
+      sqlStmt << "AND dxNumber = " << actUnit_->getDxNumber();
+   }
+
+   sqlStmt << " ORDER by rfFreq ";
+
+
+   return sqlStmt.str();
+}
+
+// Look up the confirmed CwCoherent and Pulse candidates for the
+// specified previous activity id that fall within this dx's band.
+// Return them in the infoList, which includes all fields needed 
+// for follow up requests.
+
+void LookUpCandidatesFromSetiLive::processQueryResults()
+{
+   const string methodName(getSubclassName() + "processQueryResults()");
+
+   VERBOSE2(getVerboseLevel(), methodName + " for "
+	    << actUnit_->getDxName() << endl;);
+
+   int duplicateCount(0);
+   processCandidates(infoList_, duplicateCount);
+
+   if (infoList_.size() == 0)
+   {
+      VERBOSE2(getVerboseLevel(), "Act " << actUnit_->getActivityId() << ":"
+	       << " No candidates found for followup of actid "
+	       << actId_ << " that fall in the band of "
+	       << actUnit_->getDxName() << endl;);
+   }
+   else
+   {
+      SseArchive::SystemLog() 
+	 << "Act " << actUnit_->getActivityId() << ":"
+	 << " Following up " << infoList_.size()
+	 << " candidate(s) of actid " 
+	 << actId_ << " that fall in the band of "
+	 << actUnit_->getDxName() 
+	 << " (" << duplicateCount << " duplicates were removed)" << endl;
+   }   
+}
+
+
+
+void LookUpCandidatesFromSetiLive::processCandidates(
+   SetiLiveSignalInfoList &infoList,
+   int & duplicateCount)
+{
+   // Fetch the candidate from each row, convert the values,
+   // store them in the info list.
+   // Eliminate candidates that are too close in frequency
+   // so that that dx does not get confused.
+   // Assumes candidates are sorted in freq order.
+
+   // TBD handle duplicate pulses separately from 
+   // cw signals
+
+   // This is how far apart the candidates must be 
+   // to be considered unique:
+   // (TBD pull this out as an activity parameter)
+
+   const double minCwFreqDiffMhz = 0.000100;  
+
+   double prevCwRfFreqMhz = 0.0;
+   duplicateCount=0;
+   Assert(getResultSet() != 0);
+   while (MYSQL_ROW row = mysql_fetch_row(getResultSet()))
+   {
+      // convert the values
+      SetiLiveSignalInfo sigInfo;
+
+      // tbd error checking
+      // SignalType
+      sigInfo.signalType = SetiLiveSignalInfo::stringToSignalType(
+	 MysqlQuery::getString(row, typeCol, __FILE__, __LINE__));
+
+      // FollowupSignal
+      sigInfo.setiLiveSignal.path.rfFreq = MysqlQuery::getDouble(
+	 row, rfFreqCol, __FILE__, __LINE__);
+
+      sigInfo.setiLiveSignal.path.drift = static_cast<float>(MysqlQuery::getDouble(
+	 row, driftCol, __FILE__, __LINE__));
+      // TBD sig.res
+
+      // FollowUpSignal - original signal Id
+      sigInfo.setiLiveSignal.origSignalId.dxNumber = MysqlQuery::getInt(
+	 row, dxNumberCol, __FILE__, __LINE__);
+
+      sigInfo.setiLiveSignal.origSignalId.activityId = MysqlQuery::getInt(
+	 row, activityIdCol, __FILE__, __LINE__);
+
+      sigInfo.setiLiveSignal.origSignalId.activityStartTime.tv_sec =
+	 MysqlQuery::getInt(row, actStartTimeSecsCol,
+					  __FILE__, __LINE__);
+
+      sigInfo.setiLiveSignal.origSignalId.number = MysqlQuery::getInt(
+	 row, signalIdNumberCol, __FILE__, __LINE__);
+
+      int activityId = sigInfo.setiLiveSignal.origSignalId.activityId; 
+      int dxNumber = sigInfo.setiLiveSignal.origSignalId.dxNumber;
+      int signalNumber = sigInfo.setiLiveSignal.origSignalId.number;
+
+      string reason(MysqlQuery::getString(row, reasonCol,
+					  __FILE__, __LINE__));
+
+      /*
+        pfa and snr might be null if the previous obs was an OFF,
+        just use the defaults in that case.
+      */
+      if (row[pfaCol])
+      {
+         sigInfo.cfm.pfa = static_cast<float>(
+            MysqlQuery::getDouble(row, pfaCol, __FILE__, __LINE__));
+      }    
+     
+      if (row[snrCol])
+      {
+         sigInfo.cfm.snr = static_cast<float>(
+            MysqlQuery::getDouble(row, snrCol, __FILE__, __LINE__));
+      }
+
+      VERBOSE2(getVerboseLevel(),"candidate setiLive: \n"
+	       << "reason: " << reason
+	       << " actid: " << activityId << " dxnum: " << dxNumber
+	       << " signum: " << signalNumber << endl;);
+
+      // only keep the signals that are far enough apart in freq
+      // TBD add a separate clause for pulses
+      
+      if (sigInfo.setiLiveSignal.path.rfFreq - prevCwRfFreqMhz >  minCwFreqDiffMhz)
+      {
+	 VERBOSE2(getVerboseLevel(),"candidate from orig act to be "
+		  << "followed up: \n" << sigInfo.setiLiveSignal << sigInfo.cfm;);
+	  
+	 // store the signal on the list by value
+	 infoList.push_back(sigInfo);
+	  
+	 prevCwRfFreqMhz = sigInfo.setiLiveSignal.path.rfFreq;
+      } 
+      else
+      {
+	 duplicateCount++;
+	  
+	 VERBOSE2(getVerboseLevel(),"followup candidate too close to previous "
+		  << "candidate, discarded: \n"
+		  << sigInfo.setiLiveSignal;);
       }
    }
 }

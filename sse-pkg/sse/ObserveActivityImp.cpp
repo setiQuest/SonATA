@@ -2175,7 +2175,7 @@ void ObserveActivityImp::activityUnitComplete(ActivityUnit *activityUnit)
 	// (these counters are just a crude prototype, need better
 	// accounting later).
 	nActUnitsDone_++;
-	nActUnitsStillWorking_--;
+//nActUnitsStillWorking_--;
 
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " 
 			"ObserveActivityImp::activityUnitComplete() "

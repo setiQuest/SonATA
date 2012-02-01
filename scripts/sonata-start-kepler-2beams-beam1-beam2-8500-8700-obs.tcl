@@ -1,4 +1,4 @@
-# sonata-start-kepler-3beam-8500-8700-obs.tcl
+# sonata-start-kepler-2beams-beam1-beam2-8500-8700-obs.tcl
 #
 # SSE seeker commands to start observing
 
@@ -35,7 +35,7 @@ act set primarydecdeg 0.000000000 current
 act set primaryrahours 0.000000000 current 
 act set readytimeout 60 current 
 act set rfiagelimit 7.000000000 current 
-act set sigdetwait 3 current 
+act set sigdetwait 1 current 
 act set site {ATA} current 
 act set targetbeam1 1 current 
 act set targetbeam2 1 current 

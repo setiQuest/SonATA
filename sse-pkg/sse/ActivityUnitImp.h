@@ -42,6 +42,7 @@
 #include "sseDxInterface.h"
 #include "ObsSummaryStats.h"
 #include "FollowUpSignalInfo.h"
+#include "SetiLiveSignalInfo.h"
 #include "ObserveActivityOps.h"
 #include "SseException.h"
 #include "TargetId.h"
@@ -304,6 +305,7 @@ class ActivityUnitImp : public ActivityUnit
  private:
 
   friend class LookUpCandidatesFromPrevAct;
+  friend class LookUpCandidatesFromSetiLive;
   friend class LookUpCandidatesFromCounterpartDxs;
   friend class ResolveCandidatesBasedOnSecondaryProcessingResults;
   friend class PrepareFakeSecondaryCandidatesToForceArchiving;
@@ -332,6 +334,7 @@ class ActivityUnitImp : public ActivityUnit
       CandSigInfo();
   };
   typedef std::list<CandSigInfo> CandSigInfoList;
+  typedef std::list<CandSigInfo> SetiLiveSignalInfoList;
 
   // Methods
   void saveSignalReports(); 

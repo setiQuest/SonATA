@@ -340,7 +340,9 @@ seeker_MOST_SOURCES = \
 	MinMaxBandwidth.h \
 	PermRfiMaskFilename.h \
 	SeekerCmdLineParser.h \
-	SeekerCmdLineParser.cpp
+	SeekerCmdLineParser.cpp \
+	SetiLiveSignalInfo.h \
+	SetiLiveSignalInfo.cpp
 
 seeker_SOURCES = $(seeker_MOST_SOURCES) \
 			seeker.cpp \
