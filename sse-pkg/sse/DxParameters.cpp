@@ -309,17 +309,17 @@ DxParametersInternal::DxParametersInternal() :
    baselineWarningMeanUpperBound(
       "basewarnmeanupper", "power",
       "baseline warning mean upper bound limit",
-      3000, 0, 1e5),
+      7000, 0, 1e5),
 
    baselineWarningMeanLowerBound(
       "basewarnmeanlower", "power",
       "baseline warning mean lower bound limit",
-      60, 0, 1e5),
+      500, 0, 1e5),
 
    baselineWarningStdDevPercent(
       "basewarnstddev", "percent",
       "baseline warning std dev",
-      50, 1, 100),
+      75, 1, 100),
 
    baselineWarningMaxRange(
       "basewarnrange", "power",
@@ -331,17 +331,17 @@ DxParametersInternal::DxParametersInternal() :
    baselineErrorMeanUpperBound(
       "baseerrormeanupper", "power",
       "baseline error mean upper bound limit",
-      5000, 0, 1e5),
+      8000, 0, 1e5),
 
    baselineErrorMeanLowerBound(
       "baseerrormeanlower", "power",
       "baseline error mean lower bound limit",
-      30, 0, 1e5),
+      500, 0, 1e5),
 
    baselineErrorStdDevPercent(
       "baseerrorstddev", "percent",
       "baseline error std dev",
-      80, 1, 100),
+      100, 1, 200),
 
    baselineErrorMaxRange(
       "baseerrorrange", "power",
@@ -479,13 +479,14 @@ void DxParametersInternal::updateGeneralDxActParam(DxActivityParameters &ap)
    if (sendComplexAmplitudes.getCurrent() == ChoiceOff)
       ap.scienceDataRequest.sendComplexAmplitudes = SSE_FALSE;
 
-   ap.scienceDataRequest.requestType = REQ_FREQ;
+   ap.scienceDataRequest.scienceData.requestType = REQ_FREQ;
    Assert(dataRequestType.isValid(DataReqSubchannel));
    if (dataRequestType.getCurrent() == DataReqSubchannel)
-      ap.scienceDataRequest.requestType = REQ_SUBCHANNEL;
+      ap.scienceDataRequest.scienceData.requestType = REQ_SUBCHANNEL;
 
-   ap.scienceDataRequest.subchannel = dataRequestSubchannel.getCurrent();
-   ap.scienceDataRequest.rfFreq = dataRequestFreq.getCurrent();
+   ap.scienceDataRequest.scienceData.subchannel
+         = dataRequestSubchannel.getCurrent();
+   ap.scienceDataRequest.scienceData.rfFreq = dataRequestFreq.getCurrent();
 
    ap.baselineSubchannelAverage = baselineSubchannelAverage.getCurrent(); 
    ap.baselineInitAccumHalfFrames = 
@@ -886,8 +887,8 @@ protected:
       dataRequest.sendComplexAmplitudes = SSE_TRUE;
 
       // now override to force a frequency request
-      dataRequest.requestType = REQ_FREQ;
-      dataRequest.rfFreq = rfFreqMhz_;
+      dataRequest.scienceData.requestType = REQ_FREQ;
+      dataRequest.scienceData.rfFreq = rfFreqMhz_;
 
       proxy->dxScienceDataRequest(dataRequest);
       return "";
@@ -923,8 +924,8 @@ protected:
       dataRequest.sendComplexAmplitudes = SSE_TRUE;
 
       // now override to force a subchannel request
-      dataRequest.requestType = REQ_SUBCHANNEL;
-      dataRequest.subchannel = subchannel_;
+      dataRequest.scienceData.requestType = REQ_SUBCHANNEL;
+      dataRequest.scienceData.subchannel = subchannel_;
 
       proxy->dxScienceDataRequest(dataRequest);
       return "";

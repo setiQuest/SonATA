@@ -41,6 +41,7 @@
 #include <SseOutputTask.h>
 #include "System.h"
 #include "Activity.h"
+#include "Args.h"
 #include "Buffer.h"
 #include "Condition.h"
 #include "DxStruct.h"
@@ -204,6 +205,7 @@ private:
 	spectra::Spectra spectra;		// spectra library
 	HfBufList hfBufs;
 
+	Args *args;
 	MsgList *msgList;
 	PartitionSet *partitionSet;
 	Queue *respQ;
@@ -253,7 +255,8 @@ private:
 	void sendBaselineStatistics();
 
 	void sendComplexAmplitudes(Polarization pol, int32_t hf);
-
+	int32_t sendSubchannelData(Polarization pol, int32_t hf,
+			const DxScienceData &scienceData);
 
 	// hidden
 	Spectrometer();

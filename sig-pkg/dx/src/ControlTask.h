@@ -108,6 +108,10 @@ private:
 	void tune(Msg *msg);
 	void sendTuned(Msg *msg);
 
+	void startRequestedSubchannels(Msg *msg);
+	void addRequestedSubchannel(Msg *msg);
+	void endRequestedSubchannels(Msg *msg);
+
 	void startFollowupSignals(Msg *msg);
 	void addCwFollowupSignal(Msg *msg);
 	void addPulseFollowupSignal(Msg *msg);

@@ -260,6 +260,11 @@ CollectionTask::startActivity(Msg *msg)
 				act->getActivityId());
 	}
 
+#ifdef notdef
+	// if this is a ZX, create the requested subchannel mask
+	act->createRequestedSubchannelMask();
+#endif
+
 	// create the reader and initialize the worker tasks
 	createReceiver();
 

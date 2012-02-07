@@ -42,6 +42,7 @@
 #include "sseDxInterface.h"
 #include "ObsSummaryStats.h"
 #include "FollowUpSignalInfo.h"
+#include "SetiLiveSignalInfo.h"
 #include "ObserveActivityOps.h"
 #include "SseException.h"
 #include "TargetId.h"
@@ -304,6 +305,7 @@ class ActivityUnitImp : public ActivityUnit
  private:
 
   friend class LookUpCandidatesFromPrevAct;
+  friend class LookUpCandidatesFromSetiLive;
   friend class LookUpCandidatesFromCounterpartDxs;
   friend class ResolveCandidatesBasedOnSecondaryProcessingResults;
   friend class PrepareFakeSecondaryCandidatesToForceArchiving;
@@ -332,6 +334,7 @@ class ActivityUnitImp : public ActivityUnit
       CandSigInfo();
   };
   typedef std::list<CandSigInfo> CandSigInfoList;
+  typedef std::list<CandSigInfo> SetiLiveSignalInfoList;
 
   // Methods
   void saveSignalReports(); 
@@ -359,8 +362,8 @@ class ActivityUnitImp : public ActivityUnit
   void detachSelfFromDxProxy();
   void releaseResources();
   void sendStopMsgToDx();
-  int32_t getSubchannel(float64_t freq_, float64 lowFreq,
-                float64 subchannelWidthMhz);
+  int getSubchannel(double freq);
+  void sendRequestedCompampSubchannels(const vector<int> &compampSubchannels);
 
   // Variables
   ObserveActivity* obsActivity_;
@@ -386,6 +389,7 @@ class ActivityUnitImp : public ActivityUnit
   DbParameters & dbParam_;
   MYSQL *dbConn_;
   bool useDb_;
+  bool zxMode_;
 
   int beamNumber_;
   TargetId targetId_;

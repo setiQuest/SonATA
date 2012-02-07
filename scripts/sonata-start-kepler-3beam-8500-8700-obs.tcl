@@ -35,7 +35,7 @@ act set primarydecdeg 0.000000000 current
 act set primaryrahours 0.000000000 current 
 act set readytimeout 60 current 
 act set rfiagelimit 7.000000000 current 
-act set sigdetwait 3 current 
+act set sigdetwait 1 current 
 act set site {ATA} current 
 act set targetbeam1 1 current 
 act set targetbeam2 1 current 
@@ -161,7 +161,7 @@ sched set targetwait {on} current
 sched set tasks {prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
 sched set tscopemaxfailures 10 current 
 sched set tscopereadypause 120 current 
-sched set zenithavoid 6.000000000 current 
+sched set zenithavoid 5.000000000 current 
 tscope set antsmaxsefd 20000 current 
 
 tscope set antlistsource param

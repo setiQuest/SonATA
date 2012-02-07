@@ -38,6 +38,7 @@
 #include "SseArchive.h"
 #include "Assert.h"
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -205,6 +206,8 @@ void ScienceDataArchive::storeComplexAmplitudes(
     // write routines til we get a chance to adjust them).
 
     int nSubchannels = hdr.numberOfSubchannels;
+    if (hdr.startSubchannelId == currentDataRequestSubchannel_ )
+    {
     for (int subchannel=0; subchannel < nSubchannels; ++subchannel)
     { 
 	ComplexAmplitudes compamp;
@@ -229,5 +232,59 @@ void ScienceDataArchive::storeComplexAmplitudes(
 	}
 
     }
+    }
+    // Now check if this is one of the SETILive subchannels
+    
+    string liveFilename = getLiveFilename( hdr.pol, hdr.startSubchannelId);
+    if (liveFilename != "")
+    {
+	ComplexAmplitudes compamp;
+	extractSubchannel(compamp, hdr, subchannelArray[0]);
+	    compamp.marshall(); 
+	    writeCompAmpsToNssFile(compamp, liveFilename );
+    }
+}
+void ScienceDataArchive::prepareCompampSubchannelFiles(const string &archiveFilenamePrefix,
+                     const string &dxName, const int targetId,
+                          const vector<int> & compampSubchannels)
+{
+	for ( unsigned int subchanIndex = 0; 
+			subchanIndex< compampSubchannels.size();
+			++subchanIndex)
+	{
+		stringstream targetSubchan;
+		targetSubchan << "tg" << targetId << "." << "sbch" << 
+			compampSubchannels[subchanIndex] << "." << "requested.";
+		CompampSubchannelFile subchanFile;
+		subchanFile.subchanNumber = compampSubchannels[subchanIndex];
+		subchanFile.pol = POL_RIGHTCIRCULAR;
+		subchanFile.filename = archiveFilenamePrefix +
+			targetSubchan.str() + "R.compamp";
+		cout << subchanFile.filename << endl;
+		compampSubchannelFileList_.push_back(subchanFile);
+		subchanFile.pol = POL_LEFTCIRCULAR;
+		subchanFile.filename = archiveFilenamePrefix +
+			targetSubchan.str() + "L.compamp";
+		cout << subchanFile.filename << endl;
+		compampSubchannelFileList_.push_back(subchanFile);
+		
+	}
 }
 
+string ScienceDataArchive::getLiveFilename( Polarization pol, int subchan )
+{
+	for (CompampSubchannelFileList::iterator 
+			index = compampSubchannelFileList_.begin();
+			index != compampSubchannelFileList_.end();
+			++index)
+	{
+		if ( index->subchanNumber == subchan &&
+			index->pol == pol)
+			return( index->filename );
+	}
+	return( "");
+}
+void ScienceDataArchive::setCurrentDataRequestSubchannel( int subchan )
+{
+	currentDataRequestSubchannel_ = subchan;
+}
