@@ -359,7 +359,8 @@ class ActivityUnitImp : public ActivityUnit
   void detachSelfFromDxProxy();
   void releaseResources();
   void sendStopMsgToDx();
-
+  int32_t getSubchannel(float64_t freq_, float64 lowFreq,
+                float64 subchannelWidthMhz);
 
   // Variables
   ObserveActivity* obsActivity_;

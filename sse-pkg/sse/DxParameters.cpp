@@ -103,6 +103,7 @@ struct DxParametersInternal
    ChoiceParameter<string> dataRequestType;
    RangeParameter<int32_t> dataRequestSubchannel;          // request subchannel directly
    RangeParameter<float64_t> dataRequestFreq;    
+   RangeParameter<int32_t> dataRequestMaxCompampSubchannels;          // Max # of subchannels 
 
    // allow manual override of dx bandwidth
    ChoiceParameter<string> manualBandwidth;
@@ -282,6 +283,11 @@ DxParametersInternal::DxParametersInternal() :
       "request subchannel containing freq",
       DefaultDxSkyFreqMhz + 0.800100, 0, 
       AtaInformation::AtaMaxSkyFreqMhz),
+
+   dataRequestMaxCompampSubchannels(
+      "datareqmaxcompampsubchan", "Max # of subchannels ",
+      "Max # of subchannels",
+      1, 0, 10),
 
    manualBandwidth(
       "manualbw",  "", 
@@ -625,6 +631,8 @@ void DxParameters::addParameters()
    addParam(internal_->dataRequestType);
    addParam(internal_->dataRequestSubchannel);
    addParam(internal_->dataRequestFreq);
+   addParam(internal_->dataRequestMaxCompampSubchannels);
+
 
    addParam(internal_->manualBandwidth);
    addParam(internal_->bandwidth);
@@ -689,6 +697,10 @@ double DxParameters::getRecentRfiMaskElementWidthMinHz() const
 int DxParameters::getRecentRfiMaskSizeMax() const
 {
    return internal_->recentRfiMaskSizeMax.getCurrent();
+}
+int DxParameters::getDataRequestMaxCompampSubchannels() const
+{
+   return internal_->dataRequestMaxCompampSubchannels.getCurrent();
 }
 
 
