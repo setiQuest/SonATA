@@ -620,6 +620,7 @@ create table DxParameters
   datareqtype               text, -- dataRequestType
   datareqsubchan            int,
   datareqfreq               double,
+  datareqmaxcompampsubchan	int unsigned not null,
   manualbw                  enum("on", "off") not null,
   bandwidth                 int,
 
@@ -825,6 +826,17 @@ create table Signals like CandidateSignals;
 -- additional indexes to speed up recent rfi mask related queries:
 alter table Signals add index startTimeIndex (activityStartTime);
 alter table Signals add index targetIdIndex (targetId);
+
+-- -----------------------------------------------------------------------
+-- ZxCandidateSignals 
+-- -----------------------------------------------------------------------
+
+drop table if exists ZxCandidateSignals;
+create table ZxCandidateSignals like CandidateSignals;
+
+-- additional indexes to speed up recent rfi mask related queries:
+alter table ZxCandidateSignals add index startTimeIndex (activityStartTime);
+alter table ZxCandidateSignals add index targetIdIndex (targetId);
 
 -- -----------------------------------------------------------------------
 -- Coherent Segments Description  --

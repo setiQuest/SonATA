@@ -11,7 +11,7 @@ sh echo "SonATA switching to Kepler" | mailx -s 'SonATA switching to Kepler' -r 
 exec setAlarm ARM,sonata,KEPLER
 
 # change database to kepler
-db set name kepler
+db set name keplerLBand
 
 # change catalog priorities
 sched set catshigh keplerHZ,exokepler

@@ -12,5 +12,6 @@ sleep 120
 #send command to SSE to start Observing
 #${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beam-8500-8700-obs.tcl
 #${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-2beams-beam1-beam2-8500-8700-obs.tcl
-${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-2beams-beam1-beam2-2840-3040-obs.tcl
+#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-2beams-beam1-beam2-2840-3040-obs.tcl
+${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-2beams-beam1-beam2-1400-1750-obs.tcl
 

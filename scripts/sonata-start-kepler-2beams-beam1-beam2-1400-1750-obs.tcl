@@ -1,4 +1,4 @@
-# sonata-start-kepler-2beams-beam1-beam2-2840-3040-obs.tcl
+# sonata-start-kepler-2beams-beam1-beam2-1400-1750-obs.tcl
 #
 # SSE seeker commands to start observing
 
@@ -54,7 +54,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {kepler} current 
+db set name {keplerLBand} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -84,9 +84,10 @@ dx set coherentdetlim 0.000000000 current
 dx set compamps {on} current 
 dx set cwclustdeltafreq 2 current 
 dx set cwthresh 0.000000000 current 
-dx set daddres 2 current 
-dx set daddthresh 7.5 current 
+dx set daddres 1 current 
+dx set daddthresh 9.5 current 
 dx set datareqfreq 1420.800100000 current 
+dx set datareqmaxcompampsubchan 6
 dx set datareqsubchan 1536 max
 dx set datareqsubchan 975 current 
 dx set datareqtype {subchan} current 
@@ -117,7 +118,7 @@ sched set beam4 {off} current
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 2839.000000000 current 
+sched set beginfreq 1506.400000 current 
 sched set catshigh {keplerHZ,exokepler} current 
 sched set catshighmaxcounts 20000 current 
 sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
@@ -129,7 +130,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 3035.000000000 current 
+sched set endfreq 1713.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -194,20 +195,20 @@ tscope set tuningd 1420.000000000 current
 #tscope set antsprimary 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4g,4j,4k,5b,5c,5g
 #tscope set antsxpol 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope set antsypol 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g
-# 4j removed
-tscope set antsprimary 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4g,4k,5b,5c,5g
-tscope set antsxpol 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
-tscope set antsypol 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4k,5b,5c,5g
+# 4j removed and 1b and 4g and 4f
+tscope set antsprimary 1a,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c,5g
+tscope set antsxpol 1a,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c,5g
+tscope set antsypol 1a,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c,5g
 # Beam 1
 #tscope assign beamxc1 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope assign beamyc1 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g
-tscope assign beamxc1 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
-tscope assign beamyc1 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4k,5b,5c,5g
+tscope assign beamxc1 1a,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c,5g
+tscope assign beamyc1 1a,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c,5g
 # Beam 2
 #tscope assign beamxc1 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope assign beamyc1 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g
-tscope assign beamxd1 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
-tscope assign beamyd1 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4k,5b,5c,5g
+tscope assign beamxd1 1a,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c,5g
+tscope assign beamyd1 1a,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c,5g
 # Beam 3 -- unused
 #tscope assign beamxd2 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope assign beamyd2 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g

@@ -702,15 +702,14 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
    dxProxy_->doneSendingFollowUpSignals(activityId);
 
    // send science data request for the desired candidate's rf freq
+	   int subchan = getSubchannel( dataRequestRfFreqMhz);
+	   scienceDataArchive_->setCurrentDataRequestSubchannel(subchan);
    sigSummary 
       << "---> Data request: " << dxProxy_->getName() << "  "
       <<  dataRequestRfFreqMhz 
-      <<  "  MHz  <----- " << endl;
+      <<  "  MHz  <----- Subchan " << subchan << endl;
 
    sendScienceDataRequestFreq(dataRequestRfFreqMhz);
-	   int subchan = getSubchannel(
-			   dxActParam_.scienceDataRequest.scienceData.rfFreq);
-	   scienceDataArchive_->setCurrentDataRequestSubchannel(subchan);
 
    SseArchive::SystemLog() << sigSummary.str() << endl;
 }
@@ -989,6 +988,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
       unsigned int maxCompampSubchannels(getObsAct()->getDxParameters().getDataRequestMaxCompampSubchannels());
       if ( maskSizeToUse == 0 )
       {
+// Empty Recent Rfi Mask, just use the Data Req Subband
 	 maxCompampSubchannels = 1;
 	 if (dxActParam_.scienceDataRequest.scienceData.requestType == REQ_SUBCHANNEL)
 	 {
@@ -1009,9 +1009,9 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      maxCompampSubchannels = (unsigned int)maskSizeToUse;
 	   double subchannelWidthMhz = dxProxy_->getIntrinsics().hzPerSubchannel/SseAstro::HzPerMhz;
 	   double lowFreq = dxProxy_->getDxSkyFreq() - 
-			   dxProxy_->getBandwidthInMHz()/2.0;
+			   ( subchannelWidthMhz + dxProxy_->getBandwidthInMHz())/2.0;
 	   double highFreq = dxProxy_->getDxSkyFreq() + 
-			   dxProxy_->getBandwidthInMHz()/2.0;
+			   (dxProxy_->getBandwidthInMHz() - subchannelWidthMhz)/2.0;
        for (unsigned int signalIndex=0; compampSubchannels.size() < maxCompampSubchannels;
 		               ++signalIndex)
 	        {
@@ -1171,13 +1171,27 @@ void ActivityUnitImp::getRecentRfiSignals(
 
    const double ageLimitDays = 
       getObsAct()->getActParameters().getRecentRfiAgeLimitDays();
+   double ageLimit;
+   double minPower;
 
-   const int ageLimitSecs = static_cast<int>(ageLimitDays * SseAstro::SecsPerDay);
+   if (zxMode_) 
+   {
+   ageLimit = 365;
+   minPower = 350.;
+   }
+   else 
+   {
+   ageLimit = ageLimitDays;
+   minPower = 0.0;
+   }
+
+   const int ageLimitSecs = static_cast<int>(ageLimit * SseAstro::SecsPerDay);
 
    sqlStmt << "SELECT distinct rfFreq from " << SignalTableName << " "
 	   << "where"
 	   << " rfFreq > " << beginFreqMhz
 	   << " and rfFreq < " << endFreqMhz
+	   << " and power > " << minPower
 	   << " and UNIX_TIMESTAMP(activityStartTime) >="
 	   << " (UNIX_TIMESTAMP() - " << ageLimitSecs << ")";
 
@@ -1185,7 +1199,7 @@ void ActivityUnitImp::getRecentRfiSignals(
    sqlStmtPrefix << sqlStmt.str() << " ... (" << targetIdsToExclude.size()
                  << " exclusion targetIds omitted)";
 
-   if (! targetIdsToExclude.empty())
+   if (! targetIdsToExclude.empty() && !zxMode_)
    {
       sqlStmt << " and targetId not in (";
 
@@ -2485,6 +2499,7 @@ void ActivityUnitImp::dataCollectionComplete(DxProxy* dx)
                         << endl;
 
    getObsAct()->dataCollectionComplete(this);
+   if(zxMode_)getObsAct()->signalDetectionStarted(this);
 }
 
 
@@ -2675,7 +2690,23 @@ bool ActivityUnitImp::signalPassedOffActNullBeamSnrTest(
       double snrRatio = origFollowUpSigInfo.cfm.snr / cfm.snr;
 
       string result;
-      if (snrRatio < nullDepthLinear_)
+	    // for a pfa of -70, the average snr is .400
+     if ( origFollowUpSigInfo.cfm.snr <= .400 &&  
+		     origFollowUpSigInfo.cfm.snr >= .150)
+	    {
+		    // for a pfa of -20, the average snr is .100
+		    // above -20 is had to tell from the noise.
+	       if (cfm.snr > .100 )
+            	{
+                result = "Signal is RFI, too strong.";
+            	}
+            	else
+            	{
+         	passed = true;
+               	result = "Signal is potential candidate.";
+            	}
+	    }
+      else if (snrRatio < nullDepthLinear_)
       {
          result = "Signal is RFI, too strong.";
       }
@@ -4526,7 +4557,22 @@ findCounterpartResultsForSignal(
             double snrRatio = signalSnr / counterpartSnr;
 
             string result;
-            if (snrRatio < nullDepthLinear_)
+	    // for a pfa of -70, the average snr is .400
+	    if (signalSnr <= .400 && signalSnr >= .150)
+	    {
+		    // for a pfa of -20, the average snr is .100
+		    // above -20 is had to tell from the noise.
+	       if (counterpartSnr > .100 )
+            	{
+               	signalWasSeen = true;
+                result = "Signal is RFI, too strong.";
+            	}
+            	else
+            	{
+               	result = "Signal is potential candidate.";
+            	}
+	    }
+            else if (snrRatio < nullDepthLinear_)
             {
                signalWasSeen = true;
                result = "Signal is RFI, too strong.";
@@ -4812,26 +4858,15 @@ void ActivityUnitImp::updateObsSummarySignalCounts(SignalClassReason reason){
    if ( reason == TOO_MANY_CANDIDATES)
       getObsSummaryStats().unknownSignals++;
 }
-
-//
-// getSubchannel: compute the subchannel containing the specified
-//              frequency
-//
-// Notes:
-//              Computes the subchannel containing the specified frequency.
-//              The subchannel will be computed even if it lies outside
-//              the frequency range of the DX.
-//              This is the subchannel relative to the assigned bandwidth
-//              of the DX, which may be different from the absolute
 //              subchannel, which is based on the maximum bandwidth of the
 //              DX
 //
 int ActivityUnitImp::getSubchannel(double freq)
 {
         int subchannel;
-	   double lowFreq = dxProxy_->getDxSkyFreq() - 
-			   dxProxy_->getBandwidthInMHz()/2.0;
 	   double subchannelWidthMhz = dxProxy_->getIntrinsics().hzPerSubchannel/SseAstro::HzPerMhz;
+	   double lowFreq = dxProxy_->getDxSkyFreq() - 
+	   (subchannelWidthMhz + dxProxy_->getBandwidthInMHz())/2.0;
 
         subchannel = static_cast<int32_t> ((freq - lowFreq)
                                         / subchannelWidthMhz);

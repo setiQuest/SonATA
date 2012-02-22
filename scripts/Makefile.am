@@ -54,6 +54,7 @@ scripts_SCRIPTS = \
 	restart-kepler.tcl \
 	restart-kepler-2840-3040.tcl \
 	restart-exoplanets-2840-3040.tcl \
+	restart-exoplanets.tcl \
 	jon-kepler1.tcl \
 	jon-kepler2.tcl \
 	kepler-demo-dualpol.tcl \
@@ -239,8 +240,12 @@ scripts_SCRIPTS = \
 	sonata-start-exoplanets-2beams-beam1-beam2-8500-8700-obs.tcl \
 	sonata-start-kepler-2beams-beam1-beam2-8500-8700-obs.tcl \
 	sonata-start-exoplanets-2beams-beam1-beam2-2840-3040-obs.tcl \
+	sonata-start-exoplanets-2beams-beam1-beam2-1400-1750-obs.tcl \
 	sonata-start-kepler-2beams-beam1-beam2-2840-3040-obs.tcl \
+	sonata-start-kepler-2beams-beam1-beam2-1400-1750-obs.tcl \
 	switchConfigFile-3beam-800KHz-69dxs-3zx.tcsh \
 	3beam-dualpol-800KHz-69dx-3zx-env-vars.tcsh \
 	3beam-dualpol-800KHz-69dx-3zx-env-vars-batch.sh \
+	sonata-start-rfiscan-1700-5000-4g-obs.tcl \
+	sonata-start-rfiscan-1400-1750-4g-obs.tcl \
 	data-capture-replay-env-vars.tcsh
