@@ -365,8 +365,6 @@ class ActivityUnitImp : public ActivityUnit
   int getSubchannel(double freq);
   void sendRequestedCompampSubchannels(const vector<int> &compampSubchannels);
 
-
-
   // Variables
   ObserveActivity* obsActivity_;
   DxProxy* dxProxy_;
