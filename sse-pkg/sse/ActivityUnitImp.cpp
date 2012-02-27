@@ -947,8 +947,9 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
        covers the dx lower & upper band limits (end overlaps should
        be safely ignored by the dx).
       */
-      const double maskWideningFactorMhz = 0.010;
+      double maskWideningFactorMhz = 0.010;
 
+      if (zxMode_) maskWideningFactorMhz = 0.0;
       double bandCoveredCenterFreqMhz = dxProxy_->getDxSkyFreq(); 
       double bandCoveredWidthMhz = dxProxy_->getBandwidthInMHz()
 	 + maskWideningFactorMhz; 
@@ -1172,17 +1173,20 @@ void ActivityUnitImp::getRecentRfiSignals(
    const double ageLimitDays = 
       getObsAct()->getActParameters().getRecentRfiAgeLimitDays();
    double ageLimit;
-   double minPower;
+   double minCwPower;
+   double minPulsePower;
 
    if (zxMode_) 
    {
    ageLimit = 365;
-   minPower = 350.;
+   minCwPower = 300.;
+   minPulsePower = 90.;
    }
    else 
    {
    ageLimit = ageLimitDays;
-   minPower = 0.0;
+   minCwPower = 0.0;
+   minPulsePower = 0.0;
    }
 
    const int ageLimitSecs = static_cast<int>(ageLimit * SseAstro::SecsPerDay);
@@ -1191,7 +1195,8 @@ void ActivityUnitImp::getRecentRfiSignals(
 	   << "where"
 	   << " rfFreq > " << beginFreqMhz
 	   << " and rfFreq < " << endFreqMhz
-	   << " and power > " << minPower
+	   << " and ((type = 'CwP' and power > " << minCwPower
+	   << ") or ( type = 'Pul' and power > " << minPulsePower << " )) "
 	   << " and UNIX_TIMESTAMP(activityStartTime) >="
 	   << " (UNIX_TIMESTAMP() - " << ageLimitSecs << ")";
 

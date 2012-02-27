@@ -12,8 +12,8 @@ tscope sim
  db set host localhost
  sched set target auto
  act set type target
- sched set beginfreq 2840
- sched set endfreq 3040
+ sched set beginfreq 1512.2
+ sched set endfreq 1713.0
  sched set pipeline on
  act set targetbeam1 144
  act set targetbeam2 144

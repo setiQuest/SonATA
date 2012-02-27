@@ -118,7 +118,7 @@ sched set beam4 {off} current
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 1506.400000 current 
+sched set beginfreq 1512.2000 current 
 sched set catshigh {keplerHZ,exokepler} current 
 sched set catshighmaxcounts 20000 current 
 sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
@@ -130,7 +130,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 1713.000000000 current 
+sched set endfreq 1712.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
