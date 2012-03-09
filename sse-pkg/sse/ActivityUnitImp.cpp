@@ -1179,8 +1179,8 @@ void ActivityUnitImp::getRecentRfiSignals(
    if (zxMode_) 
    {
    ageLimit = 365;
-   minCwPower = 300.;
-   minPulsePower = 90.;
+   minCwPower = 350.;
+   minPulsePower = 500.;
    }
    else 
    {

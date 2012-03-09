@@ -11,7 +11,7 @@ sh echo "SonATA switching to Exoplanets" | mailx -s 'SonATA switching to Exoplan
 exec setAlarm ARM,sonata,EXOPL
 
 # change database to exoplanets
-db set name exoplanets
+db set name exoplanetsLBand
 
 # change catalog priorities
 sched set catshigh exoplanets,habcat
