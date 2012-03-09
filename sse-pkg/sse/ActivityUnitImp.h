@@ -230,6 +230,8 @@ class ActivityUnitImp : public ActivityUnit
   void updateObsSummarySignalCounts(SignalClassReason reason);
   void logCompactBaselineStats(const BaselineStatistics &stats);
 
+  // -- zx processing
+  void getSetiLiveCandidates(MYSQL *callerDbConn);
   // -- pulse signals ---
   virtual DbTableKeyId recordCandidate(const PulseSignalHeader &pulseSignalHdr,
                               Pulse pulses[], const string& location);
