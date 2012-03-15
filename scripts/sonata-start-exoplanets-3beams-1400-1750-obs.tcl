@@ -1,4 +1,4 @@
-# sonata-start-exoplanets-2beams-beam1-beam2-1400-1750-obs.tcl
+# sonata-start-exoplanets-3beams-1400-1750-obs.tcl
 #
 # SSE seeker commands to start observing
 
@@ -67,7 +67,7 @@ dx set basedecay 0.899999976 current
 dx set baseerrormeanlower 350.000000000 current 
 dx set baseerrormeanupper 8000.000000000 current 
 dx set baseerror on current 
-dx set baseerrorrange 700.000000000 current 
+dx set baseerrorrange 1400.000000000 current 
 dx set baseerrorstddev 100.000000000 current 
 dx set baseinitaccum 20 current 
 dx set baselines {on} current 
@@ -77,7 +77,7 @@ dx set basesubave 1 current
 dx set basewarnmeanlower 500.000000000 current 
 dx set basewarnmeanupper 7000.000000000 current 
 dx set basewarn on current 
-dx set basewarnrange 500.000000000 current 
+dx set basewarnrange 1000.000000000 current 
 dx set basewarnstddev 75.000000000 current 
 dx set clustfreqtol 339.000000000 current 
 dx set coherentdetlim 0.000000000 current 
@@ -114,7 +114,7 @@ dx set zerodrifttol 0.007000000 current
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
 sched set beam2 {on} current 
-sched set beam3 {off} current 
+sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
@@ -223,6 +223,8 @@ tscope assign beamyd1 1a,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c
 # Beam 3 -- unused
 #tscope assign beamxd2 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope assign beamyd2 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g
+tscope assign beamxd2 1a,1c,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c
+tscope assign beamyd2 1a,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c
 
 # begin observing
 
