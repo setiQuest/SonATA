@@ -889,7 +889,8 @@ void ActivityUnitImp::resolveCandidatesBasedOnSecondaryProcessingResults(MYSQL *
 
    VERBOSE2(verboseLevel_, methodName << " for "
 	    << dxProxy_->getName() << endl;);
-
+if (zxMode_)
+	cout << "resolveCandidatesBasedON SecondaryProcessingResults " << endl;
    if (zxMode_) getSetiLiveCandidates(callerDbConn);
 
    else if (actOpsBitEnabled(FORCE_ARCHIVING_AROUND_CENTER_TUNING)
@@ -917,7 +918,7 @@ void ActivityUnitImp::getSetiLiveCandidates(MYSQL *callerDbConn)
 
 	VERBOSE2(verboseLevel_, methodName << " for "
 	               << dxProxy_->getName() << endl;);
-
+cout << "executing getSetiLiveCandidates " << endl;
 	      // Get lists of candidates
 	             CwPowerSignalList cwPowerSigList;
 	             CwCoherentSignalList cwCoherentSigList;
@@ -981,7 +982,7 @@ bool ActivityUnitImp::actOpsBitEnabled(const ObserveActivityOperations & opsBit)
    Don't include signals from the current target id.
 */
 void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
-                                        const vector<TargetId> & targetsToExclude)
+                                        const vector<TargetId> & targetsToExclude, struct tm *hhmmss )
 {    
    const string methodName("sendRecentRfiMask: ");
 
@@ -1035,17 +1036,15 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
       //
       if (zxMode_)
       {
-	      time_t currentTime;
-	      struct tm hhmmss;
-	      time(&currentTime);
-	      gmtime_r(&currentTime, &hhmmss );
-	      int seed1 = hhmmss.tm_min;
-	      int seed2 = hhmmss.tm_sec;
+	      int seed1 = hhmmss->tm_min;
+	      int seed2 = hhmmss->tm_sec;
 
+	      cout << "seed1 " << seed1 << " seed2 " << seed2 << endl;
       vector<int> compampSubchannels;
       unsigned int maxCompampSubchannels(getObsAct()->getDxParameters().getDataRequestMaxCompampSubchannels());
       int maxDxSubchannels(dxProxy_->getIntrinsics().maxSubchannels);
       
+      cout << "maskToUse " << maskSizeToUse << endl;
 
       if ( maskSizeToUse == 0 )
       {
@@ -1119,10 +1118,10 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 			else
 			{
 			int subchan = getSubchannel(centerFreq);
-
 			subchannelList.push_back(subchan);
 			}
 		}
+	      cout << "subChannels " << subchannelList.size() << endl;
            if ( maxCompampSubchannels >= subchannelList.size())
            {
               for (unsigned int signalIndex=0; 
@@ -1153,6 +1152,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      int seed4 = seed1 % seed3;
 	      int seed5 = (seed2 % seed3) + 1;
 
+	      cout << "seed3 " << seed3 << " seed4 " << seed4 << " seed5 " << seed5 << endl;
 	      for (unsigned int i = 0; i < maxCompampSubchannels; i++)
 	      {
 		      int subchan = subchannelList[seed4+i*seed5];
@@ -3823,6 +3823,7 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 
    sqlStmt << " ORDER by rfFreq ";
 
+   cout << sqlStmt << endl;
 
    return sqlStmt.str();
 }

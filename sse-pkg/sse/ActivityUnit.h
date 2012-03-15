@@ -68,7 +68,7 @@ class ActivityUnit
   virtual void dxScienceDataRequest(const DxScienceDataRequest &dataRequest) = 0;
   virtual void setStartTime(const StartActivity &startAct) = 0; 
 
-  virtual void sendRecentRfiMask(MYSQL *dbConn, const vector<TargetId> & targetsToExclude) = 0;
+  virtual void sendRecentRfiMask(MYSQL *dbConn, const vector<TargetId> & targetsToExclude, struct tm *refHHMMSS) = 0;
   virtual void prepareFollowUpCandidateSignals(MYSQL *dbConn, int previousActId) = 0;
   virtual int sendFollowUpCandidateSignals(const NssDate &newStartTime) = 0;
   virtual void sendCandidatesForSecondaryProcessing(MYSQL *dbConn) = 0;
