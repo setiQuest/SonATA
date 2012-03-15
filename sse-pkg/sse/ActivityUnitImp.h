@@ -87,7 +87,7 @@ class ActivityUnitImp : public ActivityUnit
 
   // methods called by activity, usually in a separate thread,
   // so must be thread safe:
-  virtual void sendRecentRfiMask(MYSQL *callerDbConn, const vector<TargetId> & targetsToExclude);
+  virtual void sendRecentRfiMask(MYSQL *callerDbConn, const vector<TargetId> & targetsToExclude, struct tm *refHHMMSS);
   virtual void prepareFollowUpCandidateSignals(MYSQL *callerDbConn, int previousActId);
   virtual int sendFollowUpCandidateSignals(const NssDate &newStartTime);
   virtual void sendCandidatesForSecondaryProcessing(MYSQL *callerDbConn);
@@ -230,6 +230,8 @@ class ActivityUnitImp : public ActivityUnit
   void updateObsSummarySignalCounts(SignalClassReason reason);
   void logCompactBaselineStats(const BaselineStatistics &stats);
 
+  // -- zx processing
+  void getSetiLiveCandidates(MYSQL *callerDbConn);
   // -- pulse signals ---
   virtual DbTableKeyId recordCandidate(const PulseSignalHeader &pulseSignalHdr,
                               Pulse pulses[], const string& location);

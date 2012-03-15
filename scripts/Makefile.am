@@ -51,10 +51,6 @@ scripts_SCRIPTS = \
 	jane-kepler-1beam-20MHz.tcl \
 	jane-test.tcl \
 	test.tcl \
-	restart-kepler.tcl \
-	restart-kepler-2840-3040.tcl \
-	restart-exoplanets-2840-3040.tcl \
-	restart-exoplanets.tcl \
 	jon-kepler1.tcl \
 	jon-kepler2.tcl \
 	kepler-demo-dualpol.tcl \

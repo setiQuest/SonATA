@@ -15,9 +15,9 @@ tscope sim
  sched set beginfreq 1512.2
  sched set endfreq 1713.0
  sched set pipeline on
- sched set catshigh exoplanets
+ sched set catshigh habcat,exoplanets
  act set targetbeam1 144
  act set targetbeam2 144
  act set targetprimary 144
  verbose level 2
- dx set datareqmaxcompampsubchan 1
+ dx set datareqmaxcompampsubchan 10

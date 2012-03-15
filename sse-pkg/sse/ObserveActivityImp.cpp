@@ -1486,13 +1486,18 @@ void ObserveActivityImp::sendRecentRfiMask()
 			getMinDxSkyFreqMhz(),
 			targetsToExclude);
 
+	time_t refTime;
+	struct tm refHHMMSS;
+	time(&refTime);
+	gmtime_r(&refTime,&refHHMMSS);
+
 	ActUnitList::iterator it;
 	for (it = actUnitList.begin(); it != actUnitList.end(); ++it)
 	{
 		ActivityUnit *actUnit(*it);
 
 		actUnit->sendRecentRfiMask(dbParametersForWorkThread_.getDb(),
-				targetsToExclude);
+				targetsToExclude, &refHHMMSS);
 
 	}
 

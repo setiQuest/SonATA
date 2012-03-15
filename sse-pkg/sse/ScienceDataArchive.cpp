@@ -260,12 +260,12 @@ void ScienceDataArchive::prepareCompampSubchannelFiles(const string &archiveFile
 		subchanFile.pol = POL_RIGHTCIRCULAR;
 		subchanFile.filename = archiveFilenamePrefix +
 			targetSubchan.str() + "R.compamp";
-		cout << subchanFile.filename << endl;
+		//cout << subchanFile.filename << endl;
 		compampSubchannelFileList_.push_back(subchanFile);
 		subchanFile.pol = POL_LEFTCIRCULAR;
 		subchanFile.filename = archiveFilenamePrefix +
 			targetSubchan.str() + "L.compamp";
-		cout << subchanFile.filename << endl;
+		//cout << subchanFile.filename << endl;
 		compampSubchannelFileList_.push_back(subchanFile);
 		
 	}
