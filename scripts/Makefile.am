@@ -228,6 +228,8 @@ scripts_SCRIPTS = \
 	tscope-setup-3beam-good-ants-1520-1540.tcl \
 	sonata-cron-begin-kepler-session.sh \
 	sonata-start-kepler-3beam-8500-8700-obs.tcl \
+	sonata-start-kepler-3beams-1400-1750-obs.tcl \
+	sonata-start-exoplanets-3beams-1400-1750-obs.tcl \
 	sonata-start-vger-3beam-8412-8432-obs.tcl \
 	sonata-cron-switch-to-exoplanets.sh \
 	sonata-switch-to-exoplanets.tcl \
@@ -244,4 +246,5 @@ scripts_SCRIPTS = \
 	3beam-dualpol-800KHz-69dx-3zx-env-vars-batch.sh \
 	sonata-start-rfiscan-1700-5000-4g-obs.tcl \
 	sonata-start-rfiscan-1400-1750-4g-obs.tcl \
+	antenna-list.tcl \
 	data-capture-replay-env-vars.tcsh

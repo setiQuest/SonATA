@@ -36,6 +36,7 @@
 #include "DbParameters.h"
 #include "TscopeParameters.h"
 #include "SchedulerParameters.h"
+#include "Scheduler.h"
 #include "ArrayLength.h"
 #include "SseAstro.h"
 #include "SseArchive.h"
@@ -57,6 +58,12 @@ PrepAntsActStrategy::~PrepAntsActStrategy()
 
 void PrepAntsActStrategy::startInternalHook()
 {
+}
+
+void PrepAntsActStrategy::activityCompleteInternalHook(Activity *Act, 
+		bool failed)
+{
+	if (failed ) Scheduler::instance()->stop();
 }
 
 Activity * PrepAntsActStrategy::getNextActivity(

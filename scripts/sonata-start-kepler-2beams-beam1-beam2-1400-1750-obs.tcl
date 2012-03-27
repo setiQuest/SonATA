@@ -95,7 +95,7 @@ dx set datareqtype {subchan} current
 dx set length 94 current 
 dx set manualbw {off} current 
 dx set maxcand 8 current 
-dx set maxdrifttol 10.000000000 current 
+dx set maxdrifttol 1.000000000 current 
 dx set maxpulsesperhf 1000 current 
 dx set maxpulsespersubperhf 10 current 
 dx set pulseclustdeltafreq 25 current 
@@ -196,19 +196,19 @@ tscope set tuningd 1420.000000000 current
 #tscope set antsprimary 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4g,4j,4k,5b,5c,5g
 #tscope set antsxpol 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope set antsypol 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g
-# 4j removed and 1b and 4g and 4f and 1f and 5g
-tscope set antsprimary 1a,1c,1d,1g,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c
-tscope set antsxpol 1a,1c,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c
+# 4j removed and 1b and 4g and 4f and 1f and 5g and 2m
+tscope set antsprimary 1a,1c,1d,1g,1h,1k,2c,2e,2f,2g,2j,3d,3j,3l,4e,4k,5b,5c
+tscope set antsxpol 1a,1c,1h,1k,2c,2e,2f,2g,2j,3d,3j,3l,4e,4k,5b,5c
 tscope set antsypol 1a,1c,1d,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c
 # Beam 1
 #tscope assign beamxc1 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope assign beamyc1 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g
-tscope assign beamxc1 1a,1c,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c
+tscope assign beamxc1 1a,1c,1h,1k,2c,2e,2f,2g,2j,3d,3j,3l,4e,4k,5b,5c
 tscope assign beamyc1 1a,1c,1d,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c
 # Beam 2
 #tscope assign beamxc1 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g
 #tscope assign beamyc1 1a,1b,1c,1d,1f,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4f,4g,4j,4k,5b,5c,5g
-tscope assign beamxd1 1a,1c,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4k,5b,5c
+tscope assign beamxd1 1a,1c,1h,1k,2c,2e,2f,2g,2j,3d,3j,3l,4e,4k,5b,5c
 tscope assign beamyd1 1a,1c,1d,1g,1h,1k,2c,2e,2f,2g,2j,3d,3l,4k,5b,5c
 # Beam 3 -- unused
 #tscope assign beamxd2 1a,1b,1c,1f,1h,1k,2c,2e,2f,2g,2j,2m,3d,3j,3l,4e,4f,4k,5b,5c,5g

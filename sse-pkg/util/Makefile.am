@@ -50,6 +50,7 @@ bin_SCRIPTS = \
 	sonata-extract-confirmed-sigs.sh \
 	sonata-extract-observers-log-info.sh \
 	sonata-extract-systemlog-info.sh \
+	extract-delay-cals.sh \
 	current-system-log.sh \
 	watch-confirmed-sigs.sh \
 	watch-for-observers-log-info.sh \
@@ -62,6 +63,7 @@ bin_SCRIPTS = \
 	sse-watcher.sh \
 	obs-summary-report.sh \
 	obs-cal-report.sh \
+	obs-delay-cal-report.sh \
 	verifySonATATestSignal.py \
 	pushsshbintail.sh \
 	send-seeker-command-via-telnet.expect \
