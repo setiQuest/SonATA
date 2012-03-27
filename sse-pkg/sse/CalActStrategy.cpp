@@ -224,7 +224,8 @@ void CalActStrategy::selectCalTarget(TargetId &targetId, double &targetFluxJy)
    const TargetInfo & target(targetInfoVect[bestTargetIndex]);
 
    SseArchive::SystemLog() 
-      << "Cal target: " 
+	   << getCalType()
+      << " Cal target: " 
       << target.targetId
       << " (" << target.name
       << "), estimated flux: " << target.fluxJy << " Jy" 
@@ -495,5 +496,14 @@ void CalActStrategy::activityCompleteInternalHook(
       */
       double dummyFreqMhz(0);
       calFreqQueueMhz_.push_front(dummyFreqMhz);
+   }
+   else
+   {
+	   if (getCalType().compare(0,5,"delay") == 0)
+	   {
+		   stringstream summaryScript;
+		   summaryScript << getenv("HOME") << "/sonata_install/bin/obs-delay-cal-report.sh";
+		   system(summaryScript.str().c_str());
+	   }
    }
 }

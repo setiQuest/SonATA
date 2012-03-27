@@ -7,8 +7,8 @@ stop
 sh sleep 10
 
 # disarm/rearm alarm and send email
-sh echo "SonATA switching to Kepler" | mailx -s 'SonATA switching to Kepler' -r jjordan@seti.org ata-staff@seti.org
-exec setAlarm ARM,sonata,KEPLER
+#sh echo "SonATA switching to Kepler" | mailx -s 'SonATA switching to Kepler' -r jjordan@seti.org ata-staff@seti.org
+exec setAlarm ARM,sonata,Switching To KEPLER
 
 # change database to kepler
 db set name keplerLBand

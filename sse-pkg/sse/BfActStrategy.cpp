@@ -33,6 +33,8 @@
 #include "BfActStrategy.h" 
 #include "ActivityWrappers.h"
 #include "ActParameters.h"
+#include "SchedulerParameters.h"
+#include "Scheduler.h"
 
 BfActStrategy::BfActStrategy(Scheduler *scheduler,
                              Site *site, 
@@ -88,5 +90,6 @@ void BfActStrategy::activityCompleteInternalHook(
    Activity *activity, bool failed)
 {
    tryAgain_ = failed;
+   if (failed ) Scheduler::instance()->stop();
 }
 

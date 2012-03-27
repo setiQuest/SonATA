@@ -47,6 +47,7 @@ class PrepAntsActStrategy : public ActivityStrategy
  protected:
    // base class overrides
    virtual void startInternalHook();
+   virtual void activityCompleteInternalHook(Activity *act, bool failed);
    virtual Activity *getNextActivity(NssComponentTree *nssComponentTree);
    virtual bool moreActivitiesToRun();
    virtual bool okToStartNewActivity();

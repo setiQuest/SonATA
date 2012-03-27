@@ -7,8 +7,8 @@ stop
 sh sleep 10
 
 # disarm/rearm alarm and send email
-sh echo "SonATA switching to Exoplanets" | mailx -s 'SonATA switching to Exoplanets' -r jjordan@seti.org ata-staff@seti.org
-exec setAlarm ARM,sonata,EXOPL
+#sh echo "SonATA switching to Exoplanets" | mailx -s 'SonATA switching to Exoplanets' -r jjordan@seti.org ata-staff@seti.org
+exec setAlarm ARM,sonata,Switching To exoplanets
 
 # change database to exoplanets
 db set name exoplanetsLBand
