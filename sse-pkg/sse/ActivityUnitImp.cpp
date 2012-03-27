@@ -943,7 +943,7 @@ void ActivityUnitImp::getSetiLiveCandidates(MYSQL *callerDbConn)
 
 	VERBOSE2(verboseLevel_, methodName << " for "
 	               << dxProxy_->getName() << endl;);
-cout << "executing getSetiLiveCandidates " << endl;
+//cout << "executing getSetiLiveCandidates " << endl;
 	      // Get lists of candidates
 	             CwPowerSignalList cwPowerSigList;
 	             CwCoherentSignalList cwCoherentSigList;
@@ -1058,36 +1058,22 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	 maskCenterFreqMhz.size());
       
       // create list of subchannels for compamp data request
+      // only for target obs, not for follow ups
       //
-      if (zxMode_ && !(getObsAct()->getActivityName().compare(0,6, "Target")))
+      if (zxMode_ && !actOpsBitEnabled(FOLLOW_UP_OBSERVATION))
       {
 	      int seed1 = hhmmss->tm_min;
 	      int seed2 = hhmmss->tm_sec;
 
-	      cout << "seed1 " << seed1 << " seed2 " << seed2 << endl;
+	      //cout << "seed1 " << seed1 << " seed2 " << seed2 << endl;
       vector<int> compampSubchannels;
       unsigned int maxCompampSubchannels(getObsAct()->getDxParameters().getDataRequestMaxCompampSubchannels());
       int maxDxSubchannels(dxProxy_->getIntrinsics().maxSubchannels);
       
-      cout << "maskToUse " << maskSizeToUse << endl;
+      //cout << "maskToUse " << maskSizeToUse << endl;
 
       if ( maskSizeToUse == 0 )
       {
-#ifdef obsolete
-     	      maxCompampSubchannels = 1;
-	 if (dxActParam_.scienceDataRequest.scienceData.requestType == REQ_SUBCHANNEL)
-	 {
-         compampSubchannels.push_back(
-        		 dxActParam_.scienceDataRequest.scienceData.subchannel);
-	 }
-	  else
-	  {
-	    int subchan = getSubchannel(
-	    		dxActParam_.scienceDataRequest.scienceData.rfFreq);
-
-	      compampSubchannels.push_back(subchan);
-	       }
-#endif
 // Empty Recent Rfi Mask, pick maxCompampSubchannels started at seed1 and 
 // increasing in intervals of seed
 //
@@ -1146,7 +1132,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 			subchannelList.push_back(subchan);
 			}
 		}
-	      cout << "subChannels " << subchannelList.size() << endl;
+	      //cout << "subChannels " << subchannelList.size() << endl;
            if ( maxCompampSubchannels >= subchannelList.size())
            {
               for (unsigned int signalIndex=0; 
@@ -1177,7 +1163,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      int seed4 = seed1 % seed3;
 	      int seed5 = (seed2 % seed3) + 1;
 
-	      cout << "seed3 " << seed3 << " seed4 " << seed4 << " seed5 " << seed5 << endl;
+	      //cout << "seed3 " << seed3 << " seed4 " << seed4 << " seed5 " << seed5 << endl;
 	      for (unsigned int i = 0; i < maxCompampSubchannels; i++)
 	      {
 		      int subchan = subchannelList[seed4+i*seed5];
@@ -2528,7 +2514,7 @@ void ActivityUnitImp::updateStartTimeAndDxSkyFreqInDb(
 	   << "dxTuneFreq = " << dxProxy_->getDxSkyFreq()
 	   << " where id = " << getDbActivityUnitId()
 	   << " ";
-if (zxMode_)cout << sqlStmt.str() << endl;
+//if (zxMode_)cout << sqlStmt.str() << endl;
    submitDbQueryWithLoggingOnError(dbConn_, sqlStmt.str(), methodName, __LINE__);
 
 }
@@ -3847,7 +3833,11 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 	   << " AND targetId = " << actUnit_->targetId_
 	   << " AND dxNumber = " << actUnit_->getDxNumber()
 	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
-	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
+	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_ ;
+	   
+	   // Get all the signals for this Zx
+#ifdef testing
+   //
 	   << " AND sigClass = '"
 	   << SseDxMsg::signalClassToString(CLASS_CAND)
 	   << "'"
@@ -3858,7 +3848,7 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
 	   << "'"
 	   << ")";
- 
+#endif 
 	   // for testing
 	   //<< " WHERE activityId = 666 "
 	   //<< " AND targetId = 666666" 
@@ -3897,10 +3887,10 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    processCandidates(cwPowerSigList_, pulseTrainList_,
 		   cwCoherentSigList_, duplicateCount);
 
-   cout << cwPowerSigList_.size() << " zx candidates" << endl;
+   //cout << cwPowerSigList_.size() << " zx candidates" << endl;
    if ((cwPowerSigList_.size() == 0) && (pulseTrainList_.size() == 0))
    {
-	   cout << " Zero Candidates " << endl;
+	   //cout << " Zero Candidates " << endl;
       VERBOSE2(getVerboseLevel(), "Act " << actUnit_->getActivityId() << ":"
 	       << " No SetiLive candidates found for Activity "
 	       << actId_ << ",  " << actUnit_->getDxName() << endl;);
@@ -3957,28 +3947,28 @@ void LookUpCandidatesFromSetiLive::processCandidates(
 	 // For now not Coherent Signals
 	 if (sigType == CwPowerSigType)
 	 {
-	    // Use the cwCoherentSignal as the CwPowerSignal for now
 	    CwPowerSignal cwPowerSig;
 	    cwPowerSig.sig = descrip;
 	    cwPowerSigList_.push_back(cwPowerSig);
-	    actUnit_->getObsSummaryStats().confirmedCwCandidates++;
-	    actUnit_->getObsSummaryStats().allCwCandidates++;
 	    actUnit_->getObsSummaryStats().cwSignals++;
 	    actUnit_->getCondensedCandidateReport()->addSignal(
 			    sigType, descrip, cfmStats);
+	    switch (descrip.sigClass)
+	    {
+		    // First time candidates and
+		    // Seen again On cands or Not seen off cands
+	    case CLASS_CAND:
+	        actUnit_->getObsSummaryStats().confirmedCwCandidates++;
+	        actUnit_->getObsSummaryStats().allCwCandidates++;
+	        break;
+	    case CLASS_RFI:
+		    // Not Seen again on, Seen Multibeams, or Seen Off
+	    	actUnit_->getObsSummaryStats().allCwCandidates++;
+	        break;
+	    default:
+		break;
+	    }
 	      
-	    //CwCoherentSignal cwCohSig;
-	    //cwCohSig.sig = descrip;
-	    //cwCohSig.cfm = cfmStats;
-	    //cwCohSig.nSegments = 0;
-
-	    // -- segments --
-            // segments not currently used by the dx
-	    //     nSegments = MysqlQuery::getInt(
-	    //       row, nSegmentsCol));
-	    // somday fetch the segments from the database...
-
-	    //cwCoherentSigList.push_back(cwCohSig);
 
 	 }
 	 // No pulse Signals either
