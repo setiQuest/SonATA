@@ -649,7 +649,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
    nSignals.count = infoList.size();  // total number of cw & pulse followup signals
    int activityId = getActivityId();
 
-   dxProxy_->beginSendingFollowUpSignals(activityId, nSignals);
+   vector <int> compampSubchannels;
+   if (!zxMode_)dxProxy_->beginSendingFollowUpSignals(activityId, nSignals);
 
    // print the follow up signal info in a condensed format for easy reading
    // in the system log
@@ -706,14 +707,25 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
       {
 	 FollowUpPulseSignal followUpPulseSignal; 
 	 followUpPulseSignal.sig = sigInfo.followUpSignal;
-	 dxProxy_->sendFollowUpPulseSignal(activityId, followUpPulseSignal);
+	 if (!zxMode_)dxProxy_->sendFollowUpPulseSignal(activityId, followUpPulseSignal);
+
+	 else 
+	 {
+	 compampSubchannels.push_back(
+			 getSubchannel(sigInfo.followUpSignal.rfFreq));
+	 }
       }
       else // Cw, power or coherent
       {
 	 FollowUpCwSignal followUpCwSignal;
 	 followUpCwSignal.sig = sigInfo.followUpSignal;
  
-	 dxProxy_->sendFollowUpCwSignal(activityId, followUpCwSignal);
+	 if (!zxMode_)dxProxy_->sendFollowUpCwSignal(activityId, followUpCwSignal);
+	 else 
+	 {
+	 compampSubchannels.push_back(
+			 getSubchannel(sigInfo.followUpSignal.rfFreq));
+	 }
       }
       // TBD add check for invalid signalType
 
@@ -725,7 +737,7 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 
    }
 
-   dxProxy_->doneSendingFollowUpSignals(activityId);
+   if (!zxMode_)dxProxy_->doneSendingFollowUpSignals(activityId);
 
    // send science data request for the desired candidate's rf freq
 	   int subchan = getSubchannel( dataRequestRfFreqMhz);
@@ -735,7 +747,17 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
       <<  dataRequestRfFreqMhz 
       <<  "  MHz  <----- Subchan " << subchan << endl;
 
-   sendScienceDataRequestFreq(dataRequestRfFreqMhz);
+   if (!zxMode_)sendScienceDataRequestFreq(dataRequestRfFreqMhz);
+   else
+   {
+       // Send compamp subchannels to the Science Data Archive
+       scienceDataArchive_->prepareCompampSubchannelFiles(
+		        getOutputFilePrefix(),
+			      dxProxy_->getName(), targetId_,
+		       compampSubchannels);
+       // Send compamp subchannels to the ZX
+       	sendRequestedCompampSubchannels(compampSubchannels);
+   }
 
    SseArchive::SystemLog() << sigSummary.str() << endl;
 }
@@ -871,6 +893,10 @@ void ActivityUnitImp::sendCandidatesForSecondaryProcessing(MYSQL *callerDbConn)
    }
 }
 
+void ActivityUnitImp::zxLookUpSetiLiveCandidates(MYSQL *callerDbConn)
+{
+   if (zxMode_) getSetiLiveCandidates(callerDbConn);
+}
 
 
 
@@ -889,9 +915,8 @@ void ActivityUnitImp::resolveCandidatesBasedOnSecondaryProcessingResults(MYSQL *
 
    VERBOSE2(verboseLevel_, methodName << " for "
 	    << dxProxy_->getName() << endl;);
-if (zxMode_)
-	cout << "resolveCandidatesBasedON SecondaryProcessingResults " << endl;
-   if (zxMode_) getSetiLiveCandidates(callerDbConn);
+
+   if (zxMode_) return;
 
    else if (actOpsBitEnabled(FORCE_ARCHIVING_AROUND_CENTER_TUNING)
        && !actOpsBitEnabled(MULTITARGET_OBSERVATION))
@@ -918,7 +943,7 @@ void ActivityUnitImp::getSetiLiveCandidates(MYSQL *callerDbConn)
 
 	VERBOSE2(verboseLevel_, methodName << " for "
 	               << dxProxy_->getName() << endl;);
-cout << "executing getSetiLiveCandidates " << endl;
+//cout << "executing getSetiLiveCandidates " << endl;
 	      // Get lists of candidates
 	             CwPowerSignalList cwPowerSigList;
 	             CwCoherentSignalList cwCoherentSigList;
@@ -1033,36 +1058,22 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	 maskCenterFreqMhz.size());
       
       // create list of subchannels for compamp data request
+      // only for target obs, not for follow ups
       //
-      if (zxMode_)
+      if (zxMode_ && !actOpsBitEnabled(FOLLOW_UP_OBSERVATION))
       {
 	      int seed1 = hhmmss->tm_min;
 	      int seed2 = hhmmss->tm_sec;
 
-	      cout << "seed1 " << seed1 << " seed2 " << seed2 << endl;
+	      //cout << "seed1 " << seed1 << " seed2 " << seed2 << endl;
       vector<int> compampSubchannels;
       unsigned int maxCompampSubchannels(getObsAct()->getDxParameters().getDataRequestMaxCompampSubchannels());
       int maxDxSubchannels(dxProxy_->getIntrinsics().maxSubchannels);
       
-      cout << "maskToUse " << maskSizeToUse << endl;
+      //cout << "maskToUse " << maskSizeToUse << endl;
 
       if ( maskSizeToUse == 0 )
       {
-#ifdef obsolete
-     	      maxCompampSubchannels = 1;
-	 if (dxActParam_.scienceDataRequest.scienceData.requestType == REQ_SUBCHANNEL)
-	 {
-         compampSubchannels.push_back(
-        		 dxActParam_.scienceDataRequest.scienceData.subchannel);
-	 }
-	  else
-	  {
-	    int subchan = getSubchannel(
-	    		dxActParam_.scienceDataRequest.scienceData.rfFreq);
-
-	      compampSubchannels.push_back(subchan);
-	       }
-#endif
 // Empty Recent Rfi Mask, pick maxCompampSubchannels started at seed1 and 
 // increasing in intervals of seed
 //
@@ -1121,7 +1132,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 			subchannelList.push_back(subchan);
 			}
 		}
-	      cout << "subChannels " << subchannelList.size() << endl;
+	      //cout << "subChannels " << subchannelList.size() << endl;
            if ( maxCompampSubchannels >= subchannelList.size())
            {
               for (unsigned int signalIndex=0; 
@@ -1152,7 +1163,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      int seed4 = seed1 % seed3;
 	      int seed5 = (seed2 % seed3) + 1;
 
-	      cout << "seed3 " << seed3 << " seed4 " << seed4 << " seed5 " << seed5 << endl;
+	      //cout << "seed3 " << seed3 << " seed4 " << seed4 << " seed5 " << seed5 << endl;
 	      for (unsigned int i = 0; i < maxCompampSubchannels; i++)
 	      {
 		      int subchan = subchannelList[seed4+i*seed5];
@@ -2503,7 +2514,7 @@ void ActivityUnitImp::updateStartTimeAndDxSkyFreqInDb(
 	   << "dxTuneFreq = " << dxProxy_->getDxSkyFreq()
 	   << " where id = " << getDbActivityUnitId()
 	   << " ";
-
+//if (zxMode_)cout << sqlStmt.str() << endl;
    submitDbQueryWithLoggingOnError(dbConn_, sqlStmt.str(), methodName, __LINE__);
 
 }
@@ -2762,7 +2773,9 @@ void ActivityUnitImp::signalDetectionComplete(DxProxy* dx)
    if (zxMode_)
    {
    getObsAct()->doneSendingCwCoherentSignals(this);
-   getObsAct()->doneSendingCandidateResults(this);
+   if (actOpsBitEnabled(MULTITARGET_OBSERVATION) ||
+      actOpsBitEnabled(FORCE_ARCHIVING_AROUND_CENTER_TUNING))
+   		getObsAct()->doneSendingCandidateResults(this);
    // send signal detection complete after processing SetiLive Candidates
    }
    else
@@ -3523,7 +3536,13 @@ void ActivityUnitImp::notifyDxProxyDisconnected(DxProxy *dxProxy)
 void ActivityUnitImp::dxActivityComplete(DxProxy* dx,
 					  const DxActivityStatus &status)
 {
-   activityUnitComplete();
+	if (zxMode_){
+		// don't send Act Complete yet
+		//
+		}
+	else	{
+   		activityUnitComplete();
+		}
 
    // Warning ActivityUnit may be destroyed in this method.
    // Do not use ActivityUnit past this point.
@@ -3569,11 +3588,28 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
 
    sqlStmt << "SELECT activityId, rfFreq, sigClass, reason, drift, res,"
 	   << " UNIX_TIMESTAMP(activityStartTime), dxNumber, signalIdNumber,"
-	   << " type, pfa, snr"
-	   << " FROM " << CandidateSignalTableName
-	   << " WHERE activityId = " << previousActId_
-	   << " AND targetId = " << actUnit_->targetId_
-	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
+	   << " type, pfa, snr";
+   if (actUnit_->zxMode_)
+	sqlStmt	 << " FROM " << SetiLiveCandidateSignalTableName;
+   else
+ 	sqlStmt  << " FROM " << CandidateSignalTableName;
+
+   sqlStmt << " WHERE activityId = ";
+  
+#ifdef testing   
+  if (actUnit_->zxMode_) // for testing
+  {
+    sqlStmt	  << 666
+	   << " AND targetId = " << 666666;
+  }
+  else
+#endif
+  {
+    sqlStmt	  << previousActId_
+	   << " AND targetId = " << actUnit_->targetId_;
+  }
+
+  sqlStmt << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
 	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
 	   << " AND sigClass = '"
 	   << SseDxMsg::signalClassToString(CLASS_CAND)
@@ -3739,7 +3775,7 @@ void LookUpCandidatesFromPrevAct::processCandidates(
       else
       {
 	 duplicateCount++;
-	  
+	 
 	 VERBOSE2(getVerboseLevel(),"followup candidate too close to previous "
 		  << "candidate, discarded: \n"
 		  << sigInfo.followUpSignal;);
@@ -3793,10 +3829,15 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 	   << "pfa, snr, nSegments, "
 	   << "pulsePeriod, numberOfPulses, res "
 	   << " FROM " << SetiLiveCandidateSignalTableName
-	   << " WHERE activityId = " << actId_
+	   << " WHERE activityId = " << actUnit_->getActivityId()
 	   << " AND targetId = " << actUnit_->targetId_
+	   << " AND dxNumber = " << actUnit_->getDxNumber()
 	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
-	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
+	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_ ;
+	   
+	   // Get all the signals for this Zx
+#ifdef testing
+   //
 	   << " AND sigClass = '"
 	   << SseDxMsg::signalClassToString(CLASS_CAND)
 	   << "'"
@@ -3807,7 +3848,10 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
 	   << "'"
 	   << ")";
- 
+#endif 
+	   // for testing
+	   //<< " WHERE activityId = 666 "
+	   //<< " AND targetId = 666666" 
    /*
      If this is an OFF observation, then only get candidates
      that this dx saw originally.  This avoids a problem where
@@ -3816,20 +3860,19 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
      thus keeping it alive as a candidate even when the original dx 
      sees it in the OFF and thus resolves it as RFI.
    */
-   if (actUnit_->actOpsBitEnabled(OFF_OBSERVATION))
-   {
-      sqlStmt << "AND dxNumber = " << actUnit_->getDxNumber();
-   }
+//   if (actUnit_->actOpsBitEnabled(OFF_OBSERVATION))
+   //{
+      //sqlStmt << "AND dxNumber = " << actUnit_->getDxNumber();
+   //}
 
    sqlStmt << " ORDER by rfFreq ";
 
-   cout << sqlStmt << endl;
 
    return sqlStmt.str();
 }
 
-// Look up the confirmed CwCoherent and Pulse candidates for the
-// specified previous activity id that fall within this dx's band.
+// Look up the confirmed SetiLive candidates for the
+// this activity id that fall within this dx's band.
 // Return them in the infoList, which includes all fields needed 
 // for follow up requests.
 
@@ -3844,8 +3887,10 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    processCandidates(cwPowerSigList_, pulseTrainList_,
 		   cwCoherentSigList_, duplicateCount);
 
+   //cout << cwPowerSigList_.size() << " zx candidates" << endl;
    if ((cwPowerSigList_.size() == 0) && (pulseTrainList_.size() == 0))
    {
+	   //cout << " Zero Candidates " << endl;
       VERBOSE2(getVerboseLevel(), "Act " << actUnit_->getActivityId() << ":"
 	       << " No SetiLive candidates found for Activity "
 	       << actId_ << ",  " << actUnit_->getDxName() << endl;);
@@ -3853,10 +3898,9 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    else
    {
       SseArchive::SystemLog() 
-	 << "Act " << actUnit_->getActivityId() << ":"
-	 << " Following up " << cwPowerSigList_.size() + pulseTrainList_.size()
-	 << " candidate(s) of actid " 
-	 << actId_ << " that fall in the band of "
+	 << "Act " << actUnit_->getActivityId() << ": "
+	 << cwPowerSigList_.size() + pulseTrainList_.size()
+	 << " candidate(s) were found in " 
 	 << actUnit_->getDxName() 
 	 << " (" << duplicateCount << " duplicates were removed)" << endl;
    }   
@@ -3887,6 +3931,7 @@ void LookUpCandidatesFromSetiLive::processCandidates(
    duplicateCount=0;
    Assert(getResultSet() != 0);
    // Fetch the candidate from each row, convert the values, store them.
+   //
    while (MYSQL_ROW row = mysql_fetch_row(getResultSet()))
    {
       try
@@ -3895,34 +3940,35 @@ void LookUpCandidatesFromSetiLive::processCandidates(
 	 extractSignalDescription(row, descrip);
 
 	 ConfirmationStats cfmStats;
-	 extractConfirmationStats(row, cfmStats);
-
+	 //extractConfirmationStats(row, cfmStats);
 	 string sigType(MysqlQuery::getString(row, typeCol, 
 					      __FILE__, __LINE__));
 	  
 	 // For now not Coherent Signals
 	 if (sigType == CwPowerSigType)
 	 {
-	    // Use the cwCoherentSignal as the CwPowerSignal for now
 	    CwPowerSignal cwPowerSig;
 	    cwPowerSig.sig = descrip;
 	    cwPowerSigList_.push_back(cwPowerSig);
-	    actUnit_->getObsSummaryStats().confirmedCwCandidates++;
+	    actUnit_->getObsSummaryStats().cwSignals++;
 	    actUnit_->getCondensedCandidateReport()->addSignal(
 			    sigType, descrip, cfmStats);
+	    switch (descrip.sigClass)
+	    {
+		    // First time candidates and
+		    // Seen again On cands or Not seen off cands
+	    case CLASS_CAND:
+	        actUnit_->getObsSummaryStats().confirmedCwCandidates++;
+	        actUnit_->getObsSummaryStats().allCwCandidates++;
+	        break;
+	    case CLASS_RFI:
+		    // Not Seen again on, Seen Multibeams, or Seen Off
+	    	actUnit_->getObsSummaryStats().allCwCandidates++;
+	        break;
+	    default:
+		break;
+	    }
 	      
-	    //CwCoherentSignal cwCohSig;
-	    //cwCohSig.sig = descrip;
-	    //cwCohSig.cfm = cfmStats;
-	    //cwCohSig.nSegments = 0;
-
-	    // -- segments --
-            // segments not currently used by the dx
-	    //     nSegments = MysqlQuery::getInt(
-	    //       row, nSegmentsCol));
-	    // somday fetch the segments from the database...
-
-	    //cwCoherentSigList.push_back(cwCohSig);
 
 	 }
 	 // No pulse Signals either
@@ -3958,6 +4004,8 @@ void LookUpCandidatesFromSetiLive::processCandidates(
 
 	    pulseTrainList.push_back(pulseTrain);
 	    actUnit_->getObsSummaryStats().confirmedPulseCandidates++;
+	    actUnit_->getObsSummaryStats().allPulseCandidates++;
+	    actUnit_->getObsSummaryStats().pulseSignals++;
 	    actUnit_->getCondensedCandidateReport()->addSignal(
 			    sigType, descrip, cfmStats);
 
@@ -3991,25 +4039,6 @@ void LookUpCandidatesFromSetiLive::processCandidates(
       }
 
    }
-#ifdef obsolete   
-   while (MYSQL_ROW row = mysql_fetch_row(getResultSet()))
-   {
-      // convert the values
-      SetiLiveSignalInfo sigInfo;
-
-      // tbd error checking
-      // SignalType
-      sigInfo.signalType = SetiLiveSignalInfo::stringToSignalType(
-	 MysqlQuery::getString(row, typeCol, __FILE__, __LINE__));
-
-      // FollowupSignal
-      sigInfo.setiLiveSignal.path.rfFreq = MysqlQuery::getDouble(
-	 row, rfFreqCol, __FILE__, __LINE__);
-
-      sigInfo.setiLiveSignal.path.drift = static_cast<float>(MysqlQuery::getDouble(
-	 row, driftCol, __FILE__, __LINE__));
-   }
-#endif
 }
 
 
@@ -4021,6 +4050,7 @@ void LookUpCandidatesFromSetiLive::extractSignalDescription(
    descrip.pol = SseMsg::stringToPolarization(
       MysqlQuery::getString(row, polCol, __FILE__, __LINE__));
    
+
    descrip.sigClass = SseDxMsg::stringToSignalClass(
       MysqlQuery::getString(row, sigClassCol, __FILE__, __LINE__));
    
@@ -4033,13 +4063,6 @@ void LookUpCandidatesFromSetiLive::extractSignalDescription(
    extractContainsBadBands(row, descrip.containsBadBands);
    
    extractSignalId(row, descrip.signalId);
-   
-   // Set the "original signal id" fields to be the same values
-   // as the current signal.  The dx is going to overwrite
-   // the current signal info (dx number etc) as part
-   // of its processing. 
-   
-   descrip.origSignalId = descrip.signalId;
 
 }
 
@@ -4072,7 +4095,7 @@ void LookUpCandidatesFromSetiLive::extractContainsBadBands(
    }
    else if (containsBadBandsString == "No")
    {
-      containsBadBands = SSE_TRUE;
+      containsBadBands = SSE_FALSE;
    }
    else
    {
@@ -4089,12 +4112,15 @@ void LookUpCandidatesFromSetiLive::extractSignalId(
 	    row, dxNumberCol, __FILE__, __LINE__);
    signalId.activityId = MysqlQuery::getInt(
 	    row, activityIdCol, __FILE__, __LINE__);
-
    // stored act Id should be the same as the current one
-   Assert(signalId.activityId == actUnit_->getActivityId());
+   // For testing we won't check
+   // Assert(signalId.activityId == actUnit_->getActivityId());
    
-   signalId.activityStartTime.tv_sec = MysqlQuery::getInt(
-      row, actStartTimeSecsCol, __FILE__, __LINE__);
+   // signalId.activityStartTime.tv_sec = MysqlQuery::getInt(
+     // row, actStartTimeSecsCol, __FILE__, __LINE__);
+// For now use current time
+//
+    time((time_t*)&signalId.activityStartTime.tv_sec);
 
    signalId.number = MysqlQuery::getInt(
 	    row, signalIdNumberCol, __FILE__, __LINE__);
@@ -4482,7 +4508,7 @@ void LookUpCandidatesFromCounterpartDxs::extractContainsBadBands(
    }
    else if (containsBadBandsString == "No")
    {
-      containsBadBands = SSE_TRUE;
+      containsBadBands = SSE_FALSE;
    }
    else
    {
