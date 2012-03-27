@@ -92,6 +92,7 @@ class ActivityUnitImp : public ActivityUnit
   virtual int sendFollowUpCandidateSignals(const NssDate &newStartTime);
   virtual void sendCandidatesForSecondaryProcessing(MYSQL *callerDbConn);
   virtual void resolveCandidatesBasedOnSecondaryProcessingResults(MYSQL *callerDbConn);
+  virtual void zxLookUpSetiLiveCandidates(MYSQL *callerDbConn);
 
   // -- methods called by dxProxy --------
   virtual void dxTuned(DxProxy* dx, const DxTuned &dxTuned);

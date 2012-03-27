@@ -226,6 +226,7 @@ protected:
   virtual void handleDxTunedTimeout();
   virtual void handleDataCollectionCompleteTimeout();
   virtual void handleDoneSendingCwCoherentSignalsTimeout();
+  virtual void handleZxLookUpSetiLiveCandidatesTimeout();
   virtual void handleActUnitCompleteTimeout();
   virtual void prepareFollowupCandidateSignals();
   virtual int sendFollowupCandidateSignals(const NssDate &startTime);
@@ -615,6 +616,7 @@ private:
   Timeout<ObserveActivityImp> completeDxPrepNotification_;
   Timeout<ObserveActivityImp> pointAntsAndWaitTimeout_;
   Timeout<ObserveActivityImp> actDeleteTimeout_;
+  Timeout<ObserveActivityImp> zxLookUpSetiLiveCandidatesTimeout_;
 
   ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,int> startTime_;
 

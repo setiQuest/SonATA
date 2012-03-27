@@ -414,6 +414,7 @@ ObserveActivityImp::ObserveActivityImp(ActivityId_t id,
 	completeDxPrepNotification_("complete dx prep"),
 	pointAntsAndWaitTimeout_("point ants and wait"),
 	actDeleteTimeout_("delete activity"),
+	zxLookUpSetiLiveCandidatesTimeout_("zx Look Up Seti Live Candidates"),
 	startTime_(0),
 	prevActStartTime_(0),
 	ifAttnDbOffsetTable_(0),
@@ -1405,6 +1406,20 @@ void ObserveActivityImp::handleDataCollectionCompleteTimeout()
 			& ObserveActivityImp::processAllDataCollectionComplete);
 }
 
+void ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout()
+{
+	// send zxLookUp to all the dx/xz
+	ActUnitList actUnitList(
+			actUnitStillWorkingListMutexWrapper_.getListCopy());
+
+	ActUnitList::iterator it;
+	for (it = actUnitList.begin(); it != actUnitList.end(); ++it) 
+	{
+		ActivityUnit *actUnit = *it;
+		actUnit->zxLookUpSetiLiveCandidates(
+				dbParametersForWorkThread_.getDb());
+	}
+}
 // one or more of the dxs did not report 'done sending cw coherent signals'
 void ObserveActivityImp::handleDoneSendingCwCoherentSignalsTimeout()
 {
@@ -1875,6 +1890,14 @@ startActUnitWatchdogTimers()
 			& ObserveActivityImp::handleDoneSendingCwCoherentSignalsTimeout,
 			doneSendingCwCoherentSignalsWaitDurationSecs);
 
+	// Set timer for Zxs to check database for SetiLive Candidates
+	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
+ 	   static_cast<int>(startTimeOffset_ + 1.5*dataCollectionLengthSecs_ +
+				 baselineAccumulationTimeSecs );
+
+     startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
+	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,
+			zxLookUpSetiLiveCandidatesWaitDurationSecs);
 	// Start a watchdog timer, waiting for all activity units to
 	// report in as activity complete.
 

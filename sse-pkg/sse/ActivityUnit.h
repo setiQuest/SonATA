@@ -77,6 +77,7 @@ class ActivityUnit
   virtual void stop(DbParameters &dbParam) = 0;
   virtual void shutdown() = 0;
   virtual void resetSocket() = 0;
+   virtual void zxLookUpSetiLiveCandidates(MYSQL *callerDbConn) = 0;
 
   
   // -- methods called by dxProxy --------
