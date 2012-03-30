@@ -650,6 +650,7 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
    int activityId = getActivityId();
 
    vector <int> compampSubchannels;
+   vector <int> candidateIds;
    if (!zxMode_)dxProxy_->beginSendingFollowUpSignals(activityId, nSignals);
 
    // print the follow up signal info in a condensed format for easy reading
@@ -713,6 +714,9 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 	 {
 	 compampSubchannels.push_back(
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
+	 candidateIds.push_back(
+			 sigInfo.followUpSignal.origSignalId.number);
+
 	 }
       }
       else // Cw, power or coherent
@@ -725,6 +729,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 	 {
 	 compampSubchannels.push_back(
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
+	 candidateIds.push_back(
+			 sigInfo.followUpSignal.origSignalId.number);
 	 }
       }
       // TBD add check for invalid signalType
@@ -895,7 +901,13 @@ void ActivityUnitImp::sendCandidatesForSecondaryProcessing(MYSQL *callerDbConn)
 
 void ActivityUnitImp::zxLookUpSetiLiveCandidates(MYSQL *callerDbConn)
 {
-   if (zxMode_) getSetiLiveCandidates(callerDbConn);
+   if (zxMode_) 
+   {
+      if ( (!actOpsBitEnabled(FOLLOW_UP_OBSERVATION) ||
+      (actOpsBitEnabled(FOLLOW_UP_OBSERVATION) &&
+			       followUpSignalInfoList_.size() != 0)))
+          getSetiLiveCandidates(callerDbConn);
+   }
 }
 
 
@@ -1060,7 +1072,8 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
       // create list of subchannels for compamp data request
       // only for target obs, not for follow ups
       //
-      if (zxMode_ && !actOpsBitEnabled(FOLLOW_UP_OBSERVATION))
+      if (zxMode_ && (!actOpsBitEnabled(FOLLOW_UP_OBSERVATION)
+			      || followUpSignalInfoList_.size() == 0))
       {
 	      int seed1 = hhmmss->tm_min;
 	      int seed2 = hhmmss->tm_sec;
@@ -5132,6 +5145,10 @@ void ActivityUnitImp::submitDbQueryWithLoggingOnError(
                       getActivityId(), SSE_MSG_DBERR,
                       SEVERITY_WARNING, strm.str(),
                       __FILE__, lineNumber);
+#ifdef panic
+if ( strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0 )
+	      dxProxy_->restart();
+#endif
    }
 }
 

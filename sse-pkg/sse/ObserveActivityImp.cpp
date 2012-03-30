@@ -2502,12 +2502,37 @@ void ObserveActivityImp::activityComplete()
 			! doNotReportConfirmedCandidatesToScheduler())
 	{
 		if (combinedObsSummaryStats_.confirmedCwCandidates > 0 ||
-				combinedObsSummaryStats_.confirmedPulseCandidates > 0)
+			combinedObsSummaryStats_.confirmedPulseCandidates > 0)
 		{
 			getActivityStrategy()->foundConfirmedCandidates(this);
 		}
 	}
+#ifdef panic
+	else if (schedulerParameters_.followupEnabled() && 
+			 doNotReportConfirmedCandidatesToScheduler())
+		// check if there are candidates left from a target-on5!
+	{
+		if (combinedObsSummaryStats_.confirmedCwCandidates > 0 ||
+			combinedObsSummaryStats_.confirmedPulseCandidates > 0)
+		{
+      string toList(schedulerParameters_.getStrategyFailureEmailAddressList());
+	string subject("Unresolved Candidates from Target-on5");
 
+	int totalCand = combinedObsSummaryStats_.confirmedCwCandidates +
+		combinedObsSummaryStats_.confirmedPulseCandidates;
+
+	stringstream body; 
+	body << "Act: " << getId() << "\n"
+		<< "Targets: " << getTargetIdsForAllBeamsInUse() << "\n"
+		<< "Time: " << SseUtil::currentIsoDateTime() << endl
+		<<  totalCand << " Unresolved Candidates from Target-on5"
+		<< endl;
+
+	SseUtil::mailMsg(subject, toList, body.str());
+		}
+
+	}
+#endif
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
 			"ObserveActivityImp: activityComplete" << endl;);
 

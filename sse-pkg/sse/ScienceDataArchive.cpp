@@ -244,7 +244,39 @@ void ScienceDataArchive::storeComplexAmplitudes(
 	    writeCompAmpsToNssFile(compamp, liveFilename );
     }
 }
-void ScienceDataArchive::prepareCompampSubchannelFiles(const string &archiveFilenamePrefix,
+
+void ScienceDataArchive::prepareCompampSubchannelFiles(
+		const string &archiveFilenamePrefix,
+                     const string &dxName, const int targetId,
+                     const vector<int> & compampSubchannels,
+                     const vector<int> & candIds)
+{
+	for ( unsigned int subchanIndex = 0; 
+			subchanIndex< compampSubchannels.size();
+			++subchanIndex)
+	{
+		stringstream targetSubchan;
+		targetSubchan << "tg" << targetId << "." << "sbch" << 
+			compampSubchannels[subchanIndex] 
+			<< ".requested.id" << candIds[subchanIndex] << ".";
+		CompampSubchannelFile subchanFile;
+		subchanFile.subchanNumber = compampSubchannels[subchanIndex];
+		subchanFile.pol = POL_RIGHTCIRCULAR;
+		subchanFile.filename = archiveFilenamePrefix +
+			targetSubchan.str() + "R.compamp";
+		//cout << subchanFile.filename << endl;
+		compampSubchannelFileList_.push_back(subchanFile);
+		subchanFile.pol = POL_LEFTCIRCULAR;
+		subchanFile.filename = archiveFilenamePrefix +
+			targetSubchan.str() + "L.compamp";
+		//cout << subchanFile.filename << endl;
+		compampSubchannelFileList_.push_back(subchanFile);
+		
+	}
+}
+
+void ScienceDataArchive::prepareCompampSubchannelFiles(
+		const string &archiveFilenamePrefix,
                      const string &dxName, const int targetId,
                           const vector<int> & compampSubchannels)
 {

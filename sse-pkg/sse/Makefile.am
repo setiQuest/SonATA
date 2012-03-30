@@ -41,8 +41,8 @@ DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I$(top_builddir) \
 #DEBUGFLAGS=$(GCOV_FLAGS)
 
 # for gprof (time) profiling
-#GPROF_FLAGS = -pg
-#DEBUGFLAGS=$(GPROF_FLAGS)
+GPROF_FLAGS = -pg
+DEBUGFLAGS=$(GPROF_FLAGS)
 
 CXXFLAGS = @CXXFLAGS@ $(DEBUGFLAGS) 
 

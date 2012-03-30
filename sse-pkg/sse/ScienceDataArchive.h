@@ -70,6 +70,11 @@ class ScienceDataArchive
 		    const string &dxName, const int targetId,
 		     const vector<int> & compampSubchannels);
 
+    void prepareCompampSubchannelFiles(const string &archiveFilenamePrefix,
+		    const string &dxName, const int targetId,
+		     const vector<int> & compampSubchannels,
+		     const vector<int> & candIds);
+
     string getLiveFilename( Polarization pol, int subchan);
     void setCurrentDataRequestSubchannel( int subchan);
 
