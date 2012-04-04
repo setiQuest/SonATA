@@ -246,5 +246,5 @@ scripts_SCRIPTS = \
 	3beam-dualpol-800KHz-69dx-3zx-env-vars-batch.sh \
 	sonata-start-rfiscan-1700-5000-4g-obs.tcl \
 	sonata-start-rfiscan-1400-1750-4g-obs.tcl \
-	antenna-list.tcl \
+	antenna-list-master.tcl \
 	data-capture-replay-env-vars.tcsh

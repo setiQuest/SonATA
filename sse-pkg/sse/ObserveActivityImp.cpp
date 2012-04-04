@@ -1411,7 +1411,8 @@ void ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout()
 	// send zxLookUp to all the dx/xz
 	ActUnitList actUnitList(
 			actUnitStillWorkingListMutexWrapper_.getListCopy());
-
+//cout << "LookUpSetiLiveCandidatesTimeout " << actUnitList.size() <<
+//	" still working " << endl;
 	ActUnitList::iterator it;
 	for (it = actUnitList.begin(); it != actUnitList.end(); ++it) 
 	{
@@ -1892,7 +1893,7 @@ startActUnitWatchdogTimers()
 
 	// Set timer for Zxs to check database for SetiLive Candidates
 	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
- 	   static_cast<int>(startTimeOffset_ + 1.5*dataCollectionLengthSecs_ +
+ 	   static_cast<int>(startTimeOffset_ + 2.0*dataCollectionLengthSecs_ +
 				 baselineAccumulationTimeSecs );
 
      startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
@@ -2326,6 +2327,7 @@ void ObserveActivityImp::cancelPendingTimers()
 	stopActUnitsTimeout_.cancelTimer();
 	completeDxPrepNotification_.cancelTimer();
 	pointAntsAndWaitTimeout_.cancelTimer();
+	zxLookUpSetiLiveCandidatesTimeout_.cancelTimer();
 
 	// don't include actDeleteTimeout_ 
 }
@@ -2477,7 +2479,7 @@ void ObserveActivityImp::activityComplete()
 	cancelPendingTimers();
 
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
-			"beginning ObserveActivityImp: activityComplete" << endl;);
+		"beginning ObserveActivityImp: activityComplete" << endl;);
 
 	PutThreadExitMessageInWorkTaskQueue;
 
@@ -2507,7 +2509,6 @@ void ObserveActivityImp::activityComplete()
 			getActivityStrategy()->foundConfirmedCandidates(this);
 		}
 	}
-#ifdef panic
 	else if (schedulerParameters_.followupEnabled() && 
 			 doNotReportConfirmedCandidatesToScheduler())
 		// check if there are candidates left from a target-on5!
@@ -2515,7 +2516,8 @@ void ObserveActivityImp::activityComplete()
 		if (combinedObsSummaryStats_.confirmedCwCandidates > 0 ||
 			combinedObsSummaryStats_.confirmedPulseCandidates > 0)
 		{
-      string toList(schedulerParameters_.getStrategyFailureEmailAddressList());
+     string toList(schedulerParameters_.getStrategyFailureEmailAddressList());
+	//string toList("jjordan@seti.org");
 	string subject("Unresolved Candidates from Target-on5");
 
 	int totalCand = combinedObsSummaryStats_.confirmedCwCandidates +
@@ -2532,7 +2534,6 @@ void ObserveActivityImp::activityComplete()
 		}
 
 	}
-#endif
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
 			"ObserveActivityImp: activityComplete" << endl;);
 

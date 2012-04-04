@@ -156,11 +156,20 @@ void DbQuery::submitQuery(const string & queryStmt)
    }
    
    // check the number of columns received
-   unsigned int nColsReceived = mysql_num_fields(resultSet_);
+   unsigned int nColsReceived = mysql_field_count(db_);
 
+   if (nColsReceived != nRequestedCols_)
+   {
+	   cout << "Col recd " << nColsReceived << " nColRequested "
+		   << nRequestedCols_ << endl;
+	   cout << "Number of rows " << mysql_num_rows(resultSet_) << endl;
+	   cout << queryStmt << endl;
    // TBD change this to a throw
-   AssertMsg(nColsReceived == nRequestedCols_,
-	     "Did not get the expected number of columns");
+  // AssertMsg(nColsReceived == nRequestedCols_,
+//	     "Did not get the expected number of columns");
+    throw SseException("Did not get expected number of columns",
+		    __FILE__, __LINE__, SSE_MSG_DBERR, SEVERITY_ERROR);
+   }
 
    // log the number of rows found
    my_ulonglong nRows = mysql_num_rows(resultSet_); 

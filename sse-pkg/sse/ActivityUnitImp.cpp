@@ -753,14 +753,14 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
       <<  dataRequestRfFreqMhz 
       <<  "  MHz  <----- Subchan " << subchan << endl;
 
-   if (!zxMode_)sendScienceDataRequestFreq(dataRequestRfFreqMhz);
-   else
+  sendScienceDataRequestFreq(dataRequestRfFreqMhz);
+   if (zxMode_)
    {
        // Send compamp subchannels to the Science Data Archive
        scienceDataArchive_->prepareCompampSubchannelFiles(
 		        getOutputFilePrefix(),
 			      dxProxy_->getName(), targetId_,
-		       compampSubchannels);
+		       compampSubchannels, candidateIds );
        // Send compamp subchannels to the ZX
        	sendRequestedCompampSubchannels(compampSubchannels);
    }
@@ -903,10 +903,18 @@ void ActivityUnitImp::zxLookUpSetiLiveCandidates(MYSQL *callerDbConn)
 {
    if (zxMode_) 
    {
+	   cout << "zxLookUpSetiLiveCandidates" << endl;
+	   if (actOpsBitEnabled(FOLLOW_UP_OBSERVATION))
+   cout << followUpSignalInfoList_.size() << " Followup Signals" << endl;
+	  
       if ( (!actOpsBitEnabled(FOLLOW_UP_OBSERVATION) ||
       (actOpsBitEnabled(FOLLOW_UP_OBSERVATION) &&
 			       followUpSignalInfoList_.size() != 0)))
           getSetiLiveCandidates(callerDbConn);
+      
+	// Now send Signal Detection Complete and Activity Complete
+   	getObsAct()->signalDetectionComplete(this);
+   	activityUnitComplete();
    }
 }
 
@@ -967,9 +975,6 @@ void ActivityUnitImp::getSetiLiveCandidates(MYSQL *callerDbConn)
 				        pulseTrainList, cwCoherentSigList));
 	liveCandidates->execute();
 
-	// Now send Signal Detection Complete and Activity Complete
-   getObsAct()->signalDetectionComplete(this);
-   activityUnitComplete();
 }
 void ActivityUnitImp::savePulseCandSigInfo(DbTableKeyId dbTableKeyId, 
 					   const SignalDescription & descrip,
@@ -1070,10 +1075,13 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	 maskCenterFreqMhz.size());
       
       // create list of subchannels for compamp data request
-      // only for target obs, not for follow ups
+      // for target obs, and followups with no candidates
       //
-      if (zxMode_ && (!actOpsBitEnabled(FOLLOW_UP_OBSERVATION)
-			      || followUpSignalInfoList_.size() == 0))
+      if (zxMode_ )
+      {
+      if (!actOpsBitEnabled(FOLLOW_UP_OBSERVATION) || 
+		  (actOpsBitEnabled(FOLLOW_UP_OBSERVATION) && 
+	      followUpSignalInfoList_.size() == 0))
       {
 	      int seed1 = hhmmss->tm_min;
 	      int seed2 = hhmmss->tm_sec;
@@ -1192,6 +1200,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 		       compampSubchannels);
        // Send compamp subchannels to the ZX
        	sendRequestedCompampSubchannels(compampSubchannels);
+      }
       }
       if (maskSizeToUse == 0)
       {
@@ -3643,10 +3652,13 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
      thus keeping it alive as a candidate even when the original dx 
      sees it in the OFF and thus resolves it as RFI.
    */
+  if (!actUnit_->zxMode_)
+  {
    if (actUnit_->actOpsBitEnabled(OFF_OBSERVATION))
    {
       sqlStmt << "AND dxNumber = " << actUnit_->getDxNumber();
    }
+  }
 
    sqlStmt << " ORDER by rfFreq ";
 
@@ -3842,6 +3854,9 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 	   << "pfa, snr, nSegments, "
 	   << "pulsePeriod, numberOfPulses, res "
 	   << " FROM " << SetiLiveCandidateSignalTableName
+	   // for testing
+	   //<< " WHERE activityId = 666 "
+	   //<< " AND targetId = 666666" 
 	   << " WHERE activityId = " << actUnit_->getActivityId()
 	   << " AND targetId = " << actUnit_->targetId_
 	   << " AND dxNumber = " << actUnit_->getDxNumber()
@@ -3862,9 +3877,6 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 	   << "'"
 	   << ")";
 #endif 
-	   // for testing
-	   //<< " WHERE activityId = 666 "
-	   //<< " AND targetId = 666666" 
    /*
      If this is an OFF observation, then only get candidates
      that this dx saw originally.  This avoids a problem where
@@ -3880,6 +3892,7 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 
    sqlStmt << " ORDER by rfFreq ";
 
+   cout << sqlStmt.str() << endl;
 
    return sqlStmt.str();
 }
@@ -3900,10 +3913,10 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    processCandidates(cwPowerSigList_, pulseTrainList_,
 		   cwCoherentSigList_, duplicateCount);
 
-   //cout << cwPowerSigList_.size() << " zx candidates" << endl;
+   cout << cwPowerSigList_.size() << " zx candidates" << endl;
    if ((cwPowerSigList_.size() == 0) && (pulseTrainList_.size() == 0))
    {
-	   //cout << " Zero Candidates " << endl;
+	   cout << " Zero Candidates " << endl;
       VERBOSE2(getVerboseLevel(), "Act " << actUnit_->getActivityId() << ":"
 	       << " No SetiLive candidates found for Activity "
 	       << actId_ << ",  " << actUnit_->getDxName() << endl;);
@@ -5145,10 +5158,8 @@ void ActivityUnitImp::submitDbQueryWithLoggingOnError(
                       getActivityId(), SSE_MSG_DBERR,
                       SEVERITY_WARNING, strm.str(),
                       __FILE__, lineNumber);
-#ifdef panic
-if ( strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0 )
+if (strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0)
 	      dxProxy_->restart();
-#endif
    }
 }
 

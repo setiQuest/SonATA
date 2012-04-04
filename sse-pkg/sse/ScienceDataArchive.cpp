@@ -252,7 +252,7 @@ void ScienceDataArchive::prepareCompampSubchannelFiles(
                      const vector<int> & candIds)
 {
 	for ( unsigned int subchanIndex = 0; 
-			subchanIndex< compampSubchannels.size();
+			subchanIndex < compampSubchannels.size();
 			++subchanIndex)
 	{
 		stringstream targetSubchan;
