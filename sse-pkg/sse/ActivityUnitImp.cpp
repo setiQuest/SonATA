@@ -903,9 +903,9 @@ void ActivityUnitImp::zxLookUpSetiLiveCandidates(MYSQL *callerDbConn)
 {
    if (zxMode_) 
    {
-	   cout << "zxLookUpSetiLiveCandidates" << endl;
-	   if (actOpsBitEnabled(FOLLOW_UP_OBSERVATION))
-   cout << followUpSignalInfoList_.size() << " Followup Signals" << endl;
+	   //cout << "zxLookUpSetiLiveCandidates" << endl;
+	   //if (actOpsBitEnabled(FOLLOW_UP_OBSERVATION))
+   //cout << followUpSignalInfoList_.size() << " Followup Signals" << endl;
 	  
       if ( (!actOpsBitEnabled(FOLLOW_UP_OBSERVATION) ||
       (actOpsBitEnabled(FOLLOW_UP_OBSERVATION) &&
@@ -3892,7 +3892,7 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 
    sqlStmt << " ORDER by rfFreq ";
 
-   cout << sqlStmt.str() << endl;
+   //cout << sqlStmt.str() << endl;
 
    return sqlStmt.str();
 }
@@ -3913,10 +3913,10 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    processCandidates(cwPowerSigList_, pulseTrainList_,
 		   cwCoherentSigList_, duplicateCount);
 
-   cout << cwPowerSigList_.size() << " zx candidates" << endl;
+   //cout << cwPowerSigList_.size() << " zx candidates" << endl;
    if ((cwPowerSigList_.size() == 0) && (pulseTrainList_.size() == 0))
    {
-	   cout << " Zero Candidates " << endl;
+	   //cout << " Zero Candidates " << endl;
       VERBOSE2(getVerboseLevel(), "Act " << actUnit_->getActivityId() << ":"
 	       << " No SetiLive candidates found for Activity "
 	       << actId_ << ",  " << actUnit_->getDxName() << endl;);
