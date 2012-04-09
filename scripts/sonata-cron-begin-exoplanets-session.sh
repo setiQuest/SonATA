@@ -2,6 +2,15 @@
 
 # sonata-cron-begin-exoplanets-session
 
+#run the test to see if we should be running. If not - exit the script.
+/home/sonata/scripts/should_start_obs.rb
+echo $?;
+if [ $? -ne 0 ]; then
+	  exit
+fi
+#Start the backend process that watches the weather
+/home/sonata/scripts/weather_watch.rb &
+
 # start a SonATA observing session
 # start up SSE
 ${HOME}/sonata_install/bin/sonata-startup-cron-wrapper.sh -batch
