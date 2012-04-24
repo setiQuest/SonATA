@@ -247,4 +247,8 @@ scripts_SCRIPTS = \
 	sonata-start-rfiscan-1700-5000-4g-obs.tcl \
 	sonata-start-rfiscan-1400-1750-4g-obs.tcl \
 	antenna-list-master.tcl \
+	run-rosetta-demo.tcsh \
+	run-voyager-demo.tcsh \
+	run-kepler-demo.tcsh \
+	run-mars-express-demo.tcsh \
 	data-capture-replay-env-vars.tcsh
