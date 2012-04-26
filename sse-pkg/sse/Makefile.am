@@ -345,6 +345,7 @@ seeker_MOST_SOURCES = \
 	SeekerCmdLineParser.h \
 	SeekerCmdLineParser.cpp \
 	SetiLiveSignalInfo.h \
+	ThisFileDoesNotExist.cpp \
 	SetiLiveSignalInfo.cpp
 
 seeker_SOURCES = $(seeker_MOST_SOURCES) \
