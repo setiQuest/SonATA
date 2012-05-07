@@ -1,0 +1,137 @@
+#!/bin/sh
+################################################################################
+#
+# File:    create-db-kepler-2012-05
+# Project: OpenSonATA
+# Authors: The OpenSonATA code is the result of many programmers
+#          over many years
+#
+# Copyright 2011 The SETI Institute
+#
+# OpenSonATA is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# OpenSonATA is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with OpenSonATA.  If not, see<http://www.gnu.org/licenses/>.
+# 
+# Implementers of this code are requested to include the caption
+# "Licensed through SETI" with a link to setiQuest.org.
+# 
+# For alternate licensing arrangements, please contact
+# The SETI Institute at www.seti.org or setiquest.org. 
+#
+################################################################################
+
+
+# Create seeker database, and populate tables.
+
+# Set these as needed:
+dbhost="localhost"
+dbname="kepler-2012-05"
+
+if [ "$dbhost" = "" ]
+then
+    echo "Must set dbhost in script"
+    exit 1
+fi
+
+if [ "$dbname" = "" ]
+then
+    echo "Must set dbname in script"
+    exit 1
+fi
+
+#set -x
+
+# location of catalog data files
+
+catalogDir="~/peter/catalogs/observing"
+
+sourceFile()
+{
+    # Source the file, showing any warnings, but
+    # ignoring any expected "note" messages (e.g., Unknown table)
+
+    filename=$1
+    mysql -h ${dbhost} ${dbname} --show-warnings -e \
+      "set sql_notes=0; source ${filename};"
+}
+
+loadData()
+{
+    table=$1
+    filename=$2
+
+    nHeaderLines=2
+    mysql --local-infile=1 -h ${dbhost} ${dbname} --show-warnings -e \
+    "load data local infile '$filename' into table ${table}\
+    fields terminated by ',' ignore $nHeaderLines lines;"
+}
+
+mysqladmin -h ${dbhost} --force drop ${dbname}
+mysqladmin -h ${dbhost} create ${dbname}
+
+targetTable="TargetCat"
+fluxTable="CalTargetFlux"
+
+echo "schema"
+sourceFile seeker.schema
+
+echo "spacecraft"
+sourceFile seeker.spacecraft.data
+
+echo "cal delay"
+loadData $targetTable $catalogDir/seeker.caldelay.load-data
+loadData $fluxTable $catalogDir/seeker.caldelay.fluxes.load-data
+loadData BfCalDelayTime seeker.bf.caldelay.times.load-data
+
+echo "cal phase"
+loadData $targetTable $catalogDir/seeker.calphase.load-data
+loadData $fluxTable $catalogDir/seeker.calphase.fluxes.load-data
+loadData BfCalPhaseTime seeker.bf.calphase.times.load-data
+
+echo "exoplanets"
+loadData $targetTable $catalogDir/seeker.exoplanets.load-data
+
+echo "habcat"
+loadData $targetTable $catalogDir/seeker.habcat.load-data
+
+echo "gal survey"
+sourceFile $catalogDir/seeker.galactic-survey.data
+
+echo "gal survey extension"
+sourceFile $catalogDir/seeker.gal-survey-extension.data
+
+echo "cygnus x3 grid"
+sourceFile $catalogDir/seeker.cygnus-x3-survey.data
+
+echo "nearest"
+loadData $targetTable $catalogDir/seeker.nearest.load-data
+
+echo "tycho2 subset"
+loadData $targetTable $catalogDir/tycho2subset.load-data
+
+echo "tycho2 remainder"
+loadData $targetTable $catalogDir/tycho2remainder.load-data
+
+echo "exoplanet additions"
+sourceFile $catalogDir/add2exoplanets.4.11.12.txt
+
+echo "keplerHZ"
+sourceFile $catalogDir/Revised_Kepler_HZ_catalog-4.9.12.txt
+
+echo "exokepler-1"
+sourceFile $catalogDir/KOI-exokepler-load-data-JT3.data
+
+echo "exokepelr-2"
+sourceFile $catalogDir/add2exokepler-1.data
+
+echo "exokepler-3"
+sourceFile $cataloaDir/Addition2_ExoKeplerCatalog.4.9.12.txt

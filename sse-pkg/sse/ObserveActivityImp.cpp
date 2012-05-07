@@ -1891,14 +1891,6 @@ startActUnitWatchdogTimers()
 			& ObserveActivityImp::handleDoneSendingCwCoherentSignalsTimeout,
 			doneSendingCwCoherentSignalsWaitDurationSecs);
 
-	// Set timer for Zxs to check database for SetiLive Candidates
-	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
- 	   static_cast<int>(startTimeOffset_ + 2.0*dataCollectionLengthSecs_ +
-				 baselineAccumulationTimeSecs );
-
-     startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
-	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,
-			zxLookUpSetiLiveCandidatesWaitDurationSecs);
 	// Start a watchdog timer, waiting for all activity units to
 	// report in as activity complete.
 
@@ -1908,6 +1900,13 @@ startActUnitWatchdogTimers()
 	startWatchdogTimer(actUnitCompleteTimeout_,
 			&ObserveActivityImp::handleActUnitCompleteTimeout,
 			sigDetectWaitDurationSecs);
+	// Set timer for Zxs to check database for SetiLive Candidates
+	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
+ 	   static_cast<int>( 0.95*sigDetectWaitDurationSecs);
+
+     startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
+	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,
+			zxLookUpSetiLiveCandidatesWaitDurationSecs);
 }
 
 void ObserveActivityImp::

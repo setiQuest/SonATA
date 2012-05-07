@@ -121,6 +121,9 @@ scripts_SCRIPTS = \
 	sonata-start-exoplanets-obs.tcl \
 	sonata-start-exoplanets-3beam-8500-8700-obs.tcl \
 	sonata-start-exoplanets-beam1-beam3-obs.tcl \
+	sonata-start-rfiscan-2beams-1000-1200-obs.tcl \
+	sonata-stop-rfiscan.tcl \
+	sonata-start-rfiscan-1200-1400-obs.tcl \
 	sonata-start-rfiscan-1400-1750-full-array.tcl \
 	sonata-start-rfiscan-1750-1950-full-array.tcl \
 	sonata-start-rfiscan-1950-2150-full-array.tcl \

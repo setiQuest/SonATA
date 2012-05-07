@@ -716,7 +716,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
 	 candidateIds.push_back(
 			 sigInfo.followUpSignal.origSignalId.number);
-
+cout << "Pulse Sig Id " <<
+	sigInfo.followUpSignal.origSignalId.number << endl;
 	 }
       }
       else // Cw, power or coherent
@@ -731,6 +732,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
 	 candidateIds.push_back(
 			 sigInfo.followUpSignal.origSignalId.number);
+cout << "Cw Sig Id " <<
+	sigInfo.followUpSignal.origSignalId.number << endl;
 	 }
       }
       // TBD add check for invalid signalType
@@ -3627,8 +3630,9 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
   else
 #endif
   {
-    sqlStmt	  << previousActId_
-	   << " AND targetId = " << actUnit_->targetId_;
+    sqlStmt	  << previousActId_;
+   if (!actUnit_->zxMode_)
+	   sqlStmt <<  " AND targetId = " << actUnit_->targetId_;
   }
 
   sqlStmt << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
@@ -3661,8 +3665,7 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
   }
 
    sqlStmt << " ORDER by rfFreq ";
-
-
+ if (actUnit_->zxMode_) cout << sqlStmt.str();
    return sqlStmt.str();
 }
 
@@ -3762,7 +3765,8 @@ void LookUpCandidatesFromPrevAct::processCandidates(
 
       string reason(MysqlQuery::getString(row, reasonCol,
 					  __FILE__, __LINE__));
-
+if(actUnit_->zxMode_)
+	cout << "Act Id " << activityId << " zx " << dxNumber << " sigNumb " << signalNumber << endl;
       /*
         pfa and snr might be null if the previous obs was an OFF,
         just use the defaults in that case.
@@ -3892,7 +3896,7 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 
    sqlStmt << " ORDER by rfFreq ";
 
-   //cout << sqlStmt.str() << endl;
+   cout << sqlStmt.str() << endl;
 
    return sqlStmt.str();
 }
@@ -3913,7 +3917,7 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    processCandidates(cwPowerSigList_, pulseTrainList_,
 		   cwCoherentSigList_, duplicateCount);
 
-   //cout << cwPowerSigList_.size() << " zx candidates" << endl;
+   cout << cwPowerSigList_.size() << " zx candidates" << endl;
    if ((cwPowerSigList_.size() == 0) && (pulseTrainList_.size() == 0))
    {
 	   //cout << " Zero Candidates " << endl;
@@ -5158,7 +5162,9 @@ void ActivityUnitImp::submitDbQueryWithLoggingOnError(
                       getActivityId(), SSE_MSG_DBERR,
                       SEVERITY_WARNING, strm.str(),
                       __FILE__, lineNumber);
-if (strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0)
+      cout << strm.str() << endl;
+if (strm.str().compare(0,60,
+ "recordBaselineStatsInDb submitDbQuery: MySQL error: Unknown column") == 0)
 	      dxProxy_->restart();
    }
 }

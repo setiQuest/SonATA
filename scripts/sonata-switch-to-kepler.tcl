@@ -14,7 +14,7 @@ exec setAlarm ARM,sonata,Switching To KEPLER
 db set name keplerLBand
 
 # change catalog priorities
-sched set catshigh keplerHZ,exokepler
+sched set catshigh exokepler,keplerHZ
 sched set catslow exoplanets,habcat,tycho2subset,tycho2remainder
 sched set targetmerit catalog,meridian,completelyobs,timeleft
 
