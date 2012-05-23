@@ -1348,10 +1348,13 @@ void ActivityUnitImp::getRecentRfiSignals(
    sqlStmt << "SELECT distinct rfFreq from " << SignalTableName << " "
 	   << "where"
 	   << " rfFreq > " << beginFreqMhz
-	   << " and rfFreq < " << endFreqMhz
-	   << " and ((type = 'CwP' and power > " << minCwPower
-	   << ") or ( type = 'Pul' and power > " << minPulsePower << " )) "
-	   << " and UNIX_TIMESTAMP(activityStartTime) >="
+	   << " and rfFreq < " << endFreqMhz;
+   if (zxMode_)
+   {
+     sqlStmt   << " and ((type = 'CwP' and power > " << minCwPower
+	   << ") or ( type = 'Pul' and power > " << minPulsePower << " )) ";
+   }
+     sqlStmt   << " and UNIX_TIMESTAMP(activityStartTime) >="
 	   << " (UNIX_TIMESTAMP() - " << ageLimitSecs << ")";
 
    stringstream sqlStmtPrefix;
@@ -5163,9 +5166,10 @@ void ActivityUnitImp::submitDbQueryWithLoggingOnError(
                       SEVERITY_WARNING, strm.str(),
                       __FILE__, lineNumber);
       cout << strm.str() << endl;
-if (strm.str().compare(0,60,
- "recordBaselineStatsInDb submitDbQuery: MySQL error: Unknown column") == 0)
-	      dxProxy_->restart();
+	int icode = strm.str().compare(0,60,
+ 		"recordBaselineStatsInDb submitDbQuery: MySQL error: Unknown column");
+	cout << "icode = " << icode << endl;
+	if (icode == 0) dxProxy_->restart();
    }
 }
 

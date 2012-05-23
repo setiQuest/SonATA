@@ -11,10 +11,10 @@ sh sleep 10
 exec setAlarm ARM,sonata,Switching To KEPLER
 
 # change database to kepler
-db set name keplerLBand
+db set name kepler201205
 
 # change catalog priorities
-sched set catshigh exokepler,keplerHZ
+sched set catshigh keplerHZ,exokepler
 sched set catslow exoplanets,habcat,tycho2subset,tycho2remainder
 sched set targetmerit catalog,meridian,completelyobs,timeleft
 

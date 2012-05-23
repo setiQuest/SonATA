@@ -1,11 +1,10 @@
-# sonata-start-kepler-3beams-1400-1750-obs.tcl
+# sonata-start-rfiscan-1000-1200-obs.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-#sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
 
-exec setAlarm ARM,sonata,Kepler
+exec setAlarm ARM,sonata,RfiScans
 
 # connect to the backend server
 tscope setup
@@ -45,7 +44,7 @@ act set targetbeam5 1 current
 act set targetbeam6 1 current 
 act set targetprimary 1 current 
 act set tscopetimeout 300 current 
-act set type {target} current 
+act set type {rfiscan} current 
 act set varerrorlower 1.000000000 current 
 act set varerror {on} current 
 act set varerrorupper 20000.000000000 current 
@@ -54,7 +53,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {keplerLBand} current 
+db set name {kepler-2012-05} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -114,15 +113,15 @@ dx set zerodrifttol 0.007000000 current
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
 sched set beam2 {on} current 
-sched set beam3 {on} current 
+sched set beam3 {off} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 1512.2000 current 
-sched set catshigh {exoplanets,exokepler} current 
+sched set beginfreq 1000.0000 current 
+sched set catshigh {exokepler,keplerHZ} current 
 sched set catshighmaxcounts 20000 current 
-sched set catslow {habcat,tycho2subset,tycho2remainder} current 
+sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 
@@ -131,7 +130,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 1712.000000000 current 
+sched set endfreq 1200.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -141,7 +140,7 @@ sched set minfollowups 12 current
 sched set mindxbw 20.000000000 current 
 sched set mintargetsep 2.500000000 current 
 sched set moonavoid 10.000000000 current 
-sched set multitarget {on} current 
+sched set multitarget {off} current 
 sched set dxoverlap 0.001000000 current 
 sched set dxround 0.100000000 current 
 sched set dxtune {range} current 
@@ -155,12 +154,12 @@ sched set rotateidsinterval 60.000000000 current
 sched set rotateids {off} current 
 sched set stopstratfail {off} current 
 sched set sunavoid 55.000000000 current 
-sched set target {auto} current 
+sched set target {user} current 
 sched set targetavailactsetup 60 current 
 sched set targetmerit {catalog,meridian,completelyobs,timeleft} current 
 sched set targetwait {on} current 
 #sched set tasks {autoselectants,prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
-sched set tasks {prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
+sched set tasks {prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq} current 
 sched set tscopemaxfailures 10 current 
 sched set tscopereadypause 120 current 
 sched set zenithavoid 5.000000000 current 
@@ -182,10 +181,10 @@ tscope set sitelat 40.817361111 current
 tscope set sitelong 121.471802778 current 
 tscope set sitename {ATA} current 
 tscope set tuneoffset 0.000000000 current 
-tscope set tuninga 1420.000000000 current 
-tscope set tuningb 1420.000000000 current 
-tscope set tuningc 1420.000000000 current 
-tscope set tuningd 1420.000000000 current 
+tscope set tuninga 1200.000000000 current 
+tscope set tuningb 1200.000000000 current 
+tscope set tuningc 1200.000000000 current 
+tscope set tuningd 1200.000000000 current 
 
 
 source antenna-list.tcl

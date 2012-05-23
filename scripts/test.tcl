@@ -14,10 +14,10 @@ tscope sim
  dx set baseerror off
  sched set target auto
  act set type target
- sched set beginfreq 1512.2
- sched set endfreq 1713.0
- sched set pipeline on
- sched set followup on
+ sched set beginfreq 1060.0
+ sched set endfreq 1381.0
+ sched set pipe on
+ sched set followup off
  sched set catshigh habcat,exoplanets
  act set targetbeam1 144
  act set targetbeam2 144
