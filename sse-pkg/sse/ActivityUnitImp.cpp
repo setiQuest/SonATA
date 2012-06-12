@@ -1106,7 +1106,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	  for (unsigned int i = 0; i < maxCompampSubchannels; i++)
 	  {
 		  subChanNum = 2*seed1 + 2*i*(seed2+1);
-		  if (subChanNum >= maxDxSubchannels ) break;
+		  if (subChanNum > maxDxSubchannels ) break;
 		  compampSubchannels.push_back( subChanNum);
 	  }
       }
@@ -1159,6 +1159,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      //cout << "subChannels " << subchannelList.size() << endl;
            if ( maxCompampSubchannels >= subchannelList.size())
            {
+		   // store all the subchannels that were found
               for (unsigned int signalIndex=0; 
 			      compampSubchannels.size() < subchannelList.size();
 		               ++signalIndex)
@@ -1168,14 +1169,16 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      if ( compampSubchannels.size() < maxCompampSubchannels)
 	      {
 		      // Add more subchannels until at max.
-		int lastSize = compampSubchannels.size();
+		unsigned int lastSize = compampSubchannels.size();
 		int lastSubChan = compampSubchannels[lastSize-1];
+		unsigned int addThisMany = maxCompampSubchannels - lastSize;
 
-		for ( unsigned int i = 0; i < (maxCompampSubchannels-lastSize); i++)
+		for ( unsigned int i = 0; i < addThisMany; i++)
 		{
-			int subChan = lastSubChan + seed1 + i*seed2;
+			int subChan = lastSubChan + 1 + 2*seed1 + 2*i*(seed2+1);
 			if (subChan >= maxDxSubchannels) break;
 			compampSubchannels.push_back(subChan);
+			lastSubChan = subChan;
 		}
 	      }
            }
@@ -5165,10 +5168,8 @@ void ActivityUnitImp::submitDbQueryWithLoggingOnError(
                       getActivityId(), SSE_MSG_DBERR,
                       SEVERITY_WARNING, strm.str(),
                       __FILE__, lineNumber);
-      cout << strm.str() << endl;
-	int icode = strm.str().compare(0,60,
- 		"recordBaselineStatsInDb submitDbQuery: MySQL error: Unknown column");
-	cout << "icode = " << icode << endl;
+	int icode = callingMethodName.compare(0,23,
+ 		"recordBaselineStatsInDb");
 	if (icode == 0) dxProxy_->restart();
    }
 }

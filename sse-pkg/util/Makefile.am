@@ -86,6 +86,8 @@ bin_SCRIPTS = \
 	create-observing-data-images.sh \
 	send-obs-info-to-webserver.sh \
 	create-observing-targetmap.sh \
+	mybackup.sh \
+	db-backup.sh \
 	opensonata-build-test.sh 
 
 bin_PROGRAMS = \
