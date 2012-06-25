@@ -1253,8 +1253,11 @@ void ObserveActivityImp::completeRemainingDxPreparation()
 {
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": "
 			<< "ObserveActivityImp::completeRemainingDxPreparation" << endl;);
-
+// This is the actual start of Baseline Accumulation. 
 	startTime_ = calculateStartTime();
+
+// Update the start time in the database for SetiLive.
+	updateActivityStartTime();
 
 	if (followUpObservationEnabled())
 	{
@@ -6611,6 +6614,40 @@ void ObserveActivityImp::updateActivityStatistics()
 			<< "'"
 			<< ", validObservation = 'Yes',"
 			<< prepareObsSummStatsSqlUpdateStmt(combinedObsSummaryStats_)
+			<< " where id = " << getId()
+			<< " ";
+
+		submitDbQueryWithThrowOnError(sqlstmt.str(), methodName, __LINE__);
+
+	}
+	catch (SseException &except)
+	{
+		SseMessage::log(MsgSender, getId(),
+				except.code(), except.severity(), except.descrip(),
+				except.sourceFilename(), except.lineNumber());
+	}
+
+}
+void ObserveActivityImp::updateActivityStartTime()
+{
+	const string methodName("updateActivityStartTime");
+
+	try 
+	{
+		checkForZeroActId();
+
+	// calculate how much time the initial baseline accumulation will take
+
+	int baselineInitAccumTimeSecs = static_cast<int> (
+			dxParameters_.getDxActParamStruct().baselineInitAccumHalfFrames *
+			DxHalfFrameLengthSecs);
+
+		stringstream sqlstmt;
+
+		sqlstmt << "UPDATE Activities SET "
+			<< " startOfDataCollection = '" 
+			<< SseUtil::isoDateTimeWithoutTimezone(startTime_.value())
+			<< "'"
 			<< " where id = " << getId()
 			<< " ";
 

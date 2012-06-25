@@ -139,6 +139,7 @@ public:
   void updateDbErrorComment(DbParameters &dbParam, const string& emsg);
   void updateIfcStatus(const IfcStatus& ifcStatus);
   void updateActivityStatistics();
+  void updateActivityStartTime();
 
   virtual void lookUpTargetCoordinates(
      MYSQL *conn, TargetId targetId,
