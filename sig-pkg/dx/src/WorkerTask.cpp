@@ -319,6 +319,7 @@ WorkerTask::startDataCollection()
 	// buffering when we start data collection, we should flush the
 	// channel input buffers and set the state to PEND_DC.
 	activity->setState(DX_ACT_RUN_DC);
+	activity->setState(DX_ACT_PEND_DC);
 	// send start of data collection
 	cMsg = msgList->alloc(DATA_COLLECTION_STARTED, activity->getActivityId());
 	cMsg->setUnit((sonata_lib::Unit) unit);

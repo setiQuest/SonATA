@@ -1089,9 +1089,13 @@ Channel::handlePacket_(ChannelPacket *pkt)
 			// start the data collection, recording the actual start time
 			// and setting the packet sequence number
 			if (getState() == DX_ACT_PEND_BASE_ACCUM)
+			{
 				setState(DX_ACT_RUN_BASE_ACCUM);
+			}
 			else
+			{
 				setState(DX_ACT_RUN_DC);
+			}
 			startSeq = curSeq = hdr.seq;
 			// register the actual start time
 			timeval s = ATADataPacketHeader::absTimeToTimeval(hdr.absTime);
