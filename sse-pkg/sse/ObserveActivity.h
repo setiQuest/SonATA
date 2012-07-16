@@ -102,7 +102,11 @@ class ObserveActivity : public Activity
   virtual ObserveActivityOpsBitset & getOperations() = 0;
 
   virtual int getStartTime() const = 0;
+  virtual int getStartBaseAccumTime() const = 0;
+  virtual int getStartDataCollTime() const = 0;
   virtual NssDate getStartTimeAsNssDate() const = 0;
+  virtual NssDate getStartBaseAccumTimeAsNssDate() const = 0;
+  virtual NssDate getStartDataCollTimeAsNssDate() const = 0;
   virtual int getPrevActStartTime() const = 0;
   virtual int getBeamNumberForDxName(const string & dxName) = 0;
   virtual TargetId getTargetIdForBeam(int beamNumber) = 0;

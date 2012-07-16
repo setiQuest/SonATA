@@ -78,6 +78,8 @@ class ActivityUnitImp : public ActivityUnit
   virtual void initialize();
   virtual void dxScienceDataRequest(const DxScienceDataRequest &dataRequest);
   virtual void setStartTime(const StartActivity &startAct);
+  virtual void setStartBaseAccumTime(const StartActivity &startAct);
+  virtual void setStartDataCollTime(const StartActivity &startAct);
   virtual void stop(DbParameters &callerDbParam);
   virtual void shutdown();
   virtual void resetSocket();

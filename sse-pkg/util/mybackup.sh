@@ -11,3 +11,10 @@ echo "Copied directory ${isodate} to /Sse.Arc4/sonata_backup"
 cp /home/sonata/sonata_archive/permlogs/systemlogs/systemlog-${isodate}.txt /Sse.Arc4/sonata_backup/systemlogs
 
 echo "Copied /home/sonata/sonata_archive/permlogs/systemlogs/systemlog-${isodate}.txt to /Sse.Arc4/sonata_backup/systemlogs"
+
+#-------------------------------------------------
+echo "Disk space: "
+echo "------------"
+df -k
+echo ""
+

@@ -765,7 +765,8 @@ cout << "Cw Sig Id " <<
 			      dxProxy_->getName(), targetId_,
 		       compampSubchannels, candidateIds );
        // Send compamp subchannels to the ZX
-       	sendRequestedCompampSubchannels(compampSubchannels);
+       	if(!stopCommandReceived_.get())
+		sendRequestedCompampSubchannels(compampSubchannels);
    }
 
    SseArchive::SystemLog() << sigSummary.str() << endl;
@@ -1883,7 +1884,6 @@ void ActivityUnitImp::putSignalIdIntoSqlStatement(
 
    sqlStmt << ", signalIdNumber = " 
 	   << signalId.number;
-
 }
 
 // convert the fields in an original signal Id into 
@@ -2308,7 +2308,7 @@ const string ActivityUnitImp::prepareDatabaseRecordStatement()
 
 	   << ", startOfDataCollection = '" 
 	   << SseUtil::isoDateTimeWithoutTimezone(
-	      getObsAct()->getStartTime())
+	      getObsAct()->getStartDataCollTime())
 	   << "' ";
 	
    RecordDxActivityParameters
@@ -2510,6 +2510,37 @@ void ActivityUnitImp::setStartTime(const StartActivity &startAct)
 
    // pass on the start time to the dxproxy
    dxProxy_->setStartTime(getActivityId(), startAct);
+
+   if (getObsAct()->getDbParameters().useDb())
+   {
+      updateStartTimeAndDxSkyFreqInDb(startAct);
+   }
+    
+}
+
+
+void ActivityUnitImp::setStartBaseAccumTime(const StartActivity &startAct)
+{
+   VERBOSE2(getVerboseLevel(),
+	    "ActivityUnit setStartTime" << endl;);
+
+   // pass on the start time to the dxproxy
+   dxProxy_->setStartTime(getActivityId(), startAct);
+
+//   if (getObsAct()->getDbParameters().useDb())
+ //  {
+  //    updateStartTimeAndDxSkyFreqInDb(startAct);
+   //}
+    
+}
+
+void ActivityUnitImp::setStartDataCollTime(const StartActivity &startAct)
+{
+   VERBOSE2(getVerboseLevel(),
+	    "ActivityUnit setStartTime" << endl;);
+
+   // pass on the start time to the dxproxy
+//   dxProxy_->setStartTime(getActivityId(), startAct);
 
    if (getObsAct()->getDbParameters().useDb())
    {
@@ -4584,35 +4615,34 @@ void LookUpCandidatesFromCounterpartDxs::extractConfirmationStats(
 void LookUpCandidatesFromCounterpartDxs::extractPulseTrainDescription(
    MYSQL_ROW row, PulseTrainDescription & descrip)
 {
-   descrip.pulsePeriod = MysqlQuery::getDouble(
-      row, pulsePeriodCol, __FILE__, __LINE__);
-   
-   descrip.numberOfPulses =  MysqlQuery::getInt(
-      row, numberOfPulsesCol, __FILE__, __LINE__);
-   
-   descrip.res = SseDxMsg::stringToResolution(
-      MysqlQuery::getString(row, resCol, __FILE__, __LINE__));
-}
+      descrip.pulsePeriod = MysqlQuery::getDouble(
+         row, pulsePeriodCol, __FILE__, __LINE__);
 
+      descrip.numberOfPulses =  MysqlQuery::getInt(
+         row, numberOfPulsesCol, __FILE__, __LINE__);
+
+      descrip.res = SseDxMsg::stringToResolution(
+         MysqlQuery::getString(row, resCol, __FILE__, __LINE__));
+}
 
 // Fetch pulses corresponding to the signalTableId from the pulseTrainTable and
 // put them in the pulseArray.  It's assumed that the pulse array is already
 // allocated and of size 'numberOfPulses'.
 
-void LookUpCandidatesFromCounterpartDxs::getPulsesForSignal(
-   MYSQL *conn,
-   const string &pulseTrainTableName, 
-   unsigned int signalTableId, 
-   Pulse pulseArray[],
-   int numberOfPulses)
-{
-   string methodName("getPulsesForSignal");
+ void LookUpCandidatesFromCounterpartDxs::getPulsesForSignal(
+    MYSQL *conn, 
+    const string &pulseTrainTableName, 
+    unsigned int signalTableId,
+    Pulse pulseArray[], 
+    int numberOfPulses)
+     {
+      string methodName("getPulsesForSignal");
 
-   stringstream sqlStmt;
-   sqlStmt.precision(PrintPrecision);    
-   sqlStmt.setf(std::ios::fixed);  // show all decimal places up to precision
- 
-   sqlStmt << "SELECT "
+     stringstream sqlStmt;
+     sqlStmt.precision(PrintPrecision);
+     sqlStmt.setf(std::ios::fixed);  // show all decimal places up to precision
+
+     sqlStmt << "SELECT "
 	   << "rfFreq, power, spectrumNumber, binNumber, pol " 
 	   << " FROM " << pulseTrainTableName
 	   << " WHERE "
@@ -4718,7 +4748,7 @@ PrepareFakeSecondaryCandidatesToForceArchiving(
       descrip.signalId.activityId = actUnit->getActivityId();
       descrip.signalId.dxNumber = actUnit->getDxNumber();
       descrip.signalId.activityStartTime = 
-	 actUnit->obsActivity_->getStartTimeAsNssDate();
+	 actUnit->obsActivity_->getStartDataCollTimeAsNssDate();
 
       // just set some plausible values for the rest of the fields
       descrip.pol = POL_BOTH;
@@ -5144,35 +5174,39 @@ updateCandidateSignalClassAndReasonInDb(
 	   << " ";
    
    actUnit_->submitDbQueryWithLoggingOnError(conn_, sqlStmt.str(),
-					     methodName, __LINE__);
+		   methodName, __LINE__);
 
 }
 
-// ------------------------------------------------
+// --------------------------------------------------------
 
 void ActivityUnitImp::submitDbQueryWithLoggingOnError(
    MYSQL *callerDbConn,
-   const string &sqlStmt,
-   const string &callingMethodName,
-   int lineNumber)
+      const string &sqlStmt,
+        const string &callingMethodName,
+    int lineNumber)
 {
    if (mysql_query(callerDbConn, sqlStmt.c_str()) != 0)
-   {	
-      stringstream strm;
-      strm << callingMethodName 
-	   << " submitDbQuery: MySQL error: " 
-	   << mysql_error(callerDbConn)  << " "
+      {
+           stringstream strm;
+          strm << callingMethodName
+             << " submitDbQuery: MySQL error: "
+             << mysql_error(callerDbConn)  << " "
            << sqlStmt.c_str() << endl;
-      
-      SseMessage::log(MsgSender,
-                      getActivityId(), SSE_MSG_DBERR,
-                      SEVERITY_WARNING, strm.str(),
-                      __FILE__, lineNumber);
-	int icode = callingMethodName.compare(0,23,
- 		"recordBaselineStatsInDb");
-	if (icode == 0) dxProxy_->restart();
-   }
+
+        SseMessage::log(MsgSender, 
+			getActivityId(), 
+			SSE_MSG_DBERR, 
+			SEVERITY_WARNING, 
+			strm.str(),
+                    __FILE__, lineNumber);
+	if (strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0)
+              dxProxy_->restart();
+     }
 }
+
+
+// ------------------------------------------------
 
 void ActivityUnitImp::submitDbQueryWithThrowOnError(
    MYSQL *conn,
@@ -5193,6 +5227,7 @@ void ActivityUnitImp::submitDbQueryWithThrowOnError(
 }
 
 // ------------------------------------------------
+
 
 #ifdef FIND_TEST_SIGNAL
 

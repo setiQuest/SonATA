@@ -11,7 +11,7 @@ fi
 /home/sonata/scripts/weather_watch.rb &
 
 # Kill all the dxs and channelizers in case they weren't shutdown properly
-/home/sonata/sonata_install/scripts/cleanup-chan-dx.tsch
+/home/sonata/sonata_install/scripts/cleanup-chan-dx.tcsh
 
 # start a SonATA observing session
 # start up SSE
