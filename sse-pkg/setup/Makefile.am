@@ -38,9 +38,11 @@ setupdir = $(prefix)/setup/
 setup_DATA =
 
 dist_setup_DATA = \
+	expectedJaneComponents.cfg \
 	birdieMask.tcl \
 	rcvrBirdieMask.tcl \
 	permRfiMask.tcl \
+	dxPermRfiMask.tcl \
 	testMask.tcl \
 	ifc1.cfg \
 	ifc2.cfg \

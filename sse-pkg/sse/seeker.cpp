@@ -332,10 +332,10 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
 
    Scheduler *scheduler = Scheduler::instance();
    Site* site;
-
    try {
 
       site = new Site(seekerParser->getDxPort(),
+                      seekerParser->getZxPort(),
                       seekerParser->getDxArchiverPort(),
                       seekerParser->getChannelizerPort(),
                       seekerParser->getDxArchiver1Hostname(),
@@ -350,7 +350,6 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
                       seekerParser->getComponentControlPort(),
                       seekerParser->getExpectedComponentsFilename(),
                       seekerParser->getNoUi());
-
       delete seekerParser;
     
       paraGlobal.setSite(site);  // attach the site to the Text UI

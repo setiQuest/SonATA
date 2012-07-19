@@ -48,6 +48,7 @@ class Site;
 class NssComponentTree;
 class NssParameters;
 class TuneDxs;
+class TuneZxs;
 class Followup;
 class OrderedTargets;
 class ActivityData;
@@ -111,17 +112,27 @@ class ObsActStrategy : public ActivityStrategy
 
    virtual bool isTargetTooCloseToSetting(time_t currentTime, time_t setTime);
    virtual TuneDxs * getTuneDxs(int verboseLevel) const;
+   virtual TuneZxs * getTuneZxs(int verboseLevel) const;
 
    virtual void getDxListForEachBeam(
       NssComponentTree *nssComponentTree, 
       vector<string> & requestedBeamNames, 
       DxListByBeamMap & dxListByBeamMap);
 
+   virtual void getZxListForEachBeam(
+      NssComponentTree *nssComponentTree, 
+      vector<string> & requestedBeamNames, 
+      DxListByBeamMap & zxListByBeamMap);
+
    virtual DxList getShortestDxList(DxListByBeamMap & dxListByBeamMap,
 			      string & shortestListBeamName);
 
    virtual void copyDxTuningsFromOneBeamToTheOthers(
       DxListByBeamMap & dxListByBeamMap,
+      const string & sourceBeamName);
+
+   virtual void copyZxTuningsFromOneBeamToTheOthers(
+      DxListByBeamMap & zxListByBeamMap,
       const string & sourceBeamName);
 
    virtual void chooseAutoTargetsFromDb(
@@ -157,6 +168,7 @@ class ObsActStrategy : public ActivityStrategy
 
    NssParameters nssParameters_;
    TuneDxs *tuneDxs_;
+   TuneZxs *tuneZxs_;
    Followup *followup_;
    Scheduler *scheduler_;
    bool followupEnabled_;

@@ -47,6 +47,7 @@ class SeekerCmdLineParser
    string getErrorText();
    string getUsage();
    string getDxPort();
+   string getZxPort();
    string getIfcPort();
    string getTsigPort();
    string getTscopePort();
@@ -66,6 +67,7 @@ class SeekerCmdLineParser
 
    CmdLineParser *parser;
    string dxPortArg;
+   string zxPortArg;
    string ifcPortArg;
    string tsigPortArg;
    string tscopePortArg;

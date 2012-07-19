@@ -379,7 +379,6 @@ getProxyList(TproxyList *proxyList)
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(componentMapMutex_);
 
     //VERBOSE2(verboseLevel_, "getProxyList " <<  proxyTypename_  << endl;);
-
     ComponentMapIterator p;
     for (p = componentMap_.begin(); p != componentMap_.end(); ++p)
     {

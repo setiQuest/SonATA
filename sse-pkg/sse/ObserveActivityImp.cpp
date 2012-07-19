@@ -543,6 +543,16 @@ double ObserveActivityImp::getMaxDxSkyFreqMhz() const
 	return maxDxSkyFreqMhz_.value();
 }
 
+double ObserveActivityImp::getMinZxSkyFreqMhz() const
+{
+	return minZxSkyFreqMhz_.value();
+}
+
+double ObserveActivityImp::getMaxZxSkyFreqMhz() const
+{
+	return maxZxSkyFreqMhz_.value();
+}
+
 
 bool ObserveActivityImp::useManuallyAssignedDxBandwidth()
 {
@@ -717,6 +727,14 @@ void ObserveActivityImp::determineDesiredComponents()
 							__FILE__, __LINE__, SSE_MSG_MISSING_DX, SEVERITY_ERROR);
 				}
 				dxList_.insert(dxList_.end(), dxsForBeam.begin(), dxsForBeam.end());
+				// Zxs
+				DxList zxsForBeam = getNssComponentTree()->getZxsForBeams(beamSublist);
+				if (zxsForBeam.size() == 0)
+				{
+					SseArchive::SystemLog() << "Act " << getId() << "no Zxs available " 
+							<< endl;
+				}
+				zxList_.insert(zxList_.end(), zxsForBeam.begin(), zxsForBeam.end());
 			}
 		}
 
@@ -733,6 +751,7 @@ void ObserveActivityImp::determineDesiredComponents()
 
 			// copy the dx list
 			dxList_ = nssComponentTree_->getDxs();
+			zxList_ = nssComponentTree_->getZxs();
 		}
 	}
 
@@ -984,6 +1003,7 @@ bool ObserveActivityImp::start()
 		}
 
 		startComponents();
+cout << "breakpoint B " << endl;
 
 		if (actParameters_.emailActStatus())
 		{
@@ -1041,6 +1061,9 @@ void ObserveActivityImp::verifyMinMaxDxSkyFreqs()
 {
 	minDxSkyFreqMhz_ = MinDxSkyFreqMhz(dxList_);
 	maxDxSkyFreqMhz_ = MaxDxSkyFreqMhz(dxList_);
+// do for the Zxs too, but don't check yet
+	minZxSkyFreqMhz_ = MinDxSkyFreqMhz(zxList_);
+	maxZxSkyFreqMhz_ = MaxDxSkyFreqMhz(zxList_);
 
 	if (minDxSkyFreqMhz_ < 0 || maxDxSkyFreqMhz_ < 0)
 	{
@@ -1172,7 +1195,7 @@ activityUnitReady(ActivityUnit *actUnit)
 {
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
 			"ObserveActivityImp: activityUnitReady" << endl;);
-
+cout << "ObserveActivityImp::activityUnitReady " << actUnit->getDxName() << endl;
 	if (activityWrappingUp_.get())
 	{
 		return;
@@ -1191,7 +1214,8 @@ activityUnitReady(ActivityUnit *actUnit)
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
 			"nActUnitsReady=" << nActUnitsReady_ << 
 			" nActUnitsStillWorking=" << nActUnitsStillWorking_ << endl;);
-
+cout << "Units ready " << nActUnitsReady_ << " still working " << nActUnitsStillWorking_
+		<< endl;
 	if (nActUnitsReady_ == nActUnitsStillWorking_)
 	{
 		dxTunedTimeout_.cancelTimer();
@@ -2863,7 +2887,10 @@ void ObserveActivityImp::startComponents()
 		SseArchive::SystemLog() << "***CALL startChan() " << endl;
 		// Move start Channelizers here.
 		SseArchive::SystemLog() << "***CALL startDxs() " << endl;
+cout << "breakpoint 3" << endl;
 		startDxs();
+		//startZxs();
+cout << "breakpoint C" << endl;
 	}
 	else
 	{
@@ -5144,6 +5171,8 @@ void ObserveActivityImp::testSigReady(TestSigProxy* testSigProxy)
 			<< endl;
 
 		startDxs();
+		//startZxs();
+cout << "breakpoint 2" << endl;
 
 	}
 
@@ -5361,6 +5390,7 @@ void ObserveActivityImp::startIfcs()
 
 			if (dxList.size() == 0)
 			{
+cout << "breakpoint 1" << endl;
 				SseArchive::SystemLog() 
 					<< "Act " << getId() << ": "
 					<< "No dxs available for "
@@ -5371,6 +5401,7 @@ void ObserveActivityImp::startIfcs()
 			} 
 			else if (dxMinFreqMhz < 0.0)
 			{
+cout << "breakpoint 2" << endl;
 				SseArchive::SystemLog()
 					<< "Act " << getId() << ": "
 					<< ifcProxy->getName() << ": "
@@ -5416,6 +5447,7 @@ TBD: review this.
 			ifcProxy->requestReady();
 		} 
 
+cout << "breakpoint 3" << endl;
 	}
 	catch (SseException &except)
 	{
@@ -5630,7 +5662,9 @@ void ObserveActivityImp::ifcReady(IfcProxy* ifcProxy)
 			}
 			else
 			{
+cout << "breakpoint A" << endl;
 				startDxs();
+				//startZxs();
 			}
 		}
 
@@ -5704,8 +5738,65 @@ void ObserveActivityImp::startDxs()
 		}
 	}
 
-	getObsSummaryTxtStrm() << endl;
+// Now do the zxs
+cout << "Act " << getId() << ": startZxs()" << endl;
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": startZxs()" << endl;);
 
+	if (activityWrappingUp_.get()) 
+	{
+		return;
+	}
+
+	SseArchive::SystemLog() << "Act " << getId() << ": "
+		<< "Preparing zxs..." << endl;
+
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
+			"going though zx list, creating activity units..." << endl;);
+
+
+	// for each zx, start an activityUnit
+	DxList &zxList = getZxList();
+cout << "ObserveActivityImp zxlist.size() " << zxList.size() << endl;
+	//DxList::iterator p;
+	for (p = zxList.begin(); p != zxList.end(); ++p)
+	{
+		VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
+				"ObsAct:startup:proxy addr: " << *p << endl;);
+		DxProxy *proxy = *p;
+
+		// make sure dx is still connected.
+		// also make sure it is to be used (skyfreq > 0)
+
+		if (! proxy->isAlive())
+		{
+			// Zx is disconnected
+
+			stringstream strm;
+			strm << "ObserveActivityImp::processZxs(): "
+				<< "Can't start activityUnit for "
+					<< "disconnected Zx " << proxy->getName()
+					   << endl;
+			SseMessage::log(proxy->getName(),
+					getId(), SSE_MSG_DX_DISCONNECT,
+					SEVERITY_ERROR, strm.str(),
+					__FILE__, __LINE__);
+
+			getObsSummaryTxtStrm() << "Can't start activityUnit for "
+				<< "disconnected Zx " << proxy->getName()
+				<< endl;
+
+		}
+		else if (proxy->getDxSkyFreq() > 0.0)  
+		{
+			createActivityUnit(proxy, actUnitId, actUnitList);
+			actUnitId++;
+cout << "creating ActUnit for " << proxy->getName() << endl;
+		}
+
+	}
+
+	getObsSummaryTxtStrm() << endl;
+cout << "ActUnit list size " << actUnitList.size() << endl;
 	if (actUnitList.size() > 0)
 	{
 		actUnitCreatedList_ = actUnitList;
@@ -5718,6 +5809,81 @@ void ObserveActivityImp::startDxs()
 		const string msg("No dxs ready for use");
 		getObsSummaryTxtStrm() << msg <<  endl;
 		terminateActivity(msg);
+		return;
+	}
+}
+
+void ObserveActivityImp::startZxs()
+{
+cout << "Act " << getId() << ": *****startZxs()" << endl;
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": startZxs()" << endl;);
+
+	if (activityWrappingUp_.get()) 
+	{
+		return;
+	}
+
+	SseArchive::SystemLog() << "Act " << getId() << ": "
+		<< "Preparing zxs..." << endl;
+
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
+			"going though zx list, creating activity units..." << endl;);
+
+	ActUnitList actUnitList;
+	int actUnitId = 1;
+
+	// for each dx, start an activityUnit
+	DxList &zxList = getZxList();
+	DxList::iterator p;
+	for (p = zxList.begin(); p != zxList.end(); ++p)
+	{
+		VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
+				"ObsAct:startup:proxy addr: " << *p << endl;);
+		DxProxy *proxy = *p;
+
+		// make sure dx is still connected.
+		// also make sure it is to be used (skyfreq > 0)
+
+		if (! proxy->isAlive())
+		{
+			// Zx is disconnected
+
+			stringstream strm;
+			strm << "ObserveActivityImp::processZxs(): "
+				<< "Can't start activityUnit for "
+					<< "disconnected Zx " << proxy->getName()
+					   << endl;
+			SseMessage::log(proxy->getName(),
+					getId(), SSE_MSG_DX_DISCONNECT,
+					SEVERITY_ERROR, strm.str(),
+					__FILE__, __LINE__);
+
+			getObsSummaryTxtStrm() << "Can't start activityUnit for "
+				<< "disconnected Zx " << proxy->getName()
+				<< endl;
+
+		}
+		else if (proxy->getDxSkyFreq() > 0.0)  
+		{
+			createActivityUnit(proxy, actUnitId, actUnitList);
+			actUnitId++;
+		}
+	}
+
+	getObsSummaryTxtStrm() << endl;
+
+	if (actUnitList.size() > 0)
+	{
+		actUnitCreatedList_ = actUnitList;
+		actUnitStillWorkingListMutexWrapper_ = actUnitList;
+
+		prepareActivityUnits(actUnitList);
+	} 
+	else
+	{
+		const string msg("No zxs ready for use");
+		getObsSummaryTxtStrm() << msg <<  endl;
+		//terminateActivity(msg);
 		return;
 	}
 }
@@ -5896,6 +6062,11 @@ void ObserveActivityImp::prepareActivityUnits(const ActUnitList &actUnitList)
 	SseArchive::SystemLog() << "Act " << getId() << ": "
 		<< "Dx Min/Max Freq: " << getMinDxSkyFreqMhz()
 		<< " / " << getMaxDxSkyFreqMhz() 
+		<< " MHz " << endl;
+
+	SseArchive::SystemLog() << "Act " << getId() << ": "
+		<< "Zx Min/Max Freq: " << getMinZxSkyFreqMhz()
+		<< " / " << getMaxZxSkyFreqMhz() 
 		<< " MHz " << endl;
 
 	SseArchive::SystemLog() << "Act " << getId() << ": "
@@ -6356,6 +6527,11 @@ IfcList & ObserveActivityImp::getIfcList()
 DxList & ObserveActivityImp::getDxList()
 {
 	return dxList_;
+}
+
+DxList & ObserveActivityImp::getZxList()
+{
+	return zxList_;
 }
 
 

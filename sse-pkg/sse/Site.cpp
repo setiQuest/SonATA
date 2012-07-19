@@ -122,6 +122,7 @@ struct SiteInternal
    // --- data ---
 
    NssComponentManager<DxProxy> *dxManager_;
+   NssComponentManager<DxProxy> *zxManager_;
    NssComponentManager<DxArchiverProxy> *dxArchiverManager_;
    NssComponentManager<ChannelizerProxy> *channelizerManager_;    
    NssComponentManager<IfcProxy> *ifcManager_;    
@@ -130,6 +131,7 @@ struct SiteInternal
    NssComponentManager<ComponentControlProxy> *componentControlManager_;    
 
    NssAcceptHandler<DxProxy> *dxAcceptHandler_;
+   NssAcceptHandler<DxProxy> *zxAcceptHandler_;
    NssAcceptHandler<DxArchiverProxy> *dxArchiverAcceptHandler_;
    NssAcceptHandler<ChannelizerProxy> *channelizerAcceptHandler_;
    NssAcceptHandler<IfcProxy> *ifcAcceptHandler_;
@@ -168,12 +170,14 @@ SiteInternal::SiteInternal(Site *site,
    )
    :
    dxManager_(0),
+   zxManager_(0),
    dxArchiverManager_(0),
    channelizerManager_(0),
    ifcManager_(0),
    tscopeManager_(0),
    testSigManager_(0),
    dxAcceptHandler_(0),
+   zxAcceptHandler_(0),
    dxArchiverAcceptHandler_(0),
    channelizerAcceptHandler_(0),
    ifcAcceptHandler_(0),
@@ -196,8 +200,16 @@ SiteInternal::SiteInternal(Site *site,
       dxArchiver1Hostname, dxToDxArchiver1Port,
       dxArchiver2Hostname, dxToDxArchiver2Port,
       dxArchiver3Hostname, dxToDxArchiver3Port,
-      PermRfiMaskFilename);    
+      DxPermRfiMaskFilename);    
    dxManager_->setManagerName("seekerDxManager");
+
+   zxManager_ = new DxComponentManager(
+      &subscriber_, 
+      dxArchiver1Hostname, dxToDxArchiver1Port,
+      dxArchiver2Hostname, dxToDxArchiver2Port,
+      dxArchiver3Hostname, dxToDxArchiver3Port,
+      DxPermRfiMaskFilename);    
+   zxManager_->setManagerName("seekerZxManager");
 
    dxArchiverManager_ = new SseComponentManager<DxArchiverProxy>(&subscriber_);
    channelizerManager_ = new SseComponentManager<ChannelizerProxy>(&subscriber_);    
@@ -230,6 +242,7 @@ SiteInternal::~SiteInternal()
    // delete accept handlers
 
    delete dxAcceptHandler_;
+   delete zxAcceptHandler_;
    delete dxArchiverAcceptHandler_;
    delete channelizerAcceptHandler_;
    delete ifcAcceptHandler_;
@@ -239,6 +252,7 @@ SiteInternal::~SiteInternal()
 
    // delete component managers
     
+   delete zxManager_;
    delete dxManager_;
    delete dxArchiverManager_;
    delete channelizerManager_;
@@ -255,6 +269,7 @@ SiteInternal::~SiteInternal()
 // -------------- Site methods  -----------------------------------
 
 Site::Site(const string &dxPort,
+           const string &zxPort,
 	   const string &dxArchiverPort,
 	   const string &channelizerPort, 
 	   const string &dxArchiver1Hostname,
@@ -279,7 +294,6 @@ Site::Site(const string &dxPort,
 			       noUi)),
    systemStatusRepeatTimer_("status repeat timer")
 {
-
    int initialWaitTimeSecs(10);
    int verboseLevel(0);
    int repeatIntervalSecs(2);
@@ -293,10 +307,10 @@ Site::Site(const string &dxPort,
 
    internal_->dxAcceptHandler_ =
       new NssAcceptHandler<DxProxy>(dxPort, dxManager());
-
+   internal_->zxAcceptHandler_ =
+      new NssAcceptHandler<DxProxy>(zxPort, zxManager());
    internal_->dxArchiverAcceptHandler_ =
       new NssAcceptHandler<DxArchiverProxy>(dxArchiverPort, dxArchiverManager());
-
    internal_->channelizerAcceptHandler_ = 
       new NssAcceptHandler<ChannelizerProxy>(channelizerPort, channelizerManager());
 
@@ -319,7 +333,6 @@ Site::Site(const string &dxPort,
      This is a fallback in case the file load fails.
    */
    internal_->expectedNssComponentsTree_ = new ExpectedNssComponentsTree();
-
    // now try to load from file
    loadExpectedComponentsConfig(internal_->expectedNssComponentsConfigFilename_);
 }
@@ -398,6 +411,12 @@ void Site::loadExpectedComponentsConfig(const string &expectedComponentsFilename
    Assert(pcm);
    Assert(internal_->expectedNssComponentsTree_);
    pcm->setExpectedNssComponentsTree(internal_->expectedNssComponentsTree_);
+// Do the same for the Zx
+   DxComponentManager *zcm = dynamic_cast<DxComponentManager*>(
+      internal_->zxManager_);
+   Assert(zcm);
+   Assert(internal_->expectedNssComponentsTree_);
+   zcm->setExpectedNssComponentsTree(internal_->expectedNssComponentsTree_);
 }
 
 ExpectedNssComponentsTree * Site::getExpectedNssComponentsTree()
@@ -413,10 +432,12 @@ ExpectedNssComponentsTree * Site::getExpectedNssComponentsTree()
 NssComponentTree * Site::getAllComponents() const
 {
    // Don't use a mutex here -- the component managers protect themselves
-
    DxList dxList;
    internal_->dxManager_->getProxyList(&dxList);
 
+   DxList zxList;
+   internal_->zxManager_->getProxyList(&zxList);
+cout << "Site size of zxList) " << zxList.size() << endl;
    ChannelizerList chanList;
    internal_->channelizerManager_->getProxyList(&chanList);
 
@@ -428,9 +449,9 @@ NssComponentTree * Site::getAllComponents() const
 
    TestSigList testSigList;
    internal_->testSigManager_->getProxyList(&testSigList);
-
    NssComponentTree *tree = new NssComponentTree(
       dxList,
+      zxList,
       chanList,
       ifcList, 
       tscopeList,	
@@ -447,6 +468,13 @@ NssComponentManager<DxProxy> *Site::dxManager()
    // Don't use a mutex here -- the component managers protect themselves
 
    return internal_->dxManager_;
+}
+
+NssComponentManager<DxProxy> *Site::zxManager()
+{
+   // Don't use a mutex here -- the component managers protect themselves
+
+   return internal_->zxManager_;
 }
 
 NssComponentManager<DxArchiverProxy> *Site::dxArchiverManager()
@@ -504,6 +532,7 @@ void Site::setVerbose(int verboseLevel)
    // Don't use a mutex here -- the component managers protect themselves
 
    dxManager()->setVerbose(verboseLevel);
+   zxManager()->setVerbose(verboseLevel);
    dxArchiverManager()->setVerbose(verboseLevel);
    channelizerManager()->setVerbose(verboseLevel);
    ifcManager()->setVerbose(verboseLevel);
@@ -637,6 +666,9 @@ void SiteInternal::printSystemStatus(ostream &strm)
    DxList dxList;
    dxManager_->getProxyList(&dxList);
    updateDxOnelineStatus(prefix, &dxList);
+   DxList zxList;
+   zxManager_->getProxyList(&zxList);
+   updateDxOnelineStatus(prefix, &zxList);
 
    DxArchiverList dxArchiverList;
    dxArchiverManager_->getProxyList(&dxArchiverList);
@@ -1150,7 +1182,6 @@ void SiteInternal::loadExpectedNssComponentsTree(const string &configFilename)
       if (errorStrm.str() != "")
       {
 	 // log may not be visible in UI when this is printed, so
-	 // send to cerr as well
 	 cerr << errorStrm.str() << endl;
 
 	 SseMessage::log(MsgSender,
@@ -1208,10 +1239,12 @@ void SiteInternal::loadAtaBeamStatusIndices()
 
    // convert each ata beam name to a valid index into the status array
    for (vector<string>::iterator it = ataBeamNames.begin();
-	it != ataBeamNames.end(); ++it)
+        it != ataBeamNames.end(); ++it)
    {
       const string & ataName = *it;
-      
+
+
+
       TscopeBeam beamIndex = SseTscopeMsg::nameToBeam(ataName);
       if (beamIndex == TSCOPE_INVALID_BEAM)
       {

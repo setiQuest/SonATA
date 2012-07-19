@@ -338,6 +338,8 @@ seeker_MOST_SOURCES = \
 	DataBlock.h \
 	TuneDxs.cpp \
 	TuneDxs.h \
+	TuneZxs.cpp \
+	TuneZxs.h \
 	SseComponentManager.h \
 	ActivityException.h    \
 	MinMaxBandwidth.h \

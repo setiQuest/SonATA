@@ -1,15 +1,14 @@
 tscope sim
  sched set beam1 on
  sched set beam2 on
- sched set beam3 on
+ sched set beam3 off
  dx set length 25
  sched set dxtune range
  sched set multitarget on
  db set name sonatadb
  db set usedb on
- db set host localhost
+ db set host sse100
  db set usedb on
- db set host localhost
  dx set basewarn off
  dx set baseerror off
  sched set target auto

@@ -340,6 +340,19 @@ bool ObsRange::hasRangeGt(float64_t minimumBandwidth) const
    return false;
 }
 
+void ObsRange::convertFreqBandToObsRange( 
+		   const vector<FrequencyBand> & bands)
+{
+   for (vector<FrequencyBand>::const_iterator index =
+	   bands.begin(); index != bands.end(); ++index)
+   {
+      this->addInOrder(
+      		index->centerFreq - index->bandwidth/2.0,
+		  index->centerFreq + index->bandwidth/2.0);
+   }
+
+}
+
 
 // subtract obsrange from range
 ObsRange operator-(const Range& range, const ObsRange& obsRange)

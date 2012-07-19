@@ -43,6 +43,7 @@ SeekerCmdLineParser::SeekerCmdLineParser()
    :
    parser(0),
    dxPortArg("--dx-port"),
+   zxPortArg("--zx-port"),
    ifcPortArg("--ifc-port"),
    tsigPortArg("--tsig-port"),
    tscopePortArg("--tscope-port"),
@@ -72,6 +73,9 @@ CmdLineParser * SeekerCmdLineParser::createCmdLineParser()
       
    parser->addIntOption(dxPortArg, SseUtil::strToInt(DEFAULT_DX_PORT),
                         "port for dx connections");
+
+   parser->addIntOption(zxPortArg, SseUtil::strToInt(DEFAULT_ZX_PORT),
+                        "port for zx connections");
 
    parser->addIntOption(ifcPortArg, SseUtil::strToInt(DEFAULT_IFC_PORT),
                         "port for ifc connections");
@@ -143,6 +147,11 @@ string SeekerCmdLineParser::getUsage()
 string SeekerCmdLineParser::getDxPort()
 {
    return parser->getStringOption(dxPortArg);
+}
+
+string SeekerCmdLineParser::getZxPort()
+{
+   return parser->getStringOption(zxPortArg);
 }
 
 string SeekerCmdLineParser::getIfcPort()

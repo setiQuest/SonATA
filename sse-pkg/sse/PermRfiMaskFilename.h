@@ -32,6 +32,7 @@
 #ifndef PermRfiMaskFilename_H
 #define PermRfiMaskFilename_H
 
+static const string DxPermRfiMaskFilename("dxPermRfiMask.tcl");
 static const string PermRfiMaskFilename("permRfiMask.tcl");
 
 #endif // PermRfiMaskFilename_H
