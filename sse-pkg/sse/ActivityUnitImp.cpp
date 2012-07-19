@@ -2642,7 +2642,6 @@ void ActivityUnitImp::dxTuned(DxProxy* dx, const DxTuned &dxTuned)
    ActUnitSummaryStrm()
       << dx->getName() << endl
       << dxTuned;
-cout << "dxTuned 1 " << endl;
    actualDxTunedFreqMhz_ = dxTuned.dxSkyFreq;
 
    // Tuned freq should be within a few Khz of the requested freq
@@ -2650,7 +2649,6 @@ cout << "dxTuned 1 " << endl;
    const double SkyFreqTuneTolMhz(0.005000);
 
    double diffMhz = fabs(dx->getDxSkyFreq() - dxTuned.dxSkyFreq);
-cout << "dxTuned 2 " << endl;
    if (diffMhz	> SkyFreqTuneTolMhz)
    {
       stringstream strm;
@@ -2670,9 +2668,7 @@ cout << "dxTuned 2 " << endl;
       ActUnitSummaryStrm() << strm.str();
    } 
 
-cout << "dxTuned 3 " << endl;
    getObsAct()->activityUnitReady(this);
-cout << "dxTuned 4 " << endl;
 
 }
 

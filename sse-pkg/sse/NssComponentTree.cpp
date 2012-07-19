@@ -171,7 +171,7 @@ void NssComponentTreeInternal::getDxsConnectedToIfc(IfcProxy *ifcProxy,
     vector<string> expectedDxNames =
 	expectedNssComponentsTree_->getDxsForIfc(ifcName);
 
-//#if 1
+#if 0
     // debug: print the names
     for (vector<string>::iterator it = expectedDxNames.begin();
 	 it != expectedDxNames.end(); ++it)
@@ -179,7 +179,7 @@ void NssComponentTreeInternal::getDxsConnectedToIfc(IfcProxy *ifcProxy,
 	cout << *it << " ";
     }
     cout << endl;
-//#endif 
+#endif 
 
     // Now go through the dx proxy list.
     // For each proxy whose name is on the expectedDxNames list, add
@@ -285,7 +285,6 @@ NssComponentTree::NssComponentTree(const DxList &dxList,
     internal_->dxList_.sort(CompareDxsByName);
     // ZX
     internal_->zxList_ = zxList;
-cout << "NssComponents zxList size " << zxList.size() << endl;
     internal_->zxList_.sort(CompareDxsByName);
     // CHANNELIZER
     internal_->chanList_ = chanList;
@@ -323,7 +322,6 @@ DxList & NssComponentTree::getDxs()
 //-- Zx ---
 DxList & NssComponentTree::getZxs()
 {
-cout << "getZxs zxList_ size" << internal_->zxList_.size() << endl;
     return internal_->zxList_;
 }
 

@@ -290,7 +290,6 @@ void ObsActStrategy::copyZxTuningsFromOneBeamToTheOthers(
       DxListByBeamMap & zxListByBeamMap,
       const string & sourceBeamName)
 {
-cout << "copyAzTuningsFromOneBeanToTheOthers" << endl;
    Assert(zxListByBeamMap.size() > 1);
 
    // make sure specified source beam is in the map
@@ -418,7 +417,6 @@ void ObsActStrategy::chooseTargets(const string & firstTargetBeamName,
 	 new TuneDxsObsRange(getVerboseLevel(), chosenObsRange);
 //
 // 	Convert the permanent RFI mask to an ObsRange for the Zxs
-cout << "converting permRfiMask to ObsRange" << endl;
    PermRfiMask permRfiMask(PermRfiMaskFilename, "permRfiMask", 
                            getVerboseLevel());
 	 
@@ -427,10 +425,8 @@ cout << "converting permRfiMask to ObsRange" << endl;
 	badBandsForZxs.convertFreqBandToObsRange(permRfiBands);
 if (badBandsForZxs.isEmpty() )cout << "badBandsForZxs is empty" << endl;
 	delete tuneZxs_;
-cout << "new tuneZxObsRange" << endl;
 	tuneZxs_ =
 		new TuneZxsObsRange(getVerboseLevel(),badBandsForZxs);
-cout << "ok" << endl;
       VERBOSE2(getVerboseLevel(), methodName 
 	       << "Chose first target: " << firstTargetId << 
 	       " for beam: " << firstTargetBeamName << endl;);
@@ -584,7 +580,6 @@ VERBOSE2( getVerboseLevel(),"tuneDxsForMuptipleBeamsOnSingleTarget()" << endl);
       // Get the dxs and tune them
       DxList dxListForIfc =
 	 nssComponentTree->getDxsForBeams(allBeamsToUse);
-cout << "TuneDx->tune()" << endl;
       Assert(tuneDxs_);
 	tuneDxs_->tune(dxListForIfc, outputChannels, mhzPerChannel);
       float64_t channelizerTuneFreqMhz = computeChanCenterFreq(dxListForIfc, outputChannels,
@@ -778,7 +773,6 @@ void ObsActStrategy::pickMultipleTargetsAndTuneDxs(NssComponentTree *nssComponen
    
    // Tune the dxs on one beam, then copy tunings to the others
    // double maxAllowedDxSkyFreqMhz = 99999;  // effectively no limit
-cout << "TuneDxs_->tune() " << endl;
    Assert(tuneDxs_);
 	tuneDxs_->tune(shortestDxList, outputChannels, mhzPerChannel);
 
@@ -786,7 +780,6 @@ cout << "TuneDxs_->tune() " << endl;
 		mhzPerChannel); 
 
 // Now tune the Zxs
-cout << "tuneZxs_->tune() " << endl;
 	tuneZxs_->tune(shortestZxList, outputChannels, mhzPerChannel,
 		channelizerTuneFreqMhz);
        int32_t delaySecs = nssParameters_.chan_->getDelay();
@@ -1496,7 +1489,6 @@ TuneDxs* ObsActStrategy::getTuneDxs(int verboseLevel) const
 
 TuneZxs* ObsActStrategy::getTuneZxs(int verboseLevel) const
 {
-cout << "getTuneZxs" << endl;
    switch (nssParameters_.sched_->getTuneDxsOption())
    {
    case SchedulerParameters::TUNE_DXS_RANGE:

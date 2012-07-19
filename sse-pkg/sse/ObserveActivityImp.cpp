@@ -1029,7 +1029,6 @@ bool ObserveActivityImp::start()
 		}
 
 		startComponents();
-cout << "breakpoint B " << endl;
 
 		if (actParameters_.emailActStatus())
 		{
@@ -1221,7 +1220,6 @@ activityUnitReady(ActivityUnit *actUnit)
 {
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
 			"ObserveActivityImp: activityUnitReady" << endl;);
-cout << "ObserveActivityImp::activityUnitReady " << actUnit->getDxName() << endl;
 	if (activityWrappingUp_.get())
 	{
 		return;
@@ -1240,8 +1238,6 @@ cout << "ObserveActivityImp::activityUnitReady " << actUnit->getDxName() << endl
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
 			"nActUnitsReady=" << nActUnitsReady_ << 
 			" nActUnitsStillWorking=" << nActUnitsStillWorking_ << endl;);
-cout << "Units ready " << nActUnitsReady_ << " still working " << nActUnitsStillWorking_
-		<< endl;
 	if (nActUnitsReady_ == nActUnitsStillWorking_)
 	{
 		dxTunedTimeout_.cancelTimer();
@@ -2994,10 +2990,8 @@ void ObserveActivityImp::startComponents()
 		SseArchive::SystemLog() << "***CALL startChan() " << endl;
 		// Move start Channelizers here.
 		SseArchive::SystemLog() << "***CALL startDxs() " << endl;
-cout << "breakpoint 3" << endl;
 		startDxs();
 		//startZxs();
-cout << "breakpoint C" << endl;
 	}
 	else
 	{
@@ -5279,7 +5273,6 @@ void ObserveActivityImp::testSigReady(TestSigProxy* testSigProxy)
 
 		startDxs();
 		//startZxs();
-cout << "breakpoint 2" << endl;
 
 	}
 
@@ -5508,7 +5501,6 @@ cout << "breakpoint 1" << endl;
 			} 
 			else if (dxMinFreqMhz < 0.0)
 			{
-cout << "breakpoint 2" << endl;
 				SseArchive::SystemLog()
 					<< "Act " << getId() << ": "
 					<< ifcProxy->getName() << ": "
@@ -5554,7 +5546,6 @@ TBD: review this.
 			ifcProxy->requestReady();
 		} 
 
-cout << "breakpoint 3" << endl;
 	}
 	catch (SseException &except)
 	{
@@ -5769,7 +5760,6 @@ void ObserveActivityImp::ifcReady(IfcProxy* ifcProxy)
 			}
 			else
 			{
-cout << "breakpoint A" << endl;
 				startDxs();
 				//startZxs();
 			}
@@ -5846,7 +5836,6 @@ void ObserveActivityImp::startDxs()
 	}
 
 // Now do the zxs
-cout << "Act " << getId() << ": startZxs()" << endl;
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": startZxs()" << endl;);
 
 	if (activityWrappingUp_.get()) 
@@ -5863,7 +5852,6 @@ cout << "Act " << getId() << ": startZxs()" << endl;
 
 	// for each zx, start an activityUnit
 	DxList &zxList = getZxList();
-cout << "ObserveActivityImp zxlist.size() " << zxList.size() << endl;
 	//DxList::iterator p;
 	for (p = zxList.begin(); p != zxList.end(); ++p)
 	{
@@ -5897,13 +5885,11 @@ cout << "ObserveActivityImp zxlist.size() " << zxList.size() << endl;
 		{
 			createActivityUnit(proxy, actUnitId, actUnitList);
 			actUnitId++;
-cout << "creating ActUnit for " << proxy->getName() << endl;
 		}
 
 	}
 
 	getObsSummaryTxtStrm() << endl;
-cout << "ActUnit list size " << actUnitList.size() << endl;
 	if (actUnitList.size() > 0)
 	{
 		actUnitCreatedList_ = actUnitList;
@@ -5922,7 +5908,6 @@ cout << "ActUnit list size " << actUnitList.size() << endl;
 
 void ObserveActivityImp::startZxs()
 {
-cout << "Act " << getId() << ": *****startZxs()" << endl;
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": startZxs()" << endl;);
 
 	if (activityWrappingUp_.get()) 

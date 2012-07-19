@@ -412,7 +412,7 @@ void DxProxyInternal::sendStatus(DxStatus *stat)
 void DxProxyInternal::dxTuned(ActivityUnit *actUnit, DxTuned *dxTuned)
 {
     ACE_Guard<ACE_Recursive_Thread_Mutex> guard(objectMutex_);
-cerr << "DXProxy dxTuned " << endl;
+
     setDxActivityStatus(actUnit, DX_ACT_TUNED);
 
     // forward message to activityUnit

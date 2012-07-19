@@ -437,7 +437,6 @@ NssComponentTree * Site::getAllComponents() const
 
    DxList zxList;
    internal_->zxManager_->getProxyList(&zxList);
-cout << "Site size of zxList) " << zxList.size() << endl;
    ChannelizerList chanList;
    internal_->channelizerManager_->getProxyList(&chanList);
 

@@ -369,13 +369,13 @@ void TuneZxsObsRange::tune(DxList &zxList, int32_t totalChannels,
       
  int32_t nextChan; 
   int32_t dcChannel = totalChannels/2;
-cout << "dcChannel " << dcChannel << endl;
+//cout << "dcChannel " << dcChannel << endl;
   float64_t halfBandwidth = mhzPerChannel/2.0;
   float64_t minFreq = chanTuneFreqMhz - dcChannel*mhzPerChannel - halfBandwidth;
-cout << "minFreq " << minFreq << endl;
+//cout << "minFreq " << minFreq << endl;
  float64_t maxAllowedZxSkyFreqMhz = chanTuneFreqMhz + 
 		dcChannel*mhzPerChannel + halfBandwidth;
-cout << "Max ZX Sky freq" << maxAllowedZxSkyFreqMhz << endl;
+//cout << "Max ZX Sky freq" << maxAllowedZxSkyFreqMhz << endl;
    float64_t maxZxTuneSeparationMhz = totalChannels*mhzPerChannel;
    VERBOSE2(getVerboseLevel(), "TuneZxsObsRange::tune" 
 	    " zxList size = " << zxList.size() 
@@ -415,16 +415,16 @@ VERBOSE2(getVerboseLevel(), "totalUseableRangeMhz " << totalUseableRangeMhz << e
 	 centerFreq = nextLeftEdgeFreq_ + halfBandwidth;
 	 nextLeftEdgeFreq_+= mhzPerChannel;
 	nextChan++;
-cout << "1centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
-cout << "nextChan " << nextChan << endl;
+//cout << "1centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
+//cout << "nextChan " << nextChan << endl;
 
          if ( nextChan == dcChannel)  // skip over
            {
                centerFreq += mhzPerChannel;
                nextLeftEdgeFreq_ += mhzPerChannel;
                nextChan++;
-cout << "3centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
-cout << "dc Channel " << nextChan << endl;
+//cout << "3centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
+//cout << "dc Channel " << nextChan << endl;
            }
 //cout << "Obs Range " << obsRange_ << endl;
 
@@ -434,7 +434,7 @@ cout << "dc Channel " << nextChan << endl;
 // Find the next range that contains it
 	    list<Range>::const_iterator index = 
 	       obsRange_.aboveRange(nextLeftEdgeFreq_);
-cout << "New Range " << (*index).low_ << "-" << (*index).high_ << endl;
+//cout << "New Range " << (*index).low_ << "-" << (*index).high_ << endl;
 	    if (index == obsRange_.rangeEnd())
 	    {
                // Ran out of subranges
@@ -451,11 +451,11 @@ cout << "New Range " << (*index).low_ << "-" << (*index).high_ << endl;
                   int32_t firstZxChan = firstZxProxy->getChannelNumber();
 // Get next Channel Edge in the current subrange
                float64_t bwskip = (((*index).low_ ) + halfBandwidth - nextLeftEdgeFreq_)/mhzPerChannel;
-cout << "bwskip " << bwskip << endl;
+//cout << "bwskip " << bwskip << endl;
 	       nextLeftEdgeFreq_ += trunc(bwskip+.25)*mhzPerChannel;
 		centerFreq = nextLeftEdgeFreq_ + halfBandwidth;
 		nextLeftEdgeFreq_ += mhzPerChannel;
-cout << "2centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
+//cout << "2centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
 //cout << "should the channel be incremented here? " << nextChan << endl;
 //cout << "5centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
 
@@ -469,15 +469,15 @@ cout << "2centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq
                   int32_t numChan = (int32_t)(fnumChan);
 // for assume only one zx
                   nextChan =  numChan;
-cout << "fnumChan " << fnumChan << " numChan " << numChan << " nextChan " 
-	<< nextChan <<  "dcChannel " << endl;
+//cout << "fnumChan " << fnumChan << " numChan " << numChan << " nextChan " 
+	//<< nextChan <<  "dcChannel " << endl;
          if ( nextChan == dcChannel)  // skip over
            {
                centerFreq += mhzPerChannel;
                nextLeftEdgeFreq_ += mhzPerChannel;
                nextChan++;
-cout << "4centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
-cout << "dc Channel " << dcChannel << endl;
+//cout << "4centerFreq " << centerFreq << " nextLeftEdgeFreq " << nextLeftEdgeFreq_ << endl;
+//cout << "dc Channel " << dcChannel << endl;
            }
 	  if ( (nextLeftEdgeFreq_ - minFreq) > maxZxTuneSeparationMhz)
 		  {
@@ -498,21 +498,21 @@ cout << "dc Channel " << dcChannel << endl;
 	 Range(centerFreq - halfBandwidth + 0.02,
 	       centerFreq + halfBandwidth - 0.02)))
       {
-	 cout << "exiting zxlist for loop, range not included\n";
+	 //cout << "exiting zxlist for loop, range not included\n";
 	 break;
       }
 #endif
       if (centerFreq > maxAllowedZxSkyFreqMhz)
       {
-	 cout << " exiting zxlist for loop, centerfreq too high\n";
+	 //cout << " exiting zxlist for loop, centerfreq too high\n";
 	 break;
       }
 
       zxProxy->setDxSkyFreq(centerFreq);
       zxProxy->setChannelNumber(nextChan);
-cout << "CenterFreq " << centerFreq << " nextChan " << nextChan << endl;
+//cout << "CenterFreq " << centerFreq << " nextChan " << nextChan << endl;
          //nextChan++;
-cout << "nextChan " << nextChan << endl;
+//cout << "nextChan " << nextChan << endl;
 
       // don't exceed the maximumZxSeparation for the next zx
 
@@ -524,7 +524,7 @@ cout << "nextChan " << nextChan << endl;
 	 
 	 if ( (highFreqMhz - lowFreqMhz) > maxZxTuneSeparationMhz)
 	 {
-	     cout << "exiting zxlist for loop, zx separation too big\n";
+	     //cout << "exiting zxlist for loop, zx separation too big\n";
 	    break;
 	 }
 	 
