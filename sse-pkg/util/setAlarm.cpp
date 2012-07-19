@@ -300,10 +300,12 @@ int main(int argc, char *argv[])
     }
 
     //Get the IP address
-    ipAddress = getIpAddressNum((char *)"10.3.0.40");
+    //ipAddress = getIpAddressNum((char *)"10.3.0.40");
+    ipAddress = getIpAddressNum((char *)"10.3.0.59");
     if(ipAddress == 0)
     {
-      fprintf(stderr, "Error: IP conversion error for 10.3.0.40");
+      //fprintf(stderr, "Error: IP conversion error for 10.3.0.40");
+      fprintf(stderr, "Error: IP conversion error for 10.3.0.59");
       return 1;
     }
 
@@ -350,7 +352,8 @@ int main(int argc, char *argv[])
     }
     else
     {
-      fprintf(stderr,"Error connecting to the BackendServer, 10.3.0.40:1085.\n");
+      //fprintf(stderr,"Error connecting to the BackendServer, 10.3.0.40:1085.\n");
+      fprintf(stderr,"Error connecting to the BackendServer, 10.3.0.59:1085.\n");
       return 1;
     }
 

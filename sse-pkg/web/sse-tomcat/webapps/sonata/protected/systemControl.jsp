@@ -40,7 +40,7 @@
 <%-- see if runsse is currently executing --%>
 
 <c:import var="procStatus" url="/servlet/CmdExecServlet">
-   <c:param name="command" value="ps -ef | grep runsse | grep -v grep" />
+   <c:param name="command" value="ps -ef | grep runsse.sh | grep -v grep" />
    <c:param name="noEcho" value="true" />
 </c:import>
 

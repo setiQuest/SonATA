@@ -11,7 +11,7 @@ sh sleep 10
 exec setAlarm ARM,sonata,Switching To exoplanets
 
 # change database to exoplanets
-db set name exoplanetsLBand
+db set name exoplanets201205
 
 # change catalog priorities
 sched set catshigh exoplanets,habcat

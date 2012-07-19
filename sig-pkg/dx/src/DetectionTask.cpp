@@ -236,7 +236,7 @@ DetectionTask::startActivity(Msg *msg)
 	deltaFreq -= activity->getSubchannelWidthMHz() / 2;
 
 	// initialize the signal ID for this activity
-	NssDate startTime = activity->getStartTime();
+	NssDate startTime = activity->getActualStartTime();
 	SignalIdGenerator sigGen(state->getSerialNumber(), params.activityId,
 			startTime);
 	/////////////////////////////////////////////////////////////////////

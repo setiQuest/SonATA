@@ -134,11 +134,16 @@ public:
   virtual string getDataProductsDir();
 
   virtual int getStartTime() const;
+  virtual int getStartBaseAccumTime() const;
+  virtual int getStartDataCollTime() const;
   virtual NssDate getStartTimeAsNssDate() const;
+  virtual NssDate getStartBaseAccumTimeAsNssDate() const;
+  virtual NssDate getStartDataCollTimeAsNssDate() const;
   virtual DbParameters & getDbParameters();
   void updateDbErrorComment(DbParameters &dbParam, const string& emsg);
   void updateIfcStatus(const IfcStatus& ifcStatus);
   void updateActivityStatistics();
+  void updateActivityStartDataCollTime();
 
   virtual void lookUpTargetCoordinates(
      MYSQL *conn, TargetId targetId,
@@ -210,8 +215,11 @@ protected:
   virtual void checkModesThatRequireDatabaseToBeOn();
   virtual void prepareForForcedArchivingAroundCenterTuning();
   virtual void prepareActivityUnits(const ActUnitList &actUnitList);
+  virtual int calculateStartBaseAccumTime();
+  virtual int calculateStartDataCollTime();
   virtual int calculateStartTime();
-  virtual void sendStartTime(const NssDate & startTime);
+  virtual void sendStartBaseAccumTime(const NssDate & startTime);
+  virtual void sendStartDataCollTime(const NssDate & startTime);
   virtual void handleTscopeReadyTimeout();
   virtual void handleTestSigReadyTimeout();
   virtual void handleIfcReadyTimeout();
@@ -626,6 +634,8 @@ private:
   Timeout<ObserveActivityImp> zxLookUpSetiLiveCandidatesTimeout_;
 
   ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,int> startTime_;
+  ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,int> startBaseAccumTime_;
+  ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,int> startDataCollTime_;
 
   int prevActStartTime_;
   TscopeStatusMultibeam tscopeStatusOnTarget_;

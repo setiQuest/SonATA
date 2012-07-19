@@ -1,4 +1,4 @@
-# sonata-start-kepler-3beams-1400-1750-obs.tcl
+# sonata-start-kepler-3beams-1152-1352-obs.tcl
 #
 # SSE seeker commands to start observing
 
@@ -54,7 +54,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {keplerLBand} current 
+db set name {kepler201205} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -119,8 +119,8 @@ sched set beam4 {off} current
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 1512.2000 current 
-sched set catshigh {exoplanets,exokepler} current 
+sched set beginfreq 1152.370 current 
+sched set catshigh {exokepler,exoplanets} current 
 sched set catshighmaxcounts 20000 current 
 sched set catslow {habcat,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
@@ -131,7 +131,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 1712.000000000 current 
+sched set endfreq 1352.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 

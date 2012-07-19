@@ -716,7 +716,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
 	 candidateIds.push_back(
 			 sigInfo.followUpSignal.origSignalId.number);
-
+cout << "Pulse Sig Id " <<
+	sigInfo.followUpSignal.origSignalId.number << endl;
 	 }
       }
       else // Cw, power or coherent
@@ -731,6 +732,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
 	 candidateIds.push_back(
 			 sigInfo.followUpSignal.origSignalId.number);
+cout << "Cw Sig Id " <<
+	sigInfo.followUpSignal.origSignalId.number << endl;
 	 }
       }
       // TBD add check for invalid signalType
@@ -762,7 +765,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 			      dxProxy_->getName(), targetId_,
 		       compampSubchannels, candidateIds );
        // Send compamp subchannels to the ZX
-       	sendRequestedCompampSubchannels(compampSubchannels);
+       	if(!stopCommandReceived_.get())
+		sendRequestedCompampSubchannels(compampSubchannels);
    }
 
    SseArchive::SystemLog() << sigSummary.str() << endl;
@@ -1103,7 +1107,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	  for (unsigned int i = 0; i < maxCompampSubchannels; i++)
 	  {
 		  subChanNum = 2*seed1 + 2*i*(seed2+1);
-		  if (subChanNum >= maxDxSubchannels ) break;
+		  if (subChanNum > maxDxSubchannels ) break;
 		  compampSubchannels.push_back( subChanNum);
 	  }
       }
@@ -1156,6 +1160,7 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      //cout << "subChannels " << subchannelList.size() << endl;
            if ( maxCompampSubchannels >= subchannelList.size())
            {
+		   // store all the subchannels that were found
               for (unsigned int signalIndex=0; 
 			      compampSubchannels.size() < subchannelList.size();
 		               ++signalIndex)
@@ -1165,14 +1170,16 @@ void ActivityUnitImp::sendRecentRfiMask(MYSQL *callerDbConn,
 	      if ( compampSubchannels.size() < maxCompampSubchannels)
 	      {
 		      // Add more subchannels until at max.
-		int lastSize = compampSubchannels.size();
+		unsigned int lastSize = compampSubchannels.size();
 		int lastSubChan = compampSubchannels[lastSize-1];
+		unsigned int addThisMany = maxCompampSubchannels - lastSize;
 
-		for ( unsigned int i = 0; i < (maxCompampSubchannels-lastSize); i++)
+		for ( unsigned int i = 0; i < addThisMany; i++)
 		{
-			int subChan = lastSubChan + seed1 + i*seed2;
+			int subChan = lastSubChan + 1 + 2*seed1 + 2*i*(seed2+1);
 			if (subChan >= maxDxSubchannels) break;
 			compampSubchannels.push_back(subChan);
+			lastSubChan = subChan;
 		}
 	      }
            }
@@ -1345,10 +1352,13 @@ void ActivityUnitImp::getRecentRfiSignals(
    sqlStmt << "SELECT distinct rfFreq from " << SignalTableName << " "
 	   << "where"
 	   << " rfFreq > " << beginFreqMhz
-	   << " and rfFreq < " << endFreqMhz
-	   << " and ((type = 'CwP' and power > " << minCwPower
-	   << ") or ( type = 'Pul' and power > " << minPulsePower << " )) "
-	   << " and UNIX_TIMESTAMP(activityStartTime) >="
+	   << " and rfFreq < " << endFreqMhz;
+   if (zxMode_)
+   {
+     sqlStmt   << " and ((type = 'CwP' and power > " << minCwPower
+	   << ") or ( type = 'Pul' and power > " << minPulsePower << " )) ";
+   }
+     sqlStmt   << " and UNIX_TIMESTAMP(activityStartTime) >="
 	   << " (UNIX_TIMESTAMP() - " << ageLimitSecs << ")";
 
    stringstream sqlStmtPrefix;
@@ -1874,7 +1884,6 @@ void ActivityUnitImp::putSignalIdIntoSqlStatement(
 
    sqlStmt << ", signalIdNumber = " 
 	   << signalId.number;
-
 }
 
 // convert the fields in an original signal Id into 
@@ -2299,7 +2308,7 @@ const string ActivityUnitImp::prepareDatabaseRecordStatement()
 
 	   << ", startOfDataCollection = '" 
 	   << SseUtil::isoDateTimeWithoutTimezone(
-	      getObsAct()->getStartTime())
+	      getObsAct()->getStartDataCollTime())
 	   << "' ";
 	
    RecordDxActivityParameters
@@ -2501,6 +2510,37 @@ void ActivityUnitImp::setStartTime(const StartActivity &startAct)
 
    // pass on the start time to the dxproxy
    dxProxy_->setStartTime(getActivityId(), startAct);
+
+   if (getObsAct()->getDbParameters().useDb())
+   {
+      updateStartTimeAndDxSkyFreqInDb(startAct);
+   }
+    
+}
+
+
+void ActivityUnitImp::setStartBaseAccumTime(const StartActivity &startAct)
+{
+   VERBOSE2(getVerboseLevel(),
+	    "ActivityUnit setStartTime" << endl;);
+
+   // pass on the start time to the dxproxy
+   dxProxy_->setStartTime(getActivityId(), startAct);
+
+//   if (getObsAct()->getDbParameters().useDb())
+ //  {
+  //    updateStartTimeAndDxSkyFreqInDb(startAct);
+   //}
+    
+}
+
+void ActivityUnitImp::setStartDataCollTime(const StartActivity &startAct)
+{
+   VERBOSE2(getVerboseLevel(),
+	    "ActivityUnit setStartTime" << endl;);
+
+   // pass on the start time to the dxproxy
+//   dxProxy_->setStartTime(getActivityId(), startAct);
 
    if (getObsAct()->getDbParameters().useDb())
    {
@@ -3630,8 +3670,9 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
   else
 #endif
   {
-    sqlStmt	  << previousActId_
-	   << " AND targetId = " << actUnit_->targetId_;
+    sqlStmt	  << previousActId_;
+   if (!actUnit_->zxMode_)
+	   sqlStmt <<  " AND targetId = " << actUnit_->targetId_;
   }
 
   sqlStmt << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
@@ -3664,8 +3705,7 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
   }
 
    sqlStmt << " ORDER by rfFreq ";
-
-
+ if (actUnit_->zxMode_) cout << sqlStmt.str();
    return sqlStmt.str();
 }
 
@@ -3765,7 +3805,8 @@ void LookUpCandidatesFromPrevAct::processCandidates(
 
       string reason(MysqlQuery::getString(row, reasonCol,
 					  __FILE__, __LINE__));
-
+if(actUnit_->zxMode_)
+	cout << "Act Id " << activityId << " zx " << dxNumber << " sigNumb " << signalNumber << endl;
       /*
         pfa and snr might be null if the previous obs was an OFF,
         just use the defaults in that case.
@@ -3895,7 +3936,7 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 
    sqlStmt << " ORDER by rfFreq ";
 
-   //cout << sqlStmt.str() << endl;
+   cout << sqlStmt.str() << endl;
 
    return sqlStmt.str();
 }
@@ -3916,7 +3957,7 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    processCandidates(cwPowerSigList_, pulseTrainList_,
 		   cwCoherentSigList_, duplicateCount);
 
-   //cout << cwPowerSigList_.size() << " zx candidates" << endl;
+   cout << cwPowerSigList_.size() << " zx candidates" << endl;
    if ((cwPowerSigList_.size() == 0) && (pulseTrainList_.size() == 0))
    {
 	   //cout << " Zero Candidates " << endl;
@@ -4577,35 +4618,34 @@ void LookUpCandidatesFromCounterpartDxs::extractConfirmationStats(
 void LookUpCandidatesFromCounterpartDxs::extractPulseTrainDescription(
    MYSQL_ROW row, PulseTrainDescription & descrip)
 {
-   descrip.pulsePeriod = MysqlQuery::getDouble(
-      row, pulsePeriodCol, __FILE__, __LINE__);
-   
-   descrip.numberOfPulses =  MysqlQuery::getInt(
-      row, numberOfPulsesCol, __FILE__, __LINE__);
-   
-   descrip.res = SseDxMsg::stringToResolution(
-      MysqlQuery::getString(row, resCol, __FILE__, __LINE__));
-}
+      descrip.pulsePeriod = MysqlQuery::getDouble(
+         row, pulsePeriodCol, __FILE__, __LINE__);
 
+      descrip.numberOfPulses =  MysqlQuery::getInt(
+         row, numberOfPulsesCol, __FILE__, __LINE__);
+
+      descrip.res = SseDxMsg::stringToResolution(
+         MysqlQuery::getString(row, resCol, __FILE__, __LINE__));
+}
 
 // Fetch pulses corresponding to the signalTableId from the pulseTrainTable and
 // put them in the pulseArray.  It's assumed that the pulse array is already
 // allocated and of size 'numberOfPulses'.
 
-void LookUpCandidatesFromCounterpartDxs::getPulsesForSignal(
-   MYSQL *conn,
-   const string &pulseTrainTableName, 
-   unsigned int signalTableId, 
-   Pulse pulseArray[],
-   int numberOfPulses)
-{
-   string methodName("getPulsesForSignal");
+ void LookUpCandidatesFromCounterpartDxs::getPulsesForSignal(
+    MYSQL *conn, 
+    const string &pulseTrainTableName, 
+    unsigned int signalTableId,
+    Pulse pulseArray[], 
+    int numberOfPulses)
+     {
+      string methodName("getPulsesForSignal");
 
-   stringstream sqlStmt;
-   sqlStmt.precision(PrintPrecision);    
-   sqlStmt.setf(std::ios::fixed);  // show all decimal places up to precision
- 
-   sqlStmt << "SELECT "
+     stringstream sqlStmt;
+     sqlStmt.precision(PrintPrecision);
+     sqlStmt.setf(std::ios::fixed);  // show all decimal places up to precision
+
+     sqlStmt << "SELECT "
 	   << "rfFreq, power, spectrumNumber, binNumber, pol " 
 	   << " FROM " << pulseTrainTableName
 	   << " WHERE "
@@ -4711,7 +4751,7 @@ PrepareFakeSecondaryCandidatesToForceArchiving(
       descrip.signalId.activityId = actUnit->getActivityId();
       descrip.signalId.dxNumber = actUnit->getDxNumber();
       descrip.signalId.activityStartTime = 
-	 actUnit->obsActivity_->getStartTimeAsNssDate();
+	 actUnit->obsActivity_->getStartDataCollTimeAsNssDate();
 
       // just set some plausible values for the rest of the fields
       descrip.pol = POL_BOTH;
@@ -5137,34 +5177,39 @@ updateCandidateSignalClassAndReasonInDb(
 	   << " ";
    
    actUnit_->submitDbQueryWithLoggingOnError(conn_, sqlStmt.str(),
-					     methodName, __LINE__);
+		   methodName, __LINE__);
 
 }
 
-// ------------------------------------------------
+// --------------------------------------------------------
 
 void ActivityUnitImp::submitDbQueryWithLoggingOnError(
    MYSQL *callerDbConn,
-   const string &sqlStmt,
-   const string &callingMethodName,
-   int lineNumber)
+      const string &sqlStmt,
+        const string &callingMethodName,
+    int lineNumber)
 {
    if (mysql_query(callerDbConn, sqlStmt.c_str()) != 0)
-   {	
-      stringstream strm;
-      strm << callingMethodName 
-	   << " submitDbQuery: MySQL error: " 
-	   << mysql_error(callerDbConn)  << " "
+      {
+           stringstream strm;
+          strm << callingMethodName
+             << " submitDbQuery: MySQL error: "
+             << mysql_error(callerDbConn)  << " "
            << sqlStmt.c_str() << endl;
-      
-      SseMessage::log(MsgSender,
-                      getActivityId(), SSE_MSG_DBERR,
-                      SEVERITY_WARNING, strm.str(),
-                      __FILE__, lineNumber);
-if (strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0)
-	      dxProxy_->restart();
-   }
+
+        SseMessage::log(MsgSender, 
+			getActivityId(), 
+			SSE_MSG_DBERR, 
+			SEVERITY_WARNING, 
+			strm.str(),
+                    __FILE__, lineNumber);
+	if (strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0)
+              dxProxy_->restart();
+     }
 }
+
+
+// ------------------------------------------------
 
 void ActivityUnitImp::submitDbQueryWithThrowOnError(
    MYSQL *conn,
@@ -5185,6 +5230,7 @@ void ActivityUnitImp::submitDbQueryWithThrowOnError(
 }
 
 // ------------------------------------------------
+
 
 #ifdef FIND_TEST_SIGNAL
 

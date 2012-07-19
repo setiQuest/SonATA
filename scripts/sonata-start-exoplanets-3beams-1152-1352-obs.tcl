@@ -1,11 +1,11 @@
-# sonata-start-kepler-3beams-1400-1750-obs.tcl
+# sonata-start-exoplanets-3beams-1152-1352-obs.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-#sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
+#sh echo "SonATA taking array." | mailx -s 'SonATA taking array for exoplanets' -r jrichards@seti.org ata-staff@seti.org
 
-exec setAlarm ARM,sonata,Kepler
+exec setAlarm ARM,sonata,exoplanets
 
 # connect to the backend server
 tscope setup
@@ -54,7 +54,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {keplerLBand} current 
+db set name {exoplanets201205} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -77,7 +77,7 @@ dx set basesubave 1 current
 dx set basewarnmeanlower 400.000000000 current 
 dx set basewarnmeanupper 10000.000000000 current 
 dx set basewarn on current 
-dx set basewarnrange 10000.000000000 current 
+dx set basewarnrange 1000.000000000 current 
 dx set basewarnstddev 75.000000000 current 
 dx set clustfreqtol 339.000000000 current 
 dx set coherentdetlim 0.000000000 current 
@@ -104,7 +104,7 @@ dx set pulsethresh 12.000000000 current
 dx set recentrfienable {on} current 
 dx set recentrfimaskelemwidmin 1000.000000000 current 
 dx set recentrfimasksizemax 4096 current 
-dx set secondarycwthresh -18.000000000 current 
+dx set secondarycwthresh -10.000000000 current 
 dx set secondarypfamargin 3.000000000 current 
 dx set secondarytrainsignifthresh -17.000000000 current 
 dx set singletthresh 100.000000000 current 
@@ -119,10 +119,10 @@ sched set beam4 {off} current
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 1512.2000 current 
-sched set catshigh {exoplanets,exokepler} current 
+sched set beginfreq 1152.370 current 
+sched set catshigh {exoplanets,habcat} current 
 sched set catshighmaxcounts 20000 current 
-sched set catslow {habcat,tycho2subset,tycho2remainder} current 
+sched set catslow {tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 
@@ -131,7 +131,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 1712.000000000 current 
+sched set endfreq 1352.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -186,7 +186,6 @@ tscope set tuninga 1420.000000000 current
 tscope set tuningb 1420.000000000 current 
 tscope set tuningc 1420.000000000 current 
 tscope set tuningd 1420.000000000 current 
-
 
 source antenna-list.tcl
 

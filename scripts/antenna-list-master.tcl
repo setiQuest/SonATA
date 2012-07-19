@@ -19,6 +19,6 @@ tscope assign beamyd1 1a,1c,1d,1e,1g,2b,2c,2e,2f,2g,2j,3d,3l,4k,4l,5b,5c,5g
 
 # ANTS MARKED GOOD (BF3)
 tscope assign beamxd2 1a,1c,1d,2b,2c,2e,2f,2g,2j,2k,2m,3d,3j,3l,4e,4k,4l,5b,5c,5g
-tscope assign beamyd2 1a,1c,1d,1e,1g,2b,2c,2e,2f,2g,2j,3d,3l,4k,4l,5b,5c,5g
+tscope assign beamyd2 1a,1c,1d,1e,1g,2b,2c,2e,2f,3d,3l,4k,4l,5b,5c,5g
 
  

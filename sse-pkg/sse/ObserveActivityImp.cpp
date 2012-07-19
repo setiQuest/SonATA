@@ -79,7 +79,7 @@
 using namespace std;
 
 static const char * IfAttnDbOffsetFilename = "ifAttnDbOffset.cfg";
-static const double DxHalfFrameLengthSecs = 0.80;
+static const double DxHalfFrameLengthSecs = 0.75;
 static const int PrintPrecision = 9;  // MilliHz
 static const char * PrimaryBeam = "primary";
 
@@ -502,10 +502,36 @@ int ObserveActivityImp::getStartTime() const
 	return startTime_.value();
 }
 
+int ObserveActivityImp::getStartBaseAccumTime() const
+{
+	return startBaseAccumTime_.value();
+}
+
+int ObserveActivityImp::getStartDataCollTime() const
+{
+	return startDataCollTime_.value();
+}
+
 NssDate ObserveActivityImp::getStartTimeAsNssDate() const
 {
 	NssDate nssDate;
 	nssDate.tv_sec = getStartTime();
+
+	return nssDate;
+}
+
+NssDate ObserveActivityImp::getStartBaseAccumTimeAsNssDate() const
+{
+	NssDate nssDate;
+	nssDate.tv_sec = getStartBaseAccumTime();
+
+	return nssDate;
+}
+
+NssDate ObserveActivityImp::getStartDataCollTimeAsNssDate() const
+{
+	NssDate nssDate;
+	nssDate.tv_sec = getStartDataCollTime();
 
 	return nssDate;
 }
@@ -1277,13 +1303,16 @@ void ObserveActivityImp::completeRemainingDxPreparation()
 {
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": "
 			<< "ObserveActivityImp::completeRemainingDxPreparation" << endl;);
+	startBaseAccumTime_ = calculateStartBaseAccumTime();
+	startDataCollTime_ = calculateStartDataCollTime();
 
-	startTime_ = calculateStartTime();
+// Update the start time in the database for SetiLive.
+	updateActivityStartDataCollTime();
 
 	if (followUpObservationEnabled())
 	{
 		int nSignalsSent = 
-			sendFollowupCandidateSignals(getStartTimeAsNssDate());
+			sendFollowupCandidateSignals(getStartBaseAccumTimeAsNssDate());
 		if (nSignalsSent == 0)
 		{
 			terminateActivity("No signals found for followup");
@@ -1291,7 +1320,8 @@ void ObserveActivityImp::completeRemainingDxPreparation()
 		}
 	}
 
-	sendStartTime(getStartTimeAsNssDate());
+	sendStartBaseAccumTime(getStartBaseAccumTimeAsNssDate());
+	sendStartDataCollTime(getStartDataCollTimeAsNssDate());
 
 	updateStatus(ObserveActivityStatus::PENDING_DATA_COLLECTION);
 
@@ -1536,6 +1566,7 @@ void ObserveActivityImp::sendRecentRfiMask()
 	{
 		ActivityUnit *actUnit(*it);
 
+		if (activityWrappingUp_.get() == true) break;
 		actUnit->sendRecentRfiMask(dbParametersForWorkThread_.getDb(),
 				targetsToExclude, &refHHMMSS);
 
@@ -1856,7 +1887,7 @@ int ObserveActivityImp::sendFollowupCandidateSignals(const NssDate &startTime)
 	return totalFollowUpSignalCount;
 }
 
-void ObserveActivityImp::sendStartTime(const NssDate & startTime)
+void ObserveActivityImp::sendStartBaseAccumTime(const NssDate & startTime)
 {
 	StartActivity startAct;
 	startAct.startTime = startTime;
@@ -1865,14 +1896,34 @@ void ObserveActivityImp::sendStartTime(const NssDate & startTime)
 			actUnitStillWorkingListMutexWrapper_.getListCopy());
 
 	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
-			"ObserveActivityImp: sending start time to " <<
+			"ObserveActivityImp: sending base accum start time to " <<
 			actUnitList.size() << " activity units" << endl;);
 
 	ActUnitList::iterator it;
 	for (it = actUnitList.begin(); it != actUnitList.end(); ++it)
 	{
 		ActivityUnit *actUnit(*it);
-		actUnit->setStartTime(startAct); 
+		actUnit->setStartBaseAccumTime(startAct); 
+	}
+}
+
+void ObserveActivityImp::sendStartDataCollTime(const NssDate & startTime)
+{
+	StartActivity startAct;
+	startAct.startTime = startTime;
+
+	ActUnitList actUnitList(
+			actUnitStillWorkingListMutexWrapper_.getListCopy());
+
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": " <<
+			"ObserveActivityImp: sending data coll start time to " <<
+			actUnitList.size() << " activity units" << endl;);
+
+	ActUnitList::iterator it;
+	for (it = actUnitList.begin(); it != actUnitList.end(); ++it)
+	{
+		ActivityUnit *actUnit(*it);
+		actUnit->setStartDataCollTime(startAct); 
 	}
 }
 
@@ -1915,14 +1966,6 @@ startActUnitWatchdogTimers()
 			& ObserveActivityImp::handleDoneSendingCwCoherentSignalsTimeout,
 			doneSendingCwCoherentSignalsWaitDurationSecs);
 
-	// Set timer for Zxs to check database for SetiLive Candidates
-	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
- 	   static_cast<int>(startTimeOffset_ + 2.0*dataCollectionLengthSecs_ +
-				 baselineAccumulationTimeSecs );
-
-     startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
-	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,
-			zxLookUpSetiLiveCandidatesWaitDurationSecs);
 	// Start a watchdog timer, waiting for all activity units to
 	// report in as activity complete.
 
@@ -1932,6 +1975,13 @@ startActUnitWatchdogTimers()
 	startWatchdogTimer(actUnitCompleteTimeout_,
 			&ObserveActivityImp::handleActUnitCompleteTimeout,
 			sigDetectWaitDurationSecs);
+	// Set timer for Zxs to check database for SetiLive Candidates
+	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
+ 	   static_cast<int>( 0.95*sigDetectWaitDurationSecs);
+
+     startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
+	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,
+			zxLookUpSetiLiveCandidatesWaitDurationSecs);
 }
 
 void ObserveActivityImp::
@@ -2593,7 +2643,7 @@ int ObserveActivityImp::calculateStartTime()
 	// log start time
 	stringstream strm;
 
-	strm << "Scheduled DX Start Time: "
+	strm << "Scheduled DX Baseline Accumulation Start Time: "
 		<< SseUtil::isoDateTime(startTimeSecs) 
 		<< " (" << startTimeSecs << " secs)"
 		<< endl;
@@ -2602,6 +2652,63 @@ int ObserveActivityImp::calculateStartTime()
 
 	SseArchive::SystemLog() << "Act " << getId() << ": " 
 		<< strm.str();
+
+	return startTimeSecs;
+}
+
+int ObserveActivityImp::calculateStartBaseAccumTime()
+{
+	// current time, in abs seconds since the epoch
+	time_t currentTime = time(NULL);   
+
+	// when to start the obs, in abs seconds
+	time_t startTimeSecs = currentTime + startTimeOffset_;
+
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": " 
+			<< "data collection scheduled start time: " 
+			<< SseUtil::isoDateTime(startTimeSecs) << endl);
+
+	// log start time
+	stringstream strm;
+
+	strm << "Scheduled DX Baseline Accumulation Start Time: "
+		<< SseUtil::isoDateTime(startTimeSecs) 
+		<< " (" << startTimeSecs << " secs)"
+		<< endl;
+
+	obsSummaryTxtStrm_ << strm.str();
+
+	SseArchive::SystemLog() << "Act " << getId() << ": " 
+		<< strm.str();
+
+	return startTimeSecs;
+}
+
+
+// Calculate the absolute time in secs for the start of an observation.
+int ObserveActivityImp::calculateStartDataCollTime()
+{
+
+	int baselineInitAccumTimeSecs = static_cast<int> (
+			dxParameters_.getDxActParamStruct().baselineInitAccumHalfFrames *
+			DxHalfFrameLengthSecs);
+
+	// when to start the obs, in abs seconds
+	time_t startTimeSecs = getStartBaseAccumTime() + baselineInitAccumTimeSecs;
+
+	// log start time
+	stringstream strm;
+
+	strm << "Scheduled DX Data Collection Start Time: "
+		<< SseUtil::isoDateTime(startTimeSecs) 
+		<< " (" << startTimeSecs << " secs)"
+		<< endl;
+
+	obsSummaryTxtStrm_ << strm.str();
+
+	SseArchive::SystemLog() << "Act " << getId() << ": " 
+		<< strm.str();
+
 
 	return startTimeSecs;
 }
@@ -6783,11 +6890,36 @@ void ObserveActivityImp::updateActivityStatistics()
 		stringstream sqlstmt;
 
 		sqlstmt << "UPDATE Activities SET "
-			<< " startOfDataCollection = '" 
-			<< SseUtil::isoDateTimeWithoutTimezone(startTime_.value())
-			<< "'"
-			<< ", validObservation = 'Yes',"
+			<< " validObservation = 'Yes',"
 			<< prepareObsSummStatsSqlUpdateStmt(combinedObsSummaryStats_)
+			<< " where id = " << getId()
+			<< " ";
+
+		submitDbQueryWithThrowOnError(sqlstmt.str(), methodName, __LINE__);
+
+	}
+	catch (SseException &except)
+	{
+		SseMessage::log(MsgSender, getId(),
+				except.code(), except.severity(), except.descrip(),
+				except.sourceFilename(), except.lineNumber());
+	}
+
+}
+void ObserveActivityImp::updateActivityStartDataCollTime()
+{
+	const string methodName("updateActivityStartDataCollTime");
+
+	try 
+	{
+		checkForZeroActId();
+
+		stringstream sqlstmt;
+
+		sqlstmt << "UPDATE Activities SET "
+			<< " startOfDataCollection = '" 
+			<< SseUtil::isoDateTimeWithoutTimezone(startDataCollTime_.value())
+			<< "'"
 			<< " where id = " << getId()
 			<< " ";
 
