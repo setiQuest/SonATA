@@ -96,7 +96,7 @@ setenv DXHOST9_OPTS "$DX_OPTS $BEAM3_DX_OPTS $XPOL_ONLY"
 
 # Backend Server Host for use with ATA
 #-------------------------------------
-setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST tumulus
+setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST sonata
 
 ${HOME}/sonata_install/scripts/kes-switchConfigFile-2beam-2dx.tcsh
 
