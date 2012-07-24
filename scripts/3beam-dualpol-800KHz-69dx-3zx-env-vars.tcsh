@@ -111,8 +111,7 @@ setenv ZXHOST2_ZX_NAMES "zx2900"
 setenv ZXHOST3_ZX_NAMES "zx3900"
 
 # Command line arguments for all ZXs
-setenv ZX_OPTS "-Z"
-#setenv ZX_OPTS "  "	# blank for now
+setenv ZX_OPTS "-Z -h 8890"
 
 
 # Set up command line arguments for each ZX_HOST
