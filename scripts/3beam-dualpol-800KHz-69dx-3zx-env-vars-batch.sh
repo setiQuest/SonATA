@@ -174,7 +174,7 @@ export ZXHOST3_OPTS
 
 # Backend Server Host for use with ATA
 #-------------------------------------
-CONTROL_COMPONENTS_ANT_CONTROL_HOST=tumulus
+CONTROL_COMPONENTS_ANT_CONTROL_HOST=sonata
 export CONTROL_COMPONENTS_ANT_CONTROL_HOST
 
 ${HOME}/sonata_install/scripts/switchConfigFile-3beam-800KHz-69dxs-3zx.tcsh

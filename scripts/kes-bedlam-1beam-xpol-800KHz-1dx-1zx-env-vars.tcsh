@@ -127,5 +127,5 @@ setenv ZXHOST3_OPTS "$DX_OPTS $BEAM3_DX_OPTS ZX_OPTS $XPOL_ONLY"
 
 # Backend Server Host for use with ATA
 #-------------------------------------
-setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST tumulus
+setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST sonata
 ${HOME}/sonata_install/scripts/kes-switchConfigFile-1beam-800KHz-1dx-1zx.tcsh

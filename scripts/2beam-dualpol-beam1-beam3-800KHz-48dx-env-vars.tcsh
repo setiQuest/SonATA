@@ -99,5 +99,5 @@ setenv DXHOST9_OPTS "$DX_OPTS $BEAM3_DX_OPTS "
 
 # Backend Server Host for use with ATA
 #-------------------------------------
-setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST tumulus
+setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST sonata
 ${HOME}/sonata_install/scripts/switchConfigFile-2beam-beam1-beam3-800KHz-48dxs.tcsh

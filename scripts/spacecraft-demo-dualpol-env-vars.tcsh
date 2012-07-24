@@ -64,7 +64,7 @@ setenv DXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS"
 
 # Backend Server Host for use with ATA
 #-------------------------------------
-#setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST tumulus
+#setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST sonata
 
 # Backend Server Host for offline testing
 setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST localhost
