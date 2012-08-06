@@ -120,7 +120,7 @@ sched set beam5 {off} current
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
 sched set beginfreq 1152.370 current 
-sched set catshigh {exokepler,exoplanets} current 
+sched set catshigh {exoplanets,exokepler} current 
 sched set catshighmaxcounts 20000 current 
 sched set catslow {habcat,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 

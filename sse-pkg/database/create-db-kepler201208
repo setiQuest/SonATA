@@ -130,8 +130,8 @@ sourceFile $catalogDir/Revised_Kepler_HZ_catalog-4.9.12.txt
 echo "exokepler-1"
 sourceFile $catalogDir/KOI-exokepler-load-data-JT3.data
 
-echo "exokepelr-2"
+echo "exokepler-2"
 sourceFile $catalogDir/add2exokepler-1.data
 
 echo "exokepler-3"
-sourceFile $cataloaDir/Addition2_ExoKeplerCatalog.4.9.12.txt
+sourceFile $catalogDir/Addition2_ExoKeplerCatalog.4.9.12.txt
