@@ -81,6 +81,8 @@ public:
   virtual list<Range>::const_iterator aboveRange(float64_t value) const;
   virtual list<Range>::iterator aboveRange(float64_t value);
   virtual list<Range>::const_iterator rangeEnd() const;
+  virtual void convertFreqBandToObsRange(
+			const vector<FrequencyBand> &bands);
 
   // total frequency range in Range
   virtual float64_t totalRange() const;

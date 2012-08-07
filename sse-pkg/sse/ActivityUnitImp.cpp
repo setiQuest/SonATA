@@ -716,8 +716,8 @@ void ActivityUnitImp::forwardFollowUpSignalsToDx(
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
 	 candidateIds.push_back(
 			 sigInfo.followUpSignal.origSignalId.number);
-cout << "Pulse Sig Id " <<
-	sigInfo.followUpSignal.origSignalId.number << endl;
+//cout << "Pulse Sig Id " <<
+	//sigInfo.followUpSignal.origSignalId.number << endl;
 	 }
       }
       else // Cw, power or coherent
@@ -732,8 +732,8 @@ cout << "Pulse Sig Id " <<
 			 getSubchannel(sigInfo.followUpSignal.rfFreq));
 	 candidateIds.push_back(
 			 sigInfo.followUpSignal.origSignalId.number);
-cout << "Cw Sig Id " <<
-	sigInfo.followUpSignal.origSignalId.number << endl;
+//cout << "Cw Sig Id " <<
+	//sigInfo.followUpSignal.origSignalId.number << endl;
 	 }
       }
       // TBD add check for invalid signalType
@@ -2642,7 +2642,6 @@ void ActivityUnitImp::dxTuned(DxProxy* dx, const DxTuned &dxTuned)
    ActUnitSummaryStrm()
       << dx->getName() << endl
       << dxTuned;
-
    actualDxTunedFreqMhz_ = dxTuned.dxSkyFreq;
 
    // Tuned freq should be within a few Khz of the requested freq
@@ -3702,7 +3701,7 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
   }
 
    sqlStmt << " ORDER by rfFreq ";
- if (actUnit_->zxMode_) cout << sqlStmt.str();
+// if (actUnit_->zxMode_) cout << sqlStmt.str();
    return sqlStmt.str();
 }
 
@@ -3802,8 +3801,8 @@ void LookUpCandidatesFromPrevAct::processCandidates(
 
       string reason(MysqlQuery::getString(row, reasonCol,
 					  __FILE__, __LINE__));
-if(actUnit_->zxMode_)
-	cout << "Act Id " << activityId << " zx " << dxNumber << " sigNumb " << signalNumber << endl;
+//if(actUnit_->zxMode_)
+//	cout << "Act Id " << activityId << " zx " << dxNumber << " sigNumb " << signalNumber << endl;
       /*
         pfa and snr might be null if the previous obs was an OFF,
         just use the defaults in that case.
@@ -3933,7 +3932,7 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 
    sqlStmt << " ORDER by rfFreq ";
 
-   cout << sqlStmt.str() << endl;
+   //cout << sqlStmt.str() << endl;
 
    return sqlStmt.str();
 }
@@ -3954,7 +3953,7 @@ void LookUpCandidatesFromSetiLive::processQueryResults()
    processCandidates(cwPowerSigList_, pulseTrainList_,
 		   cwCoherentSigList_, duplicateCount);
 
-   cout << cwPowerSigList_.size() << " zx candidates" << endl;
+   //cout << cwPowerSigList_.size() << " zx candidates" << endl;
    if ((cwPowerSigList_.size() == 0) && (pulseTrainList_.size() == 0))
    {
 	   //cout << " Zero Candidates " << endl;

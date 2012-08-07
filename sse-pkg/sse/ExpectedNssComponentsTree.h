@@ -76,24 +76,31 @@ class ExpectedNssComponentsTree
     vector<string> getIfcs();
     vector<string> getBeams();
     vector<string> getDxs();
+    vector<string> getZxs();
     vector<string> getChans();
     vector<string> getAtaBeams();
 
     // get the components "under" a given component
     vector<string> getBeamsForIfc(const string &ifc);
     vector<string> getDxsForBeam(const string &beam);
+    vector<string> getZxsForBeam(const string &beam);
     vector<string> getChansForBeam(const string &beam);
     vector<string> getDxsForIfc(const string &ifc);
+    vector<string> getZxsForIfc(const string &ifc);
 
     // get all components of a type for a site
     vector<string> getIfcsForSite(const string &site);
     vector<string> getDxsForSite(const string &site);
+    vector<string> getZxsForSite(const string &site);
     vector<string> getChansForSite(const string &site);
 
     string getBeamForDx(const string & dx);
+    string getBeamForZx(const string & dx);
     string getBeamForChan(const string & chan);
     string getChanForDx(const string & dx);
+    string getChanForZx(const string & dx);
     string getIfcForDx(const string &dx);
+    string getIfcForZx(const string &dx);
 
     vector<string> getAtaBeamsForBeam(const string &beam);
 

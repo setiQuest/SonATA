@@ -49,6 +49,7 @@ class NssComponentTree
 {
  public:
     NssComponentTree(const DxList &dxList,
+                     const DxList &zxList,
 		     const ChannelizerList & chanList,
 		     const IfcList &ifcList,
 		     const TscopeList &tscopeList,
@@ -58,7 +59,9 @@ class NssComponentTree
     virtual ~NssComponentTree();
 
     DxList & getDxs();
+    DxList & getZxs();
     DxList & getDxsForIfc(IfcProxy *ifcProxy);
+    DxList & getZxsForIfc(IfcProxy *ifcProxy);
 
     ChannelizerList & getChans();
     IfcList & getIfcs();
@@ -67,6 +70,7 @@ class NssComponentTree
 
     IfcList getIfcsForBeams(std::vector<std::string> beamNames);
     DxList getDxsForBeams(std::vector<std::string> beamNames);
+    DxList getZxsForBeams(std::vector<std::string> beamNames);
     ChannelizerList getChansForBeams(std::vector<std::string> beamNames);
 
     ExpectedNssComponentsTree *getExpectedNssComponentsTree();

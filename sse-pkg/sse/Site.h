@@ -52,6 +52,7 @@ class Site {
 
 public:
     Site(const string &dxPort, 
+         const string &zxPort, 
 	 const string &dxArchiverPort, 
 	 const string &channelizerPort, 
 	 const string &dxArchiver1Hostname, 
@@ -72,6 +73,7 @@ public:
    ~Site();
 
     NssComponentManager<DxProxy> *dxManager();
+    NssComponentManager<DxProxy> *zxManager();
     NssComponentManager<DxArchiverProxy> *dxArchiverManager();
     NssComponentManager<ChannelizerProxy> *channelizerManager();
     NssComponentManager<IfcProxy> *ifcManager();

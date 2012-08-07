@@ -69,14 +69,18 @@ struct NssComponentTreeInternal
     ~NssComponentTreeInternal();
 
     DxList & getDxListForIfc(IfcProxy *ifcProxy);
+    DxList & getZxListForIfc(IfcProxy *ifcProxy);
 
     void createDxListsForIfcs();
+    void createZxListsForIfcs();
     void getDxsConnectedToIfc(IfcProxy *ifcProxy, DxList &outputDxList);
+    void getZxsConnectedToIfc(IfcProxy *ifcProxy, DxList &outputDxList);
 
     // data
 
     IfcList ifcList_;
     DxList dxList_;
+    DxList zxList_;
     ChannelizerList chanList_;
     TscopeList tscopeList_;
     TestSigList testSigList_;
@@ -84,6 +88,7 @@ struct NssComponentTreeInternal
     ExpectedNssComponentsTree *expectedNssComponentsTree_;
 
     DxListForIfcMap dxListForIfc_;
+    DxListForIfcMap zxListForIfc_;
 
 };
 
@@ -107,7 +112,6 @@ void NssComponentTreeInternal::createDxListsForIfcs()
 {
     // create a DxList for each ifc, based on the expectedNssComponentsTree
     // information
-
     for (IfcList::iterator it = ifcList_.begin(); 
 	 it != ifcList_.end(); it++)
     {
@@ -127,6 +131,30 @@ void NssComponentTreeInternal::createDxListsForIfcs()
 
 }
 
+void NssComponentTreeInternal::createZxListsForIfcs()
+{
+    // create a ZxList for each ifc, based on the expectedNssComponentsTree
+    // information
+
+    for (IfcList::iterator it = ifcList_.begin(); 
+	 it != ifcList_.end(); it++)
+    {
+	IfcProxy *ifcProxy = *it;
+	DxList *zxList = new DxList;
+	
+	getZxsConnectedToIfc(ifcProxy, *zxList);
+
+	zxList->sort(CompareDxsByName);
+
+	// ifcProxy shouldn't already be in the map
+	Assert(zxListForIfc_.find(ifcProxy) == zxListForIfc_.end());
+
+	zxListForIfc_[ifcProxy] = zxList;
+	
+    }
+
+}
+
 
 // Find the dx proxies that are connected to the given
 // ifc, and store them in the outputDxList
@@ -134,10 +162,8 @@ void NssComponentTreeInternal::createDxListsForIfcs()
 void NssComponentTreeInternal::getDxsConnectedToIfc(IfcProxy *ifcProxy,
 						     DxList &outputDxList)
 {
-
     // First, use the name of the ifcProxy to look up the
     // names of the dxs that are associated with it.
-
     Assert(ifcProxy);
     string ifcName = ifcProxy->getName();
 
@@ -147,7 +173,6 @@ void NssComponentTreeInternal::getDxsConnectedToIfc(IfcProxy *ifcProxy,
 
 #if 0
     // debug: print the names
-    cout << "dxs expected to be attached to ifc: " << ifcName << endl;
     for (vector<string>::iterator it = expectedDxNames.begin();
 	 it != expectedDxNames.end(); ++it)
     {
@@ -175,13 +200,67 @@ void NssComponentTreeInternal::getDxsConnectedToIfc(IfcProxy *ifcProxy,
 
 }
 
+// Find the zx proxies that are connected to the given
+// ifc, and store them in the outputZxList
+
+void NssComponentTreeInternal::getZxsConnectedToIfc(IfcProxy *ifcProxy,
+						     DxList &outputZxList)
+{
+
+    // First, use the name of the ifcProxy to look up the
+    // names of the zxs that are associated with it.
+
+    Assert(ifcProxy);
+    string ifcName = ifcProxy->getName();
+
+    Assert(expectedNssComponentsTree_);
+    vector<string> expectedZxNames =
+	expectedNssComponentsTree_->getZxsForIfc(ifcName);
+
+#if 0
+    // debug: print the names
+    cout << "zxs expected to be attached to ifc: " << ifcName << endl;
+    for (vector<string>::iterator it = expectedZxNames.begin();
+	 it != expectedZxNames.end(); ++it)
+    {
+	cout << *it << " ";
+    }
+    cout << endl;
+#endif 
+
+    // Now go through the zx proxy list.
+    // For each proxy whose name is on the expectedZxNames list, add
+    // it to the output proxy list.
+
+    DxList & zxProxyList = zxList_;
+    for (DxList::iterator it = zxProxyList.begin();
+	 it != zxProxyList.end(); ++it)
+    {
+	DxProxy *zxProxy = *it;
+	if (find(expectedZxNames.begin(), expectedZxNames.end(),
+		 zxProxy->getName()) != expectedZxNames.end())
+	{
+	    outputZxList.push_back(zxProxy);
+	}    
+    }
+
+
+}
+
 
 DxList & NssComponentTreeInternal::getDxListForIfc(IfcProxy *ifcProxy)
 {
    // make sure ifcProxy is in the map
    Assert(dxListForIfc_.find(ifcProxy) != dxListForIfc_.end());
-
    return *dxListForIfc_[ifcProxy];
+}
+
+DxList & NssComponentTreeInternal::getZxListForIfc(IfcProxy *ifcProxy)
+{
+   // make sure ifcProxy is in the map
+   Assert(zxListForIfc_.find(ifcProxy) != zxListForIfc_.end());
+
+   return *zxListForIfc_[ifcProxy];
 }
 
 
@@ -190,6 +269,7 @@ DxList & NssComponentTreeInternal::getDxListForIfc(IfcProxy *ifcProxy)
 // ---- begin NssComponentTree ----
 
 NssComponentTree::NssComponentTree(const DxList &dxList,
+                                   const DxList &zxList,
                                    const ChannelizerList & chanList,
 				   const IfcList &ifcList,
 				   const TscopeList &tscopeList,
@@ -203,7 +283,9 @@ NssComponentTree::NssComponentTree(const DxList &dxList,
     // DX
     internal_->dxList_ = dxList;
     internal_->dxList_.sort(CompareDxsByName);
-
+    // ZX
+    internal_->zxList_ = zxList;
+    internal_->zxList_.sort(CompareDxsByName);
     // CHANNELIZER
     internal_->chanList_ = chanList;
     internal_->chanList_.sort(CompareChansByName);
@@ -211,7 +293,6 @@ NssComponentTree::NssComponentTree(const DxList &dxList,
     // IFC
     internal_->ifcList_ = ifcList;
     internal_->ifcList_.sort(CompareIfcsByName);
-
     // tscope
     internal_->tscopeList_ = tscopeList;
 
@@ -224,7 +305,7 @@ NssComponentTree::NssComponentTree(const DxList &dxList,
     // create a Dxlist for each ifc, based on the expectedNssComponentsTree
     // information
     internal_->createDxListsForIfcs();
-
+    internal_->createZxListsForIfcs();
 }
 
 NssComponentTree::~NssComponentTree()
@@ -238,12 +319,23 @@ DxList & NssComponentTree::getDxs()
     return internal_->dxList_;
 }
 
+//-- Zx ---
+DxList & NssComponentTree::getZxs()
+{
+    return internal_->zxList_;
+}
+
 // Return a list of dx proxies that are on the same IF chain
 // as the given ifcProxy
 
 DxList & NssComponentTree::getDxsForIfc(IfcProxy *ifcProxy)
 {
     return internal_->getDxListForIfc(ifcProxy);
+}
+
+DxList & NssComponentTree::getZxsForIfc(IfcProxy *ifcProxy)
+{
+    return internal_->getZxListForIfc(ifcProxy);
 }
 
 
@@ -311,6 +403,7 @@ IfcList NssComponentTree::getIfcsForBeams(std::vector<std::string> beamNames)
 }
 
 
+
 DxList NssComponentTree::getDxsForBeams(std::vector<std::string> beamNames)
 {
     DxList localDxList;
@@ -335,6 +428,27 @@ DxList NssComponentTree::getDxsForBeams(std::vector<std::string> beamNames)
     return localDxList;
 }
 
+DxList NssComponentTree::getZxsForBeams(std::vector<std::string> beamNames)
+{
+    DxList localZxList;
+
+    // Go through list of zx proxies.  For each one whose beam is
+    // on the incoming beamNames argument, add it to the local list.
+    for (DxList::iterator it = internal_->zxList_.begin();
+	 it != internal_->zxList_.end(); ++it)
+    {
+	DxProxy *zxProxy = *it;
+	string beamForZx = internal_->expectedNssComponentsTree_->getBeamForZx(zxProxy->getName());
+	if (find(beamNames.begin(), beamNames.end(), beamForZx)
+	    != beamNames.end())
+	{
+	    localZxList.push_back(zxProxy);
+	}
+    }
+
+    return localZxList;
+}
+
 
 
 
@@ -348,9 +462,7 @@ ChannelizerList NssComponentTree::getChansForBeams(std::vector<std::string> beam
 	 it != internal_->chanList_.end(); ++it)
     {
 	ChannelizerProxy *chanProxy = *it;
-//cout << "Chan Name " << chanProxy->getName() << endl;
 	string beamForChan = internal_->expectedNssComponentsTree_->getBeamForChan(chanProxy->getName());
-//cout << "Beam " << beamForChan << endl;
 	if (find(beamNames.begin(), beamNames.end(), beamForChan)
 	    != beamNames.end())
 	{

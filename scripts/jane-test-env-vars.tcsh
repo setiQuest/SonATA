@@ -9,12 +9,13 @@ setenv SSE_SETUP "${HOME}/sonata_install/setup"
 #------------------------------------
 
 # Logical Channelizer Host Names
-setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
+#setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
+setenv RUNSSE_CHAN_HOSTS "chanhost1x chanhost2x"
 
 # Actual Channelizer Host Names
-setenv CHANHOST1X "seti000-2"
-setenv CHANHOST2X "seti001-1"
-setenv CHANHOST3X "seti002-1"
+setenv CHANHOST1X "angral"
+setenv CHANHOST2X "angral"
+setenv CHANHOST3X "angral"
 setenv CHANHOST1Y "seti000-2"
 setenv CHANHOST2Y "seti001-1"
 setenv CHANHOST3Y "seti002-1"
@@ -27,7 +28,7 @@ setenv CHANHOST2Y_NAME "chan2y"
 setenv CHANHOST3Y_NAME "chan3y"
 
 # Command line options for all Channelizers
-setenv CHANOPTS "-C 128 -c 49 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 5 -F 1420.0 -t -1 -o"
+setenv CHANOPTS "-C 128 -c 25 -N 10 -O 0.25 -B 104.8576 -d $FILTER_DIR/LS256c10f25o70d.flt  -w 1 -F 1420.0 -t -1 -o"
 
 # Beam Specific Command Line options for Channelizers
 setenv CHANHOST1X_OPTS "-P X  -i 50000 -j 51000 -I 226.1.50.1 -J 227.1.1.1"
@@ -41,12 +42,12 @@ setenv CHANHOST3Y_OPTS "-P Y  -i 50005 -j 53000 -I 226.3.50.2 -J 227.3.1.1"
 #---------------------------
 
 # Logical Host Names
-setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
+setenv RUNSSE_DX_HOSTS	"dxhost1 dxhost2" 
 
 # Actual Host Names
-setenv DXHOST1 "seti000-1"
-setenv DXHOST2 "seti000-3"
-setenv DXHOST3 "seti000-4"
+setenv DXHOST1 "angral"
+setenv DXHOST2 "angral"
+setenv DXHOST3 "angral"
 setenv DXHOST4 "seti001-2"
 setenv DXHOST5 "seti001-3"
 setenv DXHOST6 "seti001-4"
@@ -55,9 +56,9 @@ setenv DXHOST8 "seti002-3"
 setenv DXHOST9 "seti002-4"
 
 # DX names
-setenv DXHOST1_DX_NAMES "dx1000 dx1001 dx1002 dx1003 dx1004 dx1005 dx1006 dx1007"
-setenv DXHOST2_DX_NAMES "dx1008 dx1009 dx1010 dx1011 dx1012 dx1013 dx1014 dx1015"
-setenv DXHOST3_DX_NAMES "dx1016 dx1017 dx1018 dx1019 dx1020 dx1021 dx1022"
+setenv DXHOST1_DX_NAMES "dx1000" 
+setenv DXHOST2_DX_NAMES "dx2000"
+setenv DXHOST3_DX_NAMES "dx3000"
 setenv DXHOST4_DX_NAMES "dx2000 dx2001 dx2002 dx2003 dx2004 dx2005 dx2006 dx2007"
 setenv DXHOST5_DX_NAMES "dx2008 dx2009 dx2010 dx2011 dx2012 dx2013 dx2014 dx2015"
 setenv DXHOST6_DX_NAMES "dx2016 dx2017 dx2018 dx2019 dx2020 dx2021 dx2022"
@@ -84,9 +85,9 @@ setenv YPOL_ONLY "-p y"
 # BEAM3 setenv DX_HOSTn_OPTS "$DX_OPTS $BEAM3_DX_OPTS"
 # XPOL_ONLY or YPOL_ONLY if appropriate
 
-setenv DXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS "
-setenv DXHOST2_OPTS "$DX_OPTS $BEAM1_DX_OPTS"
-setenv DXHOST3_OPTS "$DX_OPTS $BEAM1_DX_OPTS"
+setenv DXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS $XPOL_ONLY"
+setenv DXHOST2_OPTS "$DX_OPTS $BEAM2_DX_OPTS $XPOL_ONLY"
+setenv DXHOST3_OPTS "$DX_OPTS $BEAM3_DX_OPTS $XPOL_ONLY" 
 setenv DXHOST4_OPTS "$DX_OPTS $BEAM2_DX_OPTS"
 setenv DXHOST5_OPTS "$DX_OPTS $BEAM2_DX_OPTS"
 setenv DXHOST6_OPTS "$DX_OPTS $BEAM2_DX_OPTS"
@@ -98,12 +99,12 @@ setenv DXHOST9_OPTS "$DX_OPTS $BEAM3_DX_OPTS "
 #---------------------------
 
 # Logical Host Names
-setenv RUNSSE_ZX_HOSTS	"zxhost1 zxhost2 zxhost3"
+setenv RUNSSE_ZX_HOSTS	"zxhost1 zxhost2"
 
 # Actual Host Names
-setenv ZXHOST1 "seti000-4"
-setenv ZXHOST2 "seti001-4"
-setenv ZXHOST3 "seti002-4"
+setenv ZXHOST1 "angral"
+setenv ZXHOST2 "angral"
+setenv ZXHOST3 "angral"
 
 # ZX names
 setenv ZXHOST1_ZX_NAMES "zx1900"
@@ -120,11 +121,11 @@ setenv ZX_OPTS "-Z -h 8890"
 # BEAM3 setenv ZX_HOSTn_OPTS "$DX_OPTS $BEAM3_DX_OPTS"
 # XPOL_ONLY or YPOL_ONLY if appropriate
 
-setenv ZXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS $ZX_OPTS"
-setenv ZXHOST2_OPTS "$DX_OPTS $BEAM2_DX_OPTS $ZX_OPTS"
-setenv ZXHOST3_OPTS "$DX_OPTS $BEAM3_DX_OPTS $ZX_OPTS"
+setenv ZXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS $ZX_OPTS $XPOL_ONLY"
+setenv ZXHOST2_OPTS "$DX_OPTS $BEAM2_DX_OPTS $ZX_OPTS $XPOL_ONLY"
+setenv ZXHOST3_OPTS "$DX_OPTS $BEAM3_DX_OPTS $ZX_OPTS $XPOL_ONLY"
 
 # Backend Server Host for use with ATA
 #-------------------------------------
-setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST sonata
-${HOME}/sonata_install/scripts/switchConfigFile-3beam-800KHz-69dxs-3zx.tcsh
+setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST tumulus
+${HOME}/sonata_install/scripts/switchConfigFile-jane-test.tcsh

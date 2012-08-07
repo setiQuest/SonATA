@@ -7,15 +7,14 @@ tscope sim
  sched set multitarget on
  db set name sonatadb
  db set usedb on
- db set host localhost
+ db set host sse100
  db set usedb on
- db set host localhost
  dx set basewarn off
  dx set baseerror off
  sched set target auto
  act set type target
- sched set beginfreq 1060.0
- sched set endfreq 1381.0
+ sched set beginfreq 3827.3872
+ sched set endfreq 4200.000
  sched set pipe on
  sched set followup off
  sched set catshigh habcat,exoplanets

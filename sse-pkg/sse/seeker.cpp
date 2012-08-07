@@ -296,7 +296,6 @@ int seekerStart(int argc, char * argv[], ACE_Thread_Mutex &startingSeeker)
       cerr << seekerParser->getUsage();
       exit(1);
    }
-
    SeekerThreadArgs *seekerThreadArgs = new SeekerThreadArgs;
    seekerThreadArgs->seekerParser = seekerParser;
    seekerThreadArgs->startingSeeker = &startingSeeker;
@@ -332,10 +331,10 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
 
    Scheduler *scheduler = Scheduler::instance();
    Site* site;
-
    try {
 
       site = new Site(seekerParser->getDxPort(),
+                      seekerParser->getZxPort(),
                       seekerParser->getDxArchiverPort(),
                       seekerParser->getChannelizerPort(),
                       seekerParser->getDxArchiver1Hostname(),
@@ -350,7 +349,6 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
                       seekerParser->getComponentControlPort(),
                       seekerParser->getExpectedComponentsFilename(),
                       seekerParser->getNoUi());
-
       delete seekerParser;
     
       paraGlobal.setSite(site);  // attach the site to the Text UI
@@ -414,9 +412,12 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
    // Prevent the ACE Reactor event loop from exiting prematurely
    // when a system call is interrupted (ie, errno == EINTR)
    // by enabling restart.
+   //
+   //cerr << "restart Reactor" << endl;
    ACE_Reactor::instance()->restart(1);
 
    //int status =
+   //
    ACE_Reactor::run_event_loop();
 
    SseArchive::SystemLog() << "Seeker done" << endl;

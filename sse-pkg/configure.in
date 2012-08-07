@@ -58,7 +58,7 @@ AC_CHECK_TYPES([int32_t, uint32_t, int8_t, uint8_t])
 ACX_PTHREAD()
 LIBS="$PTHREAD_LIBS $LIBS"
 CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
-CXXFLAGS="$CXXFLAGS $PTHREAD_CFLAGS -Wall -Woverloaded-virtual -fno-default-inline"
+CXXFLAGS="$CXXFLAGS $PTHREAD_CFLAGS -Wall -Woverloaded-virtual -fno-default-inline -ggdb"
 CC="$PTHREAD_CC"
 
 # Define CPPUNIT_ROOT for the Makefiles.
@@ -155,7 +155,7 @@ dnl AC_CONFIG_SUBDIRS(libpqxx)
 
 
 # Define the default ACE_ROOT for the Makefiles.
-ACE_ROOT="$ACE_ROOT"
+ACE_ROOT="/usr/local/ACE_wrappers"
 
 # build with stlport for debugging
 AC_ARG_WITH(stlport, [  --with-stlport          use the stlport library])

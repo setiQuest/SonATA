@@ -47,6 +47,7 @@ static const string SiteType("Site");
 static const string IfcType("Ifc");
 static const string BeamType("Beam");
 static const string DxType("Dx");
+static const string ZxType("Zx");
 static const string ChanType("Chan");
 static const string ChannelizerType("Channelizer");
 static const string NoneType("None");
@@ -62,6 +63,9 @@ static void printErrorLine(ostream &strm, int linenum, const string & line)
    strm << "ExpectedNssComponents Error: Line " << linenum << ": " << line << endl;
 }
 
+//	This structure is initialized with the valid keywords
+//	and is used to parse the expectedSonATAComponents.cfg file
+
 struct ComponentTypeInfo
 {
    string parentType_; 
@@ -76,6 +80,9 @@ struct ComponentTypeInfo
 
 
 };
+
+//	This structure is used to store the components
+// 	specified in the expectedSonATAComponents.cfg file
 
 ComponentTypeInfo::ComponentTypeInfo(const string &parentType,
 				     const string &type,
@@ -114,7 +121,6 @@ struct ExpectedNssComponentsTreeInternal
    vector<string> prepareAntList(const string & antListKeyword);
 
    void turnDxsIntoSeparateComponents();
-   void turnChansIntoSeparateComponents();
 
    void addComponent(const string &line, int linenum, vector<string> &tokens);
    bool verifyChildNotOnChildList(ComponentInfo &ci, const string &childName,
@@ -133,6 +139,9 @@ struct ExpectedNssComponentsTreeInternal
       const string &componentType, const string &siteName);
    vector<string> findComponentChildrenNames(const string &componentType,
 					     const string &componentName);
+   vector<string> findComponentChildrenNames(const string &componentType,
+					     const string &componentName,
+					     const string &childType);
    vector<string>getAllComponentNames();
    vector<string>findChannelizerNames();
    vector<string>findChannelizerNames( const string &beamname);
@@ -175,15 +184,12 @@ ExpectedNssComponentsTreeInternal::ExpectedNssComponentsTreeInternal(vector<stri
 
    componentTypeInfo_.push_back(ComponentTypeInfo(IfcType, BeamType, 
 						  "DxList", DxType));
-
    parseConfigLines();
 
     // add a new component type so that dxs can be turned into separate components
    componentTypeInfo_.push_back(ComponentTypeInfo(BeamType, DxType, NoneType, NoneType));
    turnDxsIntoSeparateComponents();
 
-   //componentTypeInfo_.push_back(ComponentTypeInfo(BeamType, ChanType, NoneType, NoneType));
-   //turnChansIntoSeparateComponents();
 
    verifyThatChildListComponentsExist();
    verifyComponentParents();
@@ -249,6 +255,7 @@ string ExpectedNssComponentsTreeInternal::getChildType(
 void ExpectedNssComponentsTreeInternal::turnDxsIntoSeparateComponents()
 {
    vector<ComponentInfo> dxComponents;  // temp storage for new components
+   vector<ComponentInfo> zxComponents;  // temp storage for new components
 
    // for each Beam component on the components list
    // turn its dx children into separate components
@@ -256,21 +263,36 @@ void ExpectedNssComponentsTreeInternal::turnDxsIntoSeparateComponents()
    for (i = components_.begin(); i < components_.end(); ++i)
    { 
       ComponentInfo & ci = *i;
-      if (ci.type_ == BeamType)
+      if (ci.type_ == BeamType)	// Only dx and zx are BeamType
       {
 	 // add a component for each child name
 	 vector<string>::iterator childIt;
-	 for (childIt=ci.childNames_.begin(); childIt < ci.childNames_.end(); 
-	      ++childIt)
-	 {
+	 childIt=ci.childNames_.begin(); 
+	    while (*childIt != "ZxList" && childIt < ci.childNames_.end()) 
+            {
 	    ComponentInfo dxCompInfo;
 	    dxCompInfo.type_ = DxType;
 	    dxCompInfo.name_ = *childIt;
 	    dxCompInfo.parentName_ = ci.name_;
 
 	    dxComponents.push_back(dxCompInfo);
+	      ++childIt;
+            }
 
-	 }
+	 if (*childIt == "ZxList")  
+         {
+	    vector<string>::iterator zxChildIt;
+	    for (zxChildIt=childIt; zxChildIt < ci.childNames_.end(); 
+	         zxChildIt++)
+	    {
+	       ComponentInfo zxCompInfo;
+
+	       zxCompInfo.type_ = ZxType;
+	       zxCompInfo.name_ = *zxChildIt;
+	       zxCompInfo.parentName_ = ci.name_;
+	       zxComponents.push_back(zxCompInfo);
+	    }
+         }
 
       }
 
@@ -282,42 +304,9 @@ void ExpectedNssComponentsTreeInternal::turnDxsIntoSeparateComponents()
    { 
       components_.push_back(*i);
    }
-}
 
-
-void ExpectedNssComponentsTreeInternal::turnChansIntoSeparateComponents()
-{
-   vector<ComponentInfo> chanComponents;  // temp storage for new components
-
-   // for each Beam component on the components list
-   // turn its chan children into separate components
-   vector<ComponentInfo>::iterator i;
-   for (i = components_.begin(); i < components_.end(); ++i)
-   { 
-      ComponentInfo & ci = *i;
-      if (ci.type_ == BeamType)
-      {
-	 // add a component for each child name
-	 vector<string>::iterator childIt;
-	 for (childIt=ci.childNames_.begin(); childIt < ci.childNames_.end(); 
-	      ++childIt)
-	 {
-	    ComponentInfo chanCompInfo;
-	    chanCompInfo.type_ = ChanType;
-	    chanCompInfo.name_ = *childIt;
-	    chanCompInfo.parentName_ = ci.name_;
-
-	    chanComponents.push_back(chanCompInfo);
-
-	 }
-
-      }
-
-   }
-
-
-   // add all the new Chan components to the original list
-   for (i = chanComponents.begin(); i < chanComponents.end(); ++i)
+   // add all the new zx components to the original list
+   for (i = zxComponents.begin(); i < zxComponents.end(); ++i)
    { 
       components_.push_back(*i);
    }
@@ -460,6 +449,7 @@ bool ExpectedNssComponentsTreeInternal::verifyChildNotOnChildList(
    int linenum,
    const string &line)
 {
+   if ( childName == "ZxList") return true;
    if (find(ci.childNames_.begin(), ci.childNames_.end(),
 	    childName) !=  ci.childNames_.end())
    {
@@ -648,9 +638,12 @@ void ExpectedNssComponentsTreeInternal::verifyThatChildListComponentsExist()
       for (childNamesIt = parentInfo.childNames_.begin(); 
 	   childNamesIt < parentInfo.childNames_.end();
 	   ++childNamesIt)
-      {
+      { 
+        
 	 // check all the children
 	 const string &childName = *childNamesIt;
+       if (childName != "ZxList")
+	{
 	 ComponentInfo *childInfo = findComponentInfoByName(childName);
 	 if (childInfo == 0)
 	 {
@@ -664,6 +657,8 @@ void ExpectedNssComponentsTreeInternal::verifyThatChildListComponentsExist()
 	 else 
 	 {
 	    // make sure child is of the right type for the parent type
+	   if ( childInfo->type_ != ZxType)   // Don't woory about the Zxs
+	   {
 	    if (childInfo->type_ != getChildType(parentInfo.type_))
 	    {
 	       errorStrm_ << "ExpectedNssComponents Error: "
@@ -677,8 +672,14 @@ void ExpectedNssComponentsTreeInternal::verifyThatChildListComponentsExist()
 	    {
 	       childInfo->parentName_ = parentInfo.name_;
 	    }
+	   }
+	   else
+		{
+	          childInfo->parentName_ = parentInfo.name_;
+		}
 		    
 	 }
+	}
       }
 
    }
@@ -698,7 +699,6 @@ ComponentInfo *ExpectedNssComponentsTreeInternal::findComponentInfoByName(
 	 return &componentInfo;
       }
    }    
-
    return 0;
 }
 
@@ -785,6 +785,55 @@ vector<string> ExpectedNssComponentsTreeInternal::findComponentChildrenNames(
 	    {
 	       names.push_back(ci.childNames_[i]);
 	    }
+	 }
+      }
+   }    
+
+   return names;
+}
+
+vector<string> ExpectedNssComponentsTreeInternal::findComponentChildrenNames(
+   const string &componentType, const string &componentName, const string &childType)
+{
+   vector<string>names;
+   vector<ComponentInfo>::iterator i;
+   for (i = components_.begin(); i < components_.end(); ++i)
+   { 
+      ComponentInfo & ci = *i;
+      if (ci.type_ == componentType)
+      {
+	 if (ci.name_ == componentName)
+	 {
+           if (childType != ZxType )
+           {
+	    for (size_t i=0; i< ci.childNames_.size(); ++i)
+	    {
+
+             if ( ci.childNames_[i] != "ZxList")
+             {
+               ComponentInfo * child = findComponentInfoByName(ci.childNames_[i]);
+               if( child->type_ == childType)
+	       names.push_back(ci.childNames_[i]);
+             }
+	    }
+	   }
+           else  // we are looking for Zxs
+           {
+	    for (size_t i=0; i< ci.childNames_.size(); ++i)
+	    {
+             if ( ci.childNames_[i] == "ZxList")
+             {
+	       for (size_t y=i+1; y < ci.childNames_.size(); ++y)
+               {
+	       ComponentInfo * child = findComponentInfoByName(ci.childNames_[y]);
+               if( child->type_ == childType)
+	       names.push_back(ci.childNames_[y]);
+               }
+                break;
+             }
+	    }
+           }
+		
 	 }
       }
    }    
@@ -939,7 +988,6 @@ string ExpectedNssComponentsTreeInternal::getParent(
    {
       return "";  
    }
-
    return info->parentName_;
 }
 
@@ -1028,6 +1076,11 @@ vector<string> ExpectedNssComponentsTree::getDxs()
    return internal_->findComponentNamesByType(DxType);
 }
 
+vector<string> ExpectedNssComponentsTree::getZxs()
+{
+   return internal_->findComponentNamesByType(ZxType);
+}
+
 vector<string> ExpectedNssComponentsTree::getChans()
 {
    return internal_->findChannelizerNames();
@@ -1038,23 +1091,45 @@ vector<string> ExpectedNssComponentsTree::getDxsForIfc(const string & ifcName)
 {
    // get the dxs on each beam associated with this ifc
    vector<string> beams = internal_->findComponentChildrenNames(IfcType, ifcName);
-
    vector<string> totalDxs;
    vector<string>::iterator beamIt;
    for (beamIt = beams.begin(); beamIt != beams.end(); ++beamIt)
    {
       string & beamName = *beamIt;
       vector<string> dxs = internal_->findComponentChildrenNames(BeamType,
-								  beamName);
+								  beamName, DxType);
       totalDxs.insert(totalDxs.end(), dxs.begin(), dxs.end());
    }
 
    return totalDxs;
 }
 
+vector<string> ExpectedNssComponentsTree::getZxsForIfc(const string & ifcName)
+{
+   // get the zxs on each beam associated with this ifc
+   vector<string> beams = internal_->findComponentChildrenNames(IfcType, ifcName);
+
+   vector<string> totalZxs;
+   vector<string>::iterator beamIt;
+   for (beamIt = beams.begin(); beamIt != beams.end(); ++beamIt)
+   {
+      string & beamName = *beamIt;
+      vector<string> zxs = internal_->findComponentChildrenNames(BeamType,
+								  beamName, ZxType);
+      totalZxs.insert(totalZxs.end(), zxs.begin(), zxs.end());
+   }
+
+   return totalZxs;
+}
+
 vector<string> ExpectedNssComponentsTree::getDxsForBeam(const string & beamName)
 {
-   return internal_->findComponentChildrenNames(BeamType, beamName);
+   return internal_->findComponentChildrenNames(BeamType, beamName, DxType);
+}
+
+vector<string> ExpectedNssComponentsTree::getZxsForBeam(const string & beamName)
+{
+   return internal_->findComponentChildrenNames(BeamType, beamName, ZxType);
 }
 
 vector<string> ExpectedNssComponentsTree::getChansForBeam(const string & beamName)
@@ -1077,6 +1152,11 @@ vector<string> ExpectedNssComponentsTree::getDxsForSite(const string & siteName)
    return internal_->findComponentNamesByTypeAndSite(DxType, siteName);
 }
 
+vector<string> ExpectedNssComponentsTree::getZxsForSite(const string & siteName)
+{
+   return internal_->findComponentNamesByTypeAndSite(ZxType, siteName);
+}
+
 vector<string> ExpectedNssComponentsTree::getChansForSite(const string & siteName)
 {
    return internal_->findChannelizerNames();
@@ -1085,6 +1165,11 @@ vector<string> ExpectedNssComponentsTree::getChansForSite(const string & siteNam
 string ExpectedNssComponentsTree::getBeamForDx(const string &dx)
 {
    return internal_->getParent(dx);
+}
+
+string ExpectedNssComponentsTree::getBeamForZx(const string &zx)
+{
+   return internal_->getParent(zx);
 }
 
 string ExpectedNssComponentsTree::getBeamForChan(const string &chan)
@@ -1097,11 +1182,17 @@ string ExpectedNssComponentsTree::getBeamForChan(const string &chan)
 	    return it->first;
 	 }
       }
+   return("");
 }
 
 string ExpectedNssComponentsTree::getIfcForDx(const string &dx)
 {
    return internal_->getParent(getBeamForDx(dx));
+}
+
+string ExpectedNssComponentsTree::getIfcForZx(const string &zx)
+{
+   return internal_->getParent(getBeamForZx(zx));
 }
 
 vector<string> ExpectedNssComponentsTree::getAtaBeamsForBeam(const string &beam)

@@ -277,8 +277,11 @@ protected:
   virtual void allDataCollectionCompleteWrapup();
 
   virtual DxList & getDxList();
+  virtual DxList & getZxList();
   virtual double getMinDxSkyFreqMhz() const;
   virtual double getMaxDxSkyFreqMhz() const;
+  virtual double getMinZxSkyFreqMhz() const;
+  virtual double getMaxZxSkyFreqMhz() const;
   virtual IfcList & getIfcList();
   virtual ostream & getObsSummaryTxtStrm();
   virtual ObserveActivityOpsBitset & getActOpsBitset();
@@ -300,6 +303,7 @@ protected:
   virtual void startTestSigGens();
   virtual void startIfcs();
   virtual void startDxs();
+  virtual void startZxs();
 
   virtual void turnOffTscopes();
   virtual void turnOffTestSigs();
@@ -545,6 +549,7 @@ private:
   ActUnitList actUnitCompleteList_;
 
   DxList dxList_;
+  DxList zxList_;
   IfcList ifcList_;
   TscopeList tscopeList_;
 
@@ -607,6 +612,8 @@ private:
 
   ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,double> minDxSkyFreqMhz_;
   ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,double> maxDxSkyFreqMhz_;
+  ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,double> minZxSkyFreqMhz_;
+  ACE_Atomic_Op<ACE_Recursive_Thread_Mutex,double> maxZxSkyFreqMhz_;
   mutable ACE_Recursive_Thread_Mutex actTypeMutex_;
   mutable ACE_Recursive_Thread_Mutex diskStatusMsgMutex_;
 

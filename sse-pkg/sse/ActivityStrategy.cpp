@@ -1518,12 +1518,10 @@ void ActivityStrategy::attemptToStartNextActivity()
 bool ActivityStrategy::startNextActivity()
 {
    VERBOSE2(getVerboseLevel(), "ActivityStrategy::startNextActivity()" << endl;);
-
    NssComponentTree *nssComponentTree(site_->getAllComponents());
    bool success(false);
    try {
       Activity *activity(getNextActivity(nssComponentTree));
-
       Assert(activity);
       insertActivity(activity);
       startNextActivityHook(activity);

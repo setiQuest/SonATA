@@ -68,6 +68,7 @@
 #include "TscopeParameters.h"
 #include "TscopeProxy.h"
 #include "TuneDxs.h"
+#include "TuneZxs.h"
 #include <algorithm>
 #include <memory>
 #include <sstream>
@@ -124,6 +125,7 @@ ObsActStrategy::ObsActStrategy(Scheduler *scheduler,
    }
 
    tuneDxs_ = getTuneDxs(getVerboseLevel());
+   tuneZxs_ = getTuneZxs(getVerboseLevel());
    followup_ = Followup::instance();
 }
 
@@ -131,6 +133,7 @@ ObsActStrategy::~ObsActStrategy()
 {
    VERBOSE2(getVerboseLevel(), "ObsActStrategy::~()\n" );
    delete tuneDxs_;
+   delete tuneZxs_;
    delete orderedTargets_;
 }
 
@@ -277,6 +280,58 @@ void ObsActStrategy::copyDxTuningsFromOneBeamToTheOthers(
    }
 }
 
+
+// Copy the zx sky freqs from the zxs on the beam associated
+// with sourceBeamName to the zxs on the other beams in the
+// zxListByBeamMap.  Unused zxs on the other beams will be
+// tuned to a skyfreq of -1 Mhz.
+
+void ObsActStrategy::copyZxTuningsFromOneBeamToTheOthers(
+      DxListByBeamMap & zxListByBeamMap,
+      const string & sourceBeamName)
+{
+   Assert(zxListByBeamMap.size() > 1);
+
+   // make sure specified source beam is in the map
+   Assert(zxListByBeamMap.find(sourceBeamName) != zxListByBeamMap.end());
+
+   DxList & sourceZxList = zxListByBeamMap[sourceBeamName];
+   
+   for (DxListByBeamMap::iterator it = zxListByBeamMap.begin();
+	it != zxListByBeamMap.end(); ++it)
+   {
+      const string & destBeamName = it->first;
+      
+      // don't copy the source to itself
+      if (destBeamName != sourceBeamName)
+      {
+	 DxList & destZxList = it->second;
+
+	 // set sky freq to dummy value, to mark any zxs not to be used
+	 for (DxList::iterator listIndex = destZxList.begin();
+	      listIndex != destZxList.end();  ++listIndex)
+	 {
+	    (*listIndex)->setDxSkyFreq(-1);
+	 }
+
+	 // copy the tunings
+	 for(DxList::iterator sourceIndex = sourceZxList.begin(),
+		destIndex = destZxList.begin();
+	     sourceIndex != sourceZxList.end() && destIndex != destZxList.end();
+	     ++sourceIndex, ++destIndex)
+	 {
+	    DxProxy *sourceZxProxy = *sourceIndex;
+	    DxProxy *destZxProxy = *destIndex;
+
+	    double skyFreqMhz = sourceZxProxy->getDxSkyFreq();
+	    destZxProxy->setDxSkyFreq(skyFreqMhz);
+            int32_t chanNumber = sourceZxProxy->getChannelNumber();
+            destZxProxy->setChannelNumber(chanNumber);
+	 }
+      }      
+   }
+}
+
 // Select the first targetId, and assign it to the parameter
 // associated with the beamName.  Also set the primaryTargetId,
 // if required.
@@ -357,22 +412,27 @@ void ObsActStrategy::chooseTargets(const string & firstTargetBeamName,
          );
 
       delete tuneDxs_;
-      //tuneDxs_ =
-	 //new TuneDxsObsRange(getVerboseLevel(), chosenObsRange,
-			      //nssParameters_.sched_->getDxRound(),
-			      //nssParameters_.sched_->getDxOverlap(),
-			      //nssParameters_.sched_->getDxTuningTolerance());
 
       tuneDxs_ =
 	 new TuneDxsObsRange(getVerboseLevel(), chosenObsRange);
-
+//
+// 	Convert the permanent RFI mask to an ObsRange for the Zxs
+   PermRfiMask permRfiMask(PermRfiMaskFilename, "permRfiMask", 
+                           getVerboseLevel());
+	 
+   vector<FrequencyBand> permRfiBands(permRfiMask.getFreqBands());
+	ObsRange badBandsForZxs;
+	badBandsForZxs.convertFreqBandToObsRange(permRfiBands);
+if (badBandsForZxs.isEmpty() )cout << "badBandsForZxs is empty" << endl;
+	delete tuneZxs_;
+	tuneZxs_ =
+		new TuneZxsObsRange(getVerboseLevel(),badBandsForZxs);
       VERBOSE2(getVerboseLevel(), methodName 
 	       << "Chose first target: " << firstTargetId << 
 	       " for beam: " << firstTargetBeamName << endl;);
 
       VERBOSE2(getVerboseLevel(), methodName 
 	       << "Chose primary target: " << primaryTargetId << endl;);
-      
       nssParameters_.act_->setTargetIdForBeam(firstTargetBeamName, firstTargetId);
       if (firstTargetId != nssParameters_.act_->getTargetIdForBeam(firstTargetBeamName))
       {
@@ -475,8 +535,9 @@ VERBOSE2( getVerboseLevel(),"tuneDxsForMuptipleBeamsOnSingleTarget()" << endl);
    vector<string> allBeamsToUse(nssParameters_.sched_->getBeamsToUse());
    sort(allBeamsToUse.begin(), allBeamsToUse.end());
 
-   ExpectedNssComponentsTree *expectedTree = 
-     nssComponentTree->getExpectedNssComponentsTree();
+   //ExpectedNssComponentsTree *expectedTree = 
+    // nssComponentTree->getExpectedNssComponentsTree();
+
 #ifdef prelude
    // Get ifcs in use
    IfcList ifcList = nssComponentTree->getIfcsForBeams(
@@ -519,11 +580,11 @@ VERBOSE2( getVerboseLevel(),"tuneDxsForMuptipleBeamsOnSingleTarget()" << endl);
       // Get the dxs and tune them
       DxList dxListForIfc =
 	 nssComponentTree->getDxsForBeams(allBeamsToUse);
-
       Assert(tuneDxs_);
 	tuneDxs_->tune(dxListForIfc, outputChannels, mhzPerChannel);
       float64_t channelizerTuneFreqMhz = computeChanCenterFreq(dxListForIfc, outputChannels,
 		mhzPerChannel); 
+       
        int32_t delaySecs = nssParameters_.chan_->getDelay();
        nssParameters_.chan_->start( delaySecs, channelizerTuneFreqMhz, "all");
       /* 
@@ -639,6 +700,8 @@ void ObsActStrategy::pickMultipleTargetsAndTuneDxs(NssComponentTree *nssComponen
 			 SSE_MSG_MISSING_BEAM, SEVERITY_ERROR);
    }
 
+// Get dx List by beam and find the beam with the shortest list
+
    DxListByBeamMap dxListByBeamMap;
    getDxListForEachBeam(nssComponentTree, beamsToUse, dxListByBeamMap);
    Assert(dxListByBeamMap.size() == beamsToUse.size());
@@ -665,6 +728,36 @@ void ObsActStrategy::pickMultipleTargetsAndTuneDxs(NssComponentTree *nssComponen
    DxList shortestDxList = getShortestDxList(dxListByBeamMap,
 						shortestListBeamName);
 
+// Do the same for the zxs
+// Get zx List by beam and find the beam with the shortest list
+
+   DxListByBeamMap zxListByBeamMap;
+   getZxListForEachBeam(nssComponentTree, beamsToUse, zxListByBeamMap);
+   Assert(zxListByBeamMap.size() == beamsToUse.size());
+
+   // Make sure each beam has at least 1 dx
+   for (DxListByBeamMap::iterator it = zxListByBeamMap.begin();
+	it != zxListByBeamMap.end(); ++it)
+   {
+      const string & beamName = it->first;
+      DxList & zxList = it->second;
+      if (zxList.size() == 0)
+      {
+	 stringstream strm;
+	 strm << "No zxs are available for beam " << beamName << "\n";
+	 throw SseException(strm.str(), __FILE__, __LINE__,
+			    SSE_MSG_MISSING_DX, SEVERITY_ERROR);
+      }
+   }
+    
+   // Start with the beam that has the fewest dxs.
+   // Pick a target for it and tune those dxs.
+
+   string shortestZxListBeamName;
+   DxList shortestZxList = getShortestDxList(zxListByBeamMap,
+						shortestZxListBeamName);
+// We may not want to throw an exception.
+
    chooseTargets(shortestListBeamName, shortestDxList);
 
    // Get list of Channelizers
@@ -679,16 +772,22 @@ void ObsActStrategy::pickMultipleTargetsAndTuneDxs(NssComponentTree *nssComponen
  
    
    // Tune the dxs on one beam, then copy tunings to the others
-   double maxAllowedDxSkyFreqMhz = 99999;  // effectively no limit
+   // double maxAllowedDxSkyFreqMhz = 99999;  // effectively no limit
    Assert(tuneDxs_);
 	tuneDxs_->tune(shortestDxList, outputChannels, mhzPerChannel);
 
       float64_t channelizerTuneFreqMhz = computeChanCenterFreq(shortestDxList, outputChannels,
 		mhzPerChannel); 
+
+// Now tune the Zxs
+	tuneZxs_->tune(shortestZxList, outputChannels, mhzPerChannel,
+		channelizerTuneFreqMhz);
        int32_t delaySecs = nssParameters_.chan_->getDelay();
        nssParameters_.chan_->start( delaySecs, channelizerTuneFreqMhz, "all");
    copyDxTuningsFromOneBeamToTheOthers(dxListByBeamMap,
 					shortestListBeamName);
+   copyZxTuningsFromOneBeamToTheOthers(zxListByBeamMap,
+					shortestZxListBeamName);
 }
 
 // For each beam in the beamNames list, add a DxList
@@ -712,6 +811,27 @@ void ObsActStrategy::getDxListForEachBeam(
 	 nssComponentTree->getDxsForBeams(beamSublist);
 	 
       dxListByBeamMap[beamName] = dxsForBeam;
+   }
+}
+
+// For each beam in the beamNames list, add a DxList
+// entry in the DxListByBeamMap map.  If there are no
+// dxs available for that beam, then that list will be empty.
+
+void ObsActStrategy::getZxListForEachBeam(
+   NssComponentTree *nssComponentTree, 
+   vector<string> & requestedBeamNames, 
+   DxListByBeamMap & zxListByBeamMap)
+{
+   for (vector<string>::iterator it = requestedBeamNames.begin();
+	it != requestedBeamNames.end(); ++it)
+   {
+      const string & beamName = *it;
+      vector<string> beamSublist;
+      beamSublist.push_back(beamName);
+      DxList zxsForBeam =
+	 nssComponentTree->getZxsForBeams(beamSublist);
+      zxListByBeamMap[beamName] = zxsForBeam;
    }
 }
 
@@ -1289,7 +1409,9 @@ bool ObsActStrategy::moreActivitiesToRun()
 void ObsActStrategy::repeatStrategyHook()
 {
    delete tuneDxs_;
+   delete tuneZxs_;
    tuneDxs_ = getTuneDxs(getVerboseLevel());
+   tuneZxs_ = getTuneZxs(getVerboseLevel());
 }
 
 
@@ -1326,6 +1448,7 @@ bool ObsActStrategy::okToStartNewActivity()
     
 }
 
+
 TuneDxs* ObsActStrategy::getTuneDxs(int verboseLevel) const
 {
    switch (nssParameters_.sched_->getTuneDxsOption())
@@ -1360,6 +1483,37 @@ TuneDxs* ObsActStrategy::getTuneDxs(int verboseLevel) const
    default:
 
       AssertMsg(0, "Incorrect value for getTuneDxs");
+
+   }
+}
+
+TuneZxs* ObsActStrategy::getTuneZxs(int verboseLevel) const
+{
+   switch (nssParameters_.sched_->getTuneDxsOption())
+   {
+   case SchedulerParameters::TUNE_DXS_RANGE:
+
+	   //cout.precision(12);
+	 //cout << "beginfreq " << nssParameters_.sched_->getBeginObsFreqMhz()
+      	//	<< " endfreq " << nssParameters_.sched_->getEndObsFreqMhz()
+	//	<< endl;
+	return new TuneZxsRange(
+	 verboseLevel,
+	 Range(nssParameters_.sched_->getBeginObsFreqMhz(),
+	       nssParameters_.sched_->getEndObsFreqMhz()));
+	
+	
+   case SchedulerParameters::TUNE_DXS_USER:
+
+      return new TuneZxsUser(verboseLevel);
+
+   case SchedulerParameters::TUNE_DXS_FOREVER:
+
+      return new TuneZxsForever(verboseLevel);
+
+   default:
+
+      AssertMsg(0, "Incorrect value for getTuneZxs");
 
    }
 }
