@@ -370,6 +370,24 @@ EOF
 echo ""
 
 #-------------------------------------------------
+echo "Signal types for Zx candidates:"
+
+${mysqlStart} << EOF
+
+select Activities.type as ActivityType, sigClass as SignalClass, 
+ZxCandidateSignals.type as SigType, reason as SigClassReason, 
+count(distinct Activities.id,rfFreq,ZxCandidateSignals.type ) as Count
+from ZxCandidateSignals, Activities where 
+Activities.id = ZxCandidateSignals.activityId and 
+Activities.startOfDataCollection >= $sqlStartTime
+group by Activities.type, sigClass, reason, SigType 
+order by Activities.type;
+
+EOF
+
+echo ""
+
+#-------------------------------------------------
 #echo "Signal types for all signals:"
 
 #${mysqlStart} << EOF
