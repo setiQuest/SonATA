@@ -260,5 +260,6 @@ scripts_SCRIPTS = \
 	run-kepler-demo.tcsh \
 	run-mars-express-demo.tcsh \
 	sonata-start-rfiscan-3800-4200-obs.tcl \
-	sonata-start-kepler-3beams-3800-4000-obs.tcl \
+	sonata-start-kepler-3beams-3800-4200-obs.tcl \
+	sonata-start-exoplanets-3beams-3800-4200-obs.tcl \
 	data-capture-replay-env-vars.tcsh
