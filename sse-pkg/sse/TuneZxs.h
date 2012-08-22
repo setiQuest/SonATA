@@ -50,7 +50,8 @@ public:
   TuneZxs(int verboseLevel);
   virtual ~TuneZxs();
   virtual void tune(DxList &zxList, int32_t totalChannels,
-		float64_t mhzPerChannel, float64_t chanTuneFreqMhz) = 0;
+		float64_t mhzPerChannel, float64_t chanTuneFreqMhz,
+		ObsRange zxObservedFreqs) = 0;
   virtual bool moreActivitiesToRun() const = 0;
   virtual int getVerboseLevel() const;
   virtual int setVerboseLevel(int level);
@@ -72,7 +73,8 @@ public:
   TuneZxsUser(int verboseLevel);
   virtual ~TuneZxsUser();
   virtual void tune(DxList &zxList, int32_t totalChannels,
-		float64_t mhzPerChannel, float64_t chanTuneFreqMhz);
+		float64_t mhzPerChannel, float64_t chanTuneFreqMhz,
+		ObsRange  zxObservedFreqs);
   virtual bool moreActivitiesToRun() const;
 };
 
@@ -93,7 +95,8 @@ public:
 		const Range& range);
   virtual ~TuneZxsRange();
   virtual void tune(DxList &zxList, int32_t totalChannels,
-		float64_t mhzPerChannel, float64_t chanTuneFreqMhz);
+		float64_t mhzPerChannel, float64_t chanTuneFreqMhz,
+		ObsRange  zxObservedFreqs);
   virtual bool moreActivitiesToRun() const;
 
 protected:
@@ -109,7 +112,8 @@ public:
   TuneZxsForever(int verboseLevel);
   virtual ~TuneZxsForever();
   virtual void tune(DxList &zxList, int32_t totalChannels,
-		float64_t mhzPerChannel, float64_t chanTuneFreqMhz);
+		float64_t mhzPerChannel, float64_t chanTuneFreqMhz,
+		ObsRange  zxObservedFreqs);
 
   virtual bool moreActivitiesToRun() const;
 };
@@ -122,7 +126,8 @@ public:
   virtual ~TuneZxsObsRange();
 
   virtual void tune(DxList &zxList, int32_t totalChannels,
-		float64_t mhzPerChannel, float64_t chanTuneFreqMhz);
+		float64_t mhzPerChannel, float64_t chanTuneFreqMhz,
+		ObsRange zxObservedFreqs);
   virtual bool moreActivitiesToRun() const;
 
 protected:

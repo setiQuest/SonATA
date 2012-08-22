@@ -5199,7 +5199,7 @@ void ActivityUnitImp::submitDbQueryWithLoggingOnError(
 			SEVERITY_WARNING, 
 			strm.str(),
                     __FILE__, lineNumber);
-	if (strm.str().compare(0,30,"Unknown column \'nan\' in \'field list\'" ) == 0)
+	if (callingMethodName.compare(0,23,"recordBaselineStatsInDb" ) == 0)
               dxProxy_->restart();
      }
 }

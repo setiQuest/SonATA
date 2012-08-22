@@ -794,6 +794,52 @@ void OrderedTargets::retrieveObsHistFromDbForTargets(TargetMap & targetMap)
 
 }
 
+// Get Observed frequencies for the zxs
+//
+void OrderedTargets::retrieveObsHistFromDbForZxs(ObsRange &observedFreqs,
+		TargetId target)
+{
+   string methodName("retrieveObsHistFromDbForZxs");
+   VERBOSE2(getVerboseLevel(), "OrderedTargets::" << methodName << endl;);    
+
+   stringstream sqlstmt;
+   sqlstmt << " select distinct dxLowFreqMhz, dxHighFreqMhz"
+           << " from ActivityUnits"
+           << " where "
+           << " validObservation = 'Yes'"
+           << " and targetId = " << target 
+           << " and (dxNumber = 1900 or dxNumber = 2900 or dxNumber = 3900)"
+   	<< " order by dxLowFreqMhz, dxHighFreqMhz";
+
+   enum colIndices {lowFreqMhzCol, highFreqMhzCol, numCols};
+
+   VERBOSE3(getVerboseLevel(), "OrderedTargets::" << methodName
+            << " query: " << sqlstmt.str() << endl;);    
+   
+   MysqlQuery query(db_);
+   query.execute(sqlstmt.str(), numCols, __FILE__, __LINE__);
+
+   VERBOSE2(getVerboseLevel(), "OrderedTargets::" << methodName
+            << " query returned " << mysql_num_rows(query.getResultSet())
+            << " rows" << endl;);    
+
+   while (MYSQL_ROW row = mysql_fetch_row(query.getResultSet()))
+   {
+      double lowFreqMhz(query.getDouble(
+         row, lowFreqMhzCol, __FILE__, __LINE__));
+      
+      double highFreqMhz(query.getDouble(
+         row, highFreqMhzCol, __FILE__, __LINE__));
+
+      cout << " Low " << lowFreqMhz << " High " << highFreqMhz << endl;
+      observedFreqs.addInOrder(lowFreqMhz, highFreqMhz);
+   }
+
+   VERBOSE2(getVerboseLevel(), "OrderedTargets::" << methodName
+	    << " complete " << endl;);    
+
+}
+
 
 void OrderedTargets::updateObservedFreqsForTargetsFromDbObsHistory(ActivityId_t actId)
 {

@@ -415,18 +415,6 @@ void ObsActStrategy::chooseTargets(const string & firstTargetBeamName,
 
       tuneDxs_ =
 	 new TuneDxsObsRange(getVerboseLevel(), chosenObsRange);
-//
-// 	Convert the permanent RFI mask to an ObsRange for the Zxs
-   PermRfiMask permRfiMask(PermRfiMaskFilename, "permRfiMask", 
-                           getVerboseLevel());
-	 
-   vector<FrequencyBand> permRfiBands(permRfiMask.getFreqBands());
-	ObsRange badBandsForZxs;
-	badBandsForZxs.convertFreqBandToObsRange(permRfiBands);
-if (badBandsForZxs.isEmpty() )cout << "badBandsForZxs is empty" << endl;
-	delete tuneZxs_;
-	tuneZxs_ =
-		new TuneZxsObsRange(getVerboseLevel(),badBandsForZxs);
       VERBOSE2(getVerboseLevel(), methodName 
 	       << "Chose first target: " << firstTargetId << 
 	       " for beam: " << firstTargetBeamName << endl;);
@@ -467,6 +455,26 @@ if (badBandsForZxs.isEmpty() )cout << "badBandsForZxs is empty" << endl;
                                         additionalTargetIds);
 
       }
+//
+//	Now that we have the targets
+//	check what frequencies that the zxs have already observed on this target.
+//	Remove the observed frequencies from the the badBandsForZxs.
+//
+// 	Convert the permanent RFI mask to an ObsRange for the Zxs
+   PermRfiMask permRfiMask(PermRfiMaskFilename, "permRfiMask", 
+                           getVerboseLevel());
+	 
+   vector<FrequencyBand> permRfiBands(permRfiMask.getFreqBands());
+
+	ObsRange badBandsForZxs;
+	badBandsForZxs.convertFreqBandToObsRange(permRfiBands);
+if (badBandsForZxs.isEmpty() )cout << "badBandsForZxs is empty" << endl;
+	delete tuneZxs_;
+	ObsRange zxObservedRanges;
+	orderedTargets_->retrieveObsHistFromDbForZxs(zxObservedRanges, firstTargetId);
+	badBandsForZxs = badBandsForZxs - zxObservedRanges;
+	tuneZxs_ =
+		new TuneZxsObsRange(getVerboseLevel(),badBandsForZxs);
    }
 }
 
@@ -729,7 +737,6 @@ void ObsActStrategy::pickMultipleTargetsAndTuneDxs(NssComponentTree *nssComponen
 						shortestListBeamName);
 
 // Do the same for the zxs
-// Get zx List by beam and find the beam with the shortest list
 
    DxListByBeamMap zxListByBeamMap;
    getZxListForEachBeam(nssComponentTree, beamsToUse, zxListByBeamMap);
@@ -780,8 +787,17 @@ void ObsActStrategy::pickMultipleTargetsAndTuneDxs(NssComponentTree *nssComponen
 		mhzPerChannel); 
 
 // Now tune the Zxs
+// Get zx List by beam and find the beam with the shortest list
+// Need to get the TargetId for tune beam.
+// Check observed frequencies for zxs on that beam
+// remove observed frequencies for the ObsRange
+       ObsRange zxObservedRanges;
+       TargetId firstTargetId = nssParameters_.act_->getTargetIdForBeam(
+		       shortestListBeamName);
+	orderedTargets_->retrieveObsHistFromDbForZxs(zxObservedRanges, firstTargetId);
 	tuneZxs_->tune(shortestZxList, outputChannels, mhzPerChannel,
-		channelizerTuneFreqMhz);
+		channelizerTuneFreqMhz, zxObservedRanges );
+
        int32_t delaySecs = nssParameters_.chan_->getDelay();
        nssParameters_.chan_->start( delaySecs, channelizerTuneFreqMhz, "all");
    copyDxTuningsFromOneBeamToTheOthers(dxListByBeamMap,
@@ -1133,6 +1149,13 @@ Activity *ObsActStrategy::getFollowupActivity(const NssParameters &nssParams,
       nssParams.act_->getPreviousActivityId(),
       nssParams.db_->getDb(),
       dxList);
+   
+   DxList zxList = nssComponentTree->getZxsForBeams(beamsToUse);
+   
+   TuneZxs::tuneZxsFromPrevActInDatabase(
+      nssParams.act_->getPreviousActivityId(),
+      nssParams.db_->getDb(),
+      zxList);
    
    // Get list of Channelizers
     ChannelizerList chanList = 
