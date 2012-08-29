@@ -265,5 +265,6 @@ scripts_SCRIPTS = \
 	switchConfigFile-2beam-800KHz-46dxs-2zx.tcsh \
 	2beam-dualpol-800KHz-46dx-2zx-env-vars-batch.sh \
 	sonata-start-kepler-2beams-3800-4200-obs.tcl \
+	sonata-start-exoplanets-2beams-3800-4200-obs.tcl \
 	sonata-start-vger-2beams-8410-8430-obs.tcl \
 	data-capture-replay-env-vars.tcsh
