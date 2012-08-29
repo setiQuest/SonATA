@@ -1,7 +1,7 @@
 tscope sim
  sched set beam1 on
  sched set beam2 on
- sched set beam3 on
+ sched set beam3 off
  dx set length 25
  sched set dxtune range
  sched set multitarget on
@@ -13,7 +13,7 @@ tscope sim
  dx set baseerror off
  sched set target auto
  act set type target
- sched set beginfreq 3827.3872
+ sched set beginfreq 3887.6531
  sched set endfreq 4200.000
  sched set pipe on
  sched set followup off
