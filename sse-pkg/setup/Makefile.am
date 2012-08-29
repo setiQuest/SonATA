@@ -81,6 +81,7 @@ dist_setup_DATA = \
 	expectedSonATAComponents-beam2-800KHz-24dx.cfg \
 	expectedSonATAComponents-jane-test.cfg \
 	expectedSonATAComponents-3beam-800KHz-69dx-3zx.cfg \
+	expectedSonATAComponents-2beam-800KHz-46dxs-2zx.cfg \
 	kes-expectedSonATAComponents-1beam-800KHz-1dx-1zx.cfg \
 	kes-expectedSonATAComponents-2beam-2dx.cfg \
 	earth.xyz \

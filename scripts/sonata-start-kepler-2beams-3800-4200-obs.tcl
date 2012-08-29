@@ -1,11 +1,11 @@
-# sonata-start-exoplanets-3beams-3800-4200-obs.tcl
+# sonata-start-kepler-2beams-3800-4200-obs.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
 #sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
 
-exec setAlarm ARM,sonata,Exoplanets
+exec setAlarm ARM,sonata,Kepler
 
 # connect to the backend server
 tscope setup
@@ -54,7 +54,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {exoplanets201208} current 
+db set name {kepler201208} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -113,16 +113,16 @@ dx set tripletthresh 48.000000000 current
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
-sched set beam2 {on} current 
+sched set beam2 {off} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
 sched set beginfreq 3800.00 current 
-sched set catshigh {exoplanets,keplerHZ,exokepler} current 
+sched set catshigh {keplerHZ,exokepler} current 
 sched set catshighmaxcounts 20000 current 
-sched set catslow {habcat,tycho2subset,tycho2remainder} current 
+sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 

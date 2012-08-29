@@ -1,4 +1,4 @@
-# sonata-start-exoplanets-3beams-3800-4200-obs.tcl
+# sonata-start-exoplanets-2beams-3800-4200-obs.tcl
 #
 # SSE seeker commands to start observing
 
@@ -113,7 +113,7 @@ dx set tripletthresh 48.000000000 current
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
-sched set beam2 {on} current 
+sched set beam2 {off} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 

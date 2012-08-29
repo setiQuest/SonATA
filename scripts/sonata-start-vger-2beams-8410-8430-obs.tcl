@@ -1,11 +1,11 @@
-# sonata-start-exoplanets-3beams-3800-4200-obs.tcl
+# sonata-start-vger-2beams-8410-8430-obs.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
 #sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
 
-exec setAlarm ARM,sonata,Exoplanets
+exec setAlarm ARM,sonata,vger
 
 # connect to the backend server
 tscope setup
@@ -25,9 +25,9 @@ act set earthephem {earth.xyz} current
 act set emailactstat {off} current 
 act set emailaddr {observing@seti.org} current 
 act set freqinvert {never} current 
-act set multitargetnulls {on} current 
+act set multitargetnulls {off} current 
 act set nulldepth 7.000000000 current 
-act set offactnulls {projection} current 
+act set offactnulls {none} current 
 act set pointprimary {on} current 
 act set prevactid 0 current 
 act set primarybempos {targetid} current 
@@ -37,13 +37,13 @@ act set readytimeout 60 current
 act set rfiagelimit 7.000000000 current 
 act set sigdetwait 2 current 
 act set site {ATA} current 
-act set targetbeam1 1 current 
+act set targetbeam1 131 current 
 act set targetbeam2 1 current 
-act set targetbeam3 1 current 
+act set targetbeam3 131 current 
 act set targetbeam4 1 current 
 act set targetbeam5 1 current 
 act set targetbeam6 1 current 
-act set targetprimary 1 current 
+act set targetprimary 131 current 
 act set tscopetimeout 300 current 
 act set type {target} current 
 act set varerrorlower 1.000000000 current 
@@ -54,7 +54,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {localhost} current 
-db set name {exoplanets201208} current 
+db set name {sonatadb} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -113,14 +113,14 @@ dx set tripletthresh 48.000000000 current
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
-sched set beam2 {on} current 
+sched set beam2 {off} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 3800.00 current 
-sched set catshigh {exoplanets,keplerHZ,exokepler} current 
+sched set beginfreq 8410.00 current 
+sched set catshigh {keplerHZ,exokepler,exoplanets} current 
 sched set catshighmaxcounts 20000 current 
 sched set catslow {habcat,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
@@ -131,7 +131,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 4200.000000000 current 
+sched set endfreq 8430.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -155,7 +155,7 @@ sched set rotateidsinterval 60.000000000 current
 sched set rotateids {off} current 
 sched set stopstratfail {off} current 
 sched set sunavoid 55.000000000 current 
-sched set target {auto} current 
+sched set target {user} current 
 sched set targetavailactsetup 60 current 
 sched set targetmerit {catalog,meridian,completelyobs,timeleft} current 
 sched set targetwait {on} current 
@@ -193,3 +193,4 @@ source antenna-list.tcl
 # begin observing
 
 start tasks
+

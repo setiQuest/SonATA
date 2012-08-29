@@ -93,6 +93,7 @@ public:
 
   virtual void useThisPrimaryFovCenter(double ra2000Rads, double dec2000Rads);
 
+  virtual void retrieveObsHistFromDbForZxs(ObsRange &observedFreqs, TargetId target);
   virtual void chooseTargets(
      int nTargetsToChoose,
      time_t obsDate,

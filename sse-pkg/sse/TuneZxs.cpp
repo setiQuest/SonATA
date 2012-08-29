@@ -181,7 +181,7 @@ TuneZxsUser::~TuneZxsUser()
 }
 
 void TuneZxsUser::tune(DxList &zxList, int32_t totalChannels,
-			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz )
+			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz, ObsRange  observedFreqs )
 {
    // place holder
 }
@@ -222,7 +222,7 @@ TuneZxsRange::~TuneZxsRange()
   // The range_.low_ is used as the left edge of the first channel
 
 void TuneZxsRange::tune(DxList &zxList, int32_t totalChannels,
-			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz)
+			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz, ObsRange  observedFreqs)
 {
  float64_t maxAllowedZxSkyFreqMhz=nextFreq_ + totalChannels*mhzPerChannel;
    float64_t maxZxTuneSeparationMhz = totalChannels*mhzPerChannel;
@@ -320,7 +320,7 @@ TuneZxsForever::~TuneZxsForever()
 }
 
 void TuneZxsForever::tune(DxList &zxList, int32_t totalChannels,
-			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz )
+			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz, ObsRange  observedFreqs )
 {
 }
 bool TuneZxsForever::moreActivitiesToRun() const
@@ -363,10 +363,15 @@ float64_t TuneZxsObsRange::calculateCenterFreq(DxProxy *zxProxy)
 // maxAllowedZxSkyFreqMhz.
 
 void TuneZxsObsRange::tune(DxList &zxList, int32_t totalChannels,
-			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz )
+			 float64_t mhzPerChannel, float64_t chanTuneFreqMhz,
+	       ObsRange zxObservedFreqs	)
 {
 
-      
+     ObsRange nonConstObsRange = obsRange_;
+cout << "Obs Range " << nonConstObsRange << endl;
+cout << "Observed Range " << zxObservedFreqs << endl;
+	nonConstObsRange = nonConstObsRange - zxObservedFreqs;
+cout << "Obs Range " << nonConstObsRange << endl;
  int32_t nextChan; 
   int32_t dcChannel = totalChannels/2;
 //cout << "dcChannel " << dcChannel << endl;
@@ -390,11 +395,9 @@ void TuneZxsObsRange::tune(DxList &zxList, int32_t totalChannels,
 
       Range channelizerRange(minFreq, maxAllowedZxSkyFreqMhz);
       float64_t totalUseableRangeMhz = 
-		obsRange_.getUseableBandwidth(channelizerRange);
+		nonConstObsRange.getUseableBandwidth(channelizerRange);
 VERBOSE2(getVerboseLevel(), "totalUseableRangeMhz " << totalUseableRangeMhz << endl);
    // Get the number of zxs
-      int32_t totalZxs = zxList.size();
-      float64_t totalZxBandwidth = totalZxs*mhzPerChannel;
 
 //  We have to find a bad band in the current range and compute
 //  the channel numbe and center frequency
@@ -428,14 +431,14 @@ VERBOSE2(getVerboseLevel(), "totalUseableRangeMhz " << totalUseableRangeMhz << e
            }
 //cout << "Obs Range " << obsRange_ << endl;
 
-	 if (!obsRange_.isIncluded(nextLeftEdgeFreq_ ))
+	 if (!nonConstObsRange.isIncluded(nextLeftEdgeFreq_ ))
 	 {
 // The top edge of the channel is not in the current subrange.
 // Find the next range that contains it
 	    list<Range>::const_iterator index = 
-	       obsRange_.aboveRange(nextLeftEdgeFreq_);
+	       nonConstObsRange.aboveRange(nextLeftEdgeFreq_);
 //cout << "New Range " << (*index).low_ << "-" << (*index).high_ << endl;
-	    if (index == obsRange_.rangeEnd())
+	    if (index == nonConstObsRange.rangeEnd())
 	    {
                // Ran out of subranges
 	        //cout << "exiting do-while loop, index == obsRange end()\n";
@@ -446,9 +449,6 @@ VERBOSE2(getVerboseLevel(), "totalUseableRangeMhz " << totalUseableRangeMhz << e
 // Adjust the nextLeftEdgeFreq_ for the new subrange
 // nextLeftEdge has to correspond to a channel edge.
 
-	       DxProxy *firstZxProxy = *zxList.begin();
-                  double firstZxFreq = firstZxProxy->getDxSkyFreq();
-                  int32_t firstZxChan = firstZxProxy->getChannelNumber();
 // Get next Channel Edge in the current subrange
                float64_t bwskip = (((*index).low_ ) + halfBandwidth - nextLeftEdgeFreq_)/mhzPerChannel;
 //cout << "bwskip " << bwskip << endl;
@@ -462,10 +462,9 @@ VERBOSE2(getVerboseLevel(), "totalUseableRangeMhz " << totalUseableRangeMhz << e
 // Check that the maximum zx separation has not been exceeded.
 	       //if (zxProxy != firstZxProxy)
 	       {
-		  double lowFreqMhz = firstZxFreq - halfBandwidth;
 // Compute new channel Number
                   float64_t fnumChan = (nextLeftEdgeFreq_ - minFreq
-			+ halfBandwidth)/mhzPerChannel;
+			- halfBandwidth)/mhzPerChannel;
                   int32_t numChan = (int32_t)(fnumChan);
 // for assume only one zx
                   nextChan =  numChan;
@@ -490,11 +489,11 @@ VERBOSE2(getVerboseLevel(), "totalUseableRangeMhz " << totalUseableRangeMhz << e
 	       }
 	    }
 	 }
-      } while (!obsRange_.isIncluded(
+      } while (!nonConstObsRange.isIncluded(
 	 Range(centerFreq - halfBandwidth + 0.02,
 	       centerFreq + halfBandwidth - 0.02)));
 #ifdef notForZxs
-      if (!obsRange_.isIncluded(
+      if (!nonConstObsRange.isIncluded(
 	 Range(centerFreq - halfBandwidth + 0.02,
 	       centerFreq + halfBandwidth - 0.02)))
       {
