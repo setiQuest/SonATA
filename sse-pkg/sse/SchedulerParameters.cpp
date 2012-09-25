@@ -201,7 +201,7 @@ SchedulerParametersInternal::SchedulerParametersInternal():
 			0, 0, 90),
 
    zenithAvoidAngleDeg("zenithavoid", "deg", "zenith avoidance angle", 
-			0, 0, 90),
+			5, 0, 90),
 
    autoRiseTimeCutoffMinutes("autorisecutoff", "minutes",
 			     "time cutoff used to determine autorise targets", 

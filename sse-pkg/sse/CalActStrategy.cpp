@@ -103,6 +103,7 @@ struct TargetValues
    double fluxJy;
    double sunAngleRads;
    bool isVisible;
+   bool tooCloseToZenith;
 };
 
 void CalActStrategy::selectCalTarget(TargetId &targetId, double &targetFluxJy)
@@ -113,7 +114,19 @@ void CalActStrategy::selectCalTarget(TargetId &targetId, double &targetFluxJy)
      (already selected) cal freq, that's up at least the min amount of time,
      and that is far enough away from the sun.
    */
-   const double minUpTimeForCalHours(0.5); // tbd get from params
+// 	get the number of Cal activities
+   int numCals = calFreqQueueMhz_.size();
+// 	Compute how long it will take to do them
+// 	Assume 3 beams for now
+   double minUpTimeForCalSecs =
+	3.0*(double)numCals*(double)nssParameters_.tscope_->getCalTimeSecs();
+   double minUpTimeForCalHours = minUpTimeForCalSecs/ 3600.;
+
+   VERBOSE2(getVerboseLevel(), methodName
+                 << " numCals = " << numCals << " CalTimeSecs = " 
+		<< nssParameters_.tscope_->getCalTimeSecs() 
+		 << " minUpTimeForCalHours = " << 
+			minUpTimeForCalHours << endl;);
 
    const vector<TargetInfo> & targetInfoVect(calTargets_.getTargetInfo());
    TscopeParameters * tscope(nssParameters_.tscope_);
@@ -136,8 +149,29 @@ void CalActStrategy::selectCalTarget(TargetId &targetId, double &targetFluxJy)
             << ", avoid angle (deg) = " 
             << sunAvoidAngleDeg << endl;);
 
+//		And check for Zenith Avoidance
+
+double startZenRaRads = SseAstro::lmstRads(obsTime,
+		SseAstro::degreesToRadians(tscope->getSiteLongWestDeg()));
+double midZenRaRads = SseAstro::lmstRads(obsTime + minUpTimeForCalSecs/2,
+		SseAstro::degreesToRadians(tscope->getSiteLongWestDeg()));
+double endZenRaRads = SseAstro::lmstRads(obsTime + minUpTimeForCalSecs,
+		SseAstro::degreesToRadians(tscope->getSiteLongWestDeg()));
+double zenithDecRads = SseAstro::degreesToRadians(tscope->getSiteLatNorthDeg());
+
+double zenithAvoidAngleRads = SseAstro::degreesToRadians(
+			nssParameters_.sched_->getZenithAvoidAngleDeg());
+
+   VERBOSE2(getVerboseLevel(), methodName << " start Zenith RA " << startZenRaRads
+		<< " mid " << midZenRaRads << " end " << endZenRaRads 
+		<< " DEC " << zenithDecRads << " Avoid Angle " 
+		<< zenithAvoidAngleRads << endl;);
+
    double minFluxJy(5);  // Per Peter Backus, 17 July 2009
    vector<TargetValues> targetValueVect;
+//
+//		Get Visible Cal Targets
+//
    for (unsigned int i=0; i<targetInfoVect.size(); ++i)
    {
       double riseHoursUtc, transitHoursUtc, setHoursUtc;
@@ -168,7 +202,50 @@ void CalActStrategy::selectCalTarget(TargetId &targetId, double &targetFluxJy)
       {
          values.isVisible = true;
       }
+#ifdef old
+//	Compute angle separation from zenith at start, middle, and end of the
+//		strategy
+	values.startZenAngleRads = SseAstro::angSepRads(
+         SseAstro::hoursToRadians(targetInfoVect[i].ra2000Hours),
+         SseAstro::degreesToRadians(targetInfoVect[i].dec2000Deg),
+		startZenRaRads,  zenithDecRads );
+
+	values.midZenAngleRads = SseAstro::angSepRads(
+         SseAstro::hoursToRadians(targetInfoVect[i].ra2000Hours),
+         SseAstro::degreesToRadians(targetInfoVect[i].dec2000Deg),
+		midZenRaRads,  zenithDecRads );
+
+	values.endZenAngleRads = SseAstro::angSepRads(
+         SseAstro::hoursToRadians(targetInfoVect[i].ra2000Hours),
+         SseAstro::degreesToRadians(targetInfoVect[i].dec2000Deg),
+		endZenRaRads,  zenithDecRads );
+#endif
+        values.tooCloseToZenith = true;
+// if the Declination is not within the Zenith Avoid angle of Zenith
+// the target won't pass through zenith
+        if ( fabs(SseAstro::degreesToRadians(targetInfoVect[i].dec2000Deg) -
+		zenithDecRads ) > zenithAvoidAngleRads )
+			values.tooCloseToZenith = false;
+// In the case where the Declination is close to the Zenith Declination
+// Check that the RA is far enough away from the target RA
+	else if (  (SseAstro::hoursToRadians(targetInfoVect[i].ra2000Hours)
+ 			  > endZenRaRads + zenithAvoidAngleRads) ||
+			( SseAstro::hoursToRadians(targetInfoVect[i].ra2000Hours)
+ 			 < startZenRaRads - zenithAvoidAngleRads ) )
+			values.tooCloseToZenith = false;
+				
       targetValueVect.push_back(values);
+
+   VERBOSE2(getVerboseLevel(), methodName << " tooCloseToZenith " 
+	<< values.tooCloseToZenith 
+	<< " Target Ra " 
+	<< SseAstro::hoursToRadians(targetInfoVect[i].ra2000Hours) 
+	<< " Dec " << SseAstro::degreesToRadians(targetInfoVect[i].dec2000Deg) 
+     << endl; );
+//   VERBOSE2(getVerboseLevel(), methodName << " start Angluar Separation " 
+//	<< values.startZenAngleRads 
+//	<< " mid " << values.midZenAngleRads << " end " << values.endZenAngleRads
+//	<< endl; );
    }
 
    // First try to pick the strongest visible target that's outside
@@ -181,7 +258,8 @@ void CalActStrategy::selectCalTarget(TargetId &targetId, double &targetFluxJy)
       TargetValues &values(targetValueVect[i]);
       if (values.isVisible)
       {
-         if (values.sunAngleRads > sunAvoidAngleRads)
+         if (values.sunAngleRads > sunAvoidAngleRads  &&
+		!values.tooCloseToZenith )
          {
             if (values.fluxJy > maxFluxAtCalFreq)
             {
@@ -205,11 +283,14 @@ void CalActStrategy::selectCalTarget(TargetId &targetId, double &targetFluxJy)
          TargetValues &values(targetValueVect[i]);
          if (values.isVisible)
          {
+	  if (	!values.tooCloseToZenith )
+           {
             if (values.sunAngleRads > maxSunAngleRads)
             {
                maxSunAngleRads = values.sunAngleRads;
                bestTargetIndex = i;
             }
+           }  
          }
       }
    }
