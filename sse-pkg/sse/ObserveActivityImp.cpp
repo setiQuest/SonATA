@@ -3875,9 +3875,9 @@ void ObserveActivityImp::pointAntsAndWait(TscopeProxy *tscopeProxy)
 
 void ObserveActivityImp::pointBeams(TscopeProxy *tscopeProxy)
 {
-	/* For each prelude beam in use, get the associated ata beam(s)
+	/* For each SonATA beam in use, get the associated ata beam(s)
 	 * and point them at the appropriate target.
-	 * Eg, prelude 'beam1' may be associated with
+	 * Eg, SonATA 'beam1' may be associated with
 	 * ata beams 'beamxa1' and 'beamya1'.
 	 */
 
@@ -4210,7 +4210,7 @@ ObserveActivityImp::getAtaBeamsForPreludeBeam(const string & preludeBeamName)
 
 /*
    Assign the coords as a NULL to all the ATA beams associated with the
-   specified prelude beam.
+   specified SonATA beam.
    */
 void ObserveActivityImp::addNullBeamCoordsToAtaBeams(
 		TscopeProxy * tscopeProxy,
@@ -4254,7 +4254,7 @@ void ObserveActivityImp::assignOffActProjectionNulls(
 		<< "Using OFF act projection nulls." << endl;
 
 	/*
-	   Take each prelude beam in turn.  Assign its target coordinates
+	   Take each SonATA beam in turn.  Assign its target coordinates
 	   as a NULL on each ATA beam associated with it.
 	   */
 	tscopeProxy->beamformerClearBeamNulls();
@@ -4278,9 +4278,9 @@ void ObserveActivityImp::assignOffActProjectionNulls(
 }
 
 /*
-   For each prelude beam in use:
+   For each SonATA beam in use:
    Assign its target coordinates to each ATA beam on the
-   other prelude beams in use.
+   other SonATA beams in use.
    */
 void ObserveActivityImp::assignCrossBeamProjectionNulls(
 		TscopeProxy *tscopeProxy,
@@ -4294,8 +4294,8 @@ void ObserveActivityImp::assignCrossBeamProjectionNulls(
 		<< "Using multitarget projection nulls." << endl;
 
 	/*
-	   Take each prelude beam in turn.  Assign its target coordinates
-	   as a NULL on each ATA beam associated with the other prelude beams.
+	   Take each SonATA beam in turn.  Assign its target coordinates
+	   as a NULL on each ATA beam associated with the other SonATA beams.
 	   */
 	tscopeProxy->beamformerClearBeamNulls();
 
@@ -4326,7 +4326,7 @@ void ObserveActivityImp::assignCrossBeamProjectionNulls(
 
 /*
    Assign ant subarrays to the ata beams associated with each
-   specified prelude beam.
+   specified SonATA beam.
    */
 void ObserveActivityImp::assignSubarraysToAtaBeams(
 		TscopeProxy *tscopeProxy,
@@ -4372,7 +4372,7 @@ void ObserveActivityImp::assignSubarraysToAtaBeams(
 
 /*
    Assign target coordinates to the ata synth beams that are
-   associated with each prelude beam in the targets container. 
+   associated with each SonATA beam in the targets container. 
    */
 void ObserveActivityImp::assignTargetsToAtaBeams(
 		TscopeProxy *tscopeProxy,
@@ -4505,7 +4505,7 @@ double ObserveActivityImp::determineTuningSkyFreqMhzForPreludeBeam(
 	string ataTuningName = getTuningNameForPreludeBeam(preludeBeamName);
 	if (ataTuningName == "")
 	{
-		throw SseException("failed to get ATA tuning name for prelude beam",
+		throw SseException("failed to get ATA tuning name for SonATA beam",
 				__FILE__, __LINE__);
 	}
 
@@ -4748,19 +4748,19 @@ void ObserveActivityImp::commandAtaTuningsForPreludeBeamsInUse(
 }
 
 
-// Fill in ataTuningToPreludeBeamsMultiMap for prelude beams in use
+// Fill in ataTuningToPreludeBeamsMultiMap for SonATA beams in use
 //
 void ObserveActivityImp::findAtaTuningsForPreludeBeamsInUse(
 		AtaTuningToPreludeBeamsMultiMap & ataTuningToPreludeBeamsMultiMap)
 {
-	/* For each prelude beam in use, get the associated ata beam(s)
+	/* For each SonATA beam in use, get the associated ata beam(s)
 	 * and extract the ata tuning.
-	 * Eg, prelude 'beam1' may be associated with
+	 * Eg, SonATA 'beam1' may be associated with
 	 *   ata beams 'beamxd1' and 'beamyd1'. The ATA RF tuning is specified
 	 *   in the ATA beamname as the letter before the last number,
 	 *   in this example, the associated ATA RF tuning is 'd'.
-	 * Each prelude beam must have one (and only one) ATA RF tuning assigned to
-	 * it, but note that multiple prelude beams can be associated with
+	 * Each SonATA beam must have one (and only one) ATA RF tuning assigned to
+	 * it, but note that multiple SonATA beams can be associated with
 	 * the same ATA RF tuning.
 	 */
 
@@ -4776,7 +4776,7 @@ void ObserveActivityImp::findAtaTuningsForPreludeBeamsInUse(
 
 		// Extract ata tuning from beam names.  Error if there isn't one,
 		// or there's more than one (ie, ATA beams from different ATA tunings
-		// were assigned to the same prelude beam).
+		// were assigned to the same SonATA beam).
 
 		string lastShortTuningName("");
 		for (vector<string>::iterator ataBeamNameIt = ataBeamsForPreludeBeam.begin();
@@ -4791,7 +4791,7 @@ void ObserveActivityImp::findAtaTuningsForPreludeBeamsInUse(
 				stringstream errorMsg;
 				errorMsg << "Error extracting ATA RF tuning from ATA beam name '"
 					<< ataBeamName 
-					<< "' for prelude beam '" << preludeBeamName
+					<< "' for SonATA beam '" << preludeBeamName
 					<< "' in expected components config file, "
 					<< "ata beam name is too short\n";
 
@@ -4807,7 +4807,7 @@ void ObserveActivityImp::findAtaTuningsForPreludeBeamsInUse(
 				<< shortTuningName << endl;
 #endif
 
-			// store prelude beam associated with ata tuning
+			// store SonATA beam associated with ata tuning
 			string ataTuningFullName("TUNING" + SseUtil::strToUpper(shortTuningName));
 			TscopeTuning tuning = SseTscopeMsg::nameToTuning(ataTuningFullName);
 			if (tuning == TSCOPE_INVALID_TUNING)
@@ -4815,7 +4815,7 @@ void ObserveActivityImp::findAtaTuningsForPreludeBeamsInUse(
 				stringstream errorMsg;
 				errorMsg << "Error extracting ATA RF tuning from ATA beam name '"
 					<< ataBeamName 
-					<< "' for prelude beam '" << preludeBeamName
+					<< "' for SonATA beam '" << preludeBeamName
 					<< "' in expected components config file, "
 					<< "invalid tuning of '" 
 					<< shortTuningName << "' specified in beam name\n";
@@ -4826,14 +4826,14 @@ void ObserveActivityImp::findAtaTuningsForPreludeBeamsInUse(
 			}
 
 			// check that all ata tunings are the same for all atabeams 
-			// on this prelude beam
+			// on this SonATA beam
 			if (lastShortTuningName != "")
 			{
 				if (lastShortTuningName != shortTuningName)
 				{
 					stringstream errorMsg;
 					errorMsg << "Error extracting ATA RF tuning from ATA beam names "
-						<<  "for prelude beam '" << preludeBeamName
+						<<  "for SonATA beam '" << preludeBeamName
 						<< "' in expected components config file, "
 						<< " ATA tunings do not match: '" 
 						<< lastShortTuningName << "' and '" << shortTuningName 
@@ -4872,7 +4872,7 @@ void ObserveActivityImp::determineAtaTuning(
 	const string ataTuningName(SseUtil::strToLower(
 				SseTscopeMsg::tuningToName(tuning)));
 
-	// get the prelude beams on this ata tuning
+	// get the SonATA beams on this ata tuning
 	vector<string> preludeBeams;
 	AtaTuningToPreludeBeamsMultiMap::const_iterator it;
 	for (it = ataTuningToPreludeBeamsMultiMap.lower_bound(tuning);
@@ -4883,12 +4883,12 @@ void ObserveActivityImp::determineAtaTuning(
 		preludeBeams.push_back(preludeBeamName);
 	}
 
-	// remove duplicate prelude beams
+	// remove duplicate SonATA beams
 	sort(preludeBeams.begin(), preludeBeams.end());
 	preludeBeams.erase(unique(preludeBeams.begin(), preludeBeams.end()),
 			preludeBeams.end());
 
-	// save names of prelude beams
+	// save names of SonATA beams
 	stringstream preludeBeamNamesStrm;
 	for (vector<string>::iterator pbnamesIt = preludeBeams.begin();
 			pbnamesIt != preludeBeams.end(); ++pbnamesIt)
@@ -4921,7 +4921,7 @@ void ObserveActivityImp::determineAtaTuning(
 	float64_t bandwidthMhz = (float64_t)(proxy->getOutputChannels())*(proxy->getMhzPerChannel());
 	float64_t halfBandwidthMhz = proxy->getMhzPerChannel()/2.0;
 
-		//  Get dxs for the prelude beams on this ata tuning
+		//  Get dxs for the SonATA beams on this ata tuning
 		DxList dxList = getNssComponentTree()->getDxsForBeams(preludeBeams);
 		if (dxList.size() == 0)
 		{
@@ -4948,7 +4948,7 @@ void ObserveActivityImp::determineAtaTuning(
 
 			VERBOSE2(verboseLevel_, "Act " << getId() << ": " 
 					<< "ATA tuning: " << ataTuningName
-					<< " for prelude beams: " << preludeBeamNamesStrm.str()
+					<< " for SonATA beams: " << preludeBeamNamesStrm.str()
 					<< " tuned to: " << tuningFreqMhz << " MHz "
 					<< endl;);
 
@@ -4962,7 +4962,7 @@ void ObserveActivityImp::determineAtaTuning(
 				SseArchive::SystemLog() 
 					<< "Act " << getId() << ": " 
 					<< "no dxs in use "
-					<< "for prelude beams: " << preludeBeamNamesStrm.str()
+					<< "for SonATA beams: " << preludeBeamNamesStrm.str()
 					<< " (on ata tuning '" << ataTuningName << "') "
 					<< endl;
 
@@ -4977,7 +4977,7 @@ void ObserveActivityImp::determineAtaTuning(
 				errorMsg << "Failure setting tuning sky freq of " 
 					<< tuningFreqMhz << " MHz for ATA tuning "
 					<< ataTuningName
-					<< " for prelude beams " << preludeBeamNamesStrm.str()
+					<< " for SonATA beams " << preludeBeamNamesStrm.str()
 					<< endl;
 
 				throw SseException(errorMsg.str(), __FILE__, __LINE__,
@@ -5014,7 +5014,7 @@ if (! isMultitargetObservation() && dxMeanSkyFreqMhz < 0)
 		SseArchive::SystemLog()
 			<< "Act " << getId() << ": " 
 			<< "center tune freq "
-			<< "for prelude beams: " << preludeBeamNamesStrm.str()
+			<< "for SonATA beams: " << preludeBeamNamesStrm.str()
 			<< " (on ata tuning '" << ataTuningName << "') "
 			<< "is " << tuningSkyFreqMhz << " MHz" << endl;
 		// set tscope parameter
@@ -5025,7 +5025,7 @@ if (! isMultitargetObservation() && dxMeanSkyFreqMhz < 0)
 			errorMsg << "Failure setting tuning sky freq of " 
 				<< tuningSkyFreqMhz << " MHz for ATA tuning "
 				<< ataTuningName
-				<< " for prelude beams " << preludeBeamNamesStrm.str()
+				<< " for SonATA beams " << preludeBeamNamesStrm.str()
 				<< endl;
 
 			throw SseException(errorMsg.str(), __FILE__, __LINE__,
@@ -6017,7 +6017,7 @@ void ObserveActivityImp::createActivityUnit(DxProxy *proxy,
 			string beamName = expectedTree_->getBeamForDx(proxy->getName());
 			if (beamName == "")
 			{
-				throw SseException("failed to find prelude beam name for dx",
+				throw SseException("failed to find SonATA beam name for dx",
 						__FILE__, __LINE__);
 			}
 
@@ -6025,7 +6025,7 @@ void ObserveActivityImp::createActivityUnit(DxProxy *proxy,
 			string ataTuningName = getTuningNameForPreludeBeam(beamName);
 			if (ataTuningName == "")
 			{
-				throw SseException("failed to get ATA tuning name for prelude beam",
+				throw SseException("failed to get ATA tuning name for SonATA beam",
 						__FILE__, __LINE__);
 			}
 

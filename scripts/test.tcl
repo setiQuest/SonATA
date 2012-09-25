@@ -1,13 +1,14 @@
 tscope sim
  sched set beam1 on
  sched set beam2 on
- sched set beam3 on
+ sched set beam3 off
  dx set length 93
  sched set dxtune range
  sched set multitarget on
- db set name janetest
+ db set name kepler201208
  db set usedb on
- db set host sse100
+ db set host sse200
+ db set user jane
  db set usedb on
  dx set basewarn off
  dx set baseerror off
@@ -19,6 +20,7 @@ tscope sim
  sched set followup on
  sched set catshigh exoplanets,habcat
  sched set catslow tycho2subset,tycho2remainder
+ sched set tasks calphase,calfreq
  act set targetbeam1 144
  act set targetbeam2 144
  act set targetprimary 144

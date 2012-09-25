@@ -129,7 +129,7 @@ TscopeParametersInternal::TscopeParametersInternal():
 
    basebandCenterTuneOffsetMhz(
       "centertuneoffset", "MHz",
-      "center tune offset (diff between prelude band center and bf band center)",
+      "center tune offset (diff between SonATA band center and bf band center)",
       DefaultBasebandCenterTuneOffsetMhz, -50.0, 50.0),
 
    primaryFovAtOneGhzDeg("primaryfov", "deg @1GHz", "primary Field-Of-View at 1 GHz", 
