@@ -26,5 +26,5 @@ sleep 120
 #${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-2beams-beam1-beam2-1400-1750-obs.tcl
 #${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-1400-1750-obs.tcl
 #${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-1152-1352-obs.tcl
-#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-3800-4200-obs.tcl
-${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-2beams-3800-4200-obs.tcl
+${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-3800-4200-obs.tcl
+#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-2beams-3800-4200-obs.tcl

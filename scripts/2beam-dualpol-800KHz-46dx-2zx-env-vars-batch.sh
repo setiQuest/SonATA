@@ -14,7 +14,7 @@ echo $SSE_SETUP
 
 # Logical Channelizer Host Names
 #RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
-RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost3x chanhost3y"
+RUNSSE_CHAN_HOSTS="chanhost2x chanhost2y chanhost3x chanhost3y"
 export RUNSSE_CHAN_HOSTS
 
 # Actual Channelizer Host Names
@@ -67,7 +67,7 @@ export CHANHOST3Y_OPTS
 
 # Logical Host Names
 #RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
-RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost7 dxhost8 dxhost9"
+RUNSSE_DX_HOSTS="dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
 export RUNSSE_DX_HOSTS
 
 # Actual Host Names
@@ -148,7 +148,7 @@ export DXHOST8_OPTS
 export DXHOST9_OPTS
 
 #RUNSSE_ZX_HOSTS="zxhost1 zxhost2 zxhost3"
-RUNSSE_ZX_HOSTS="zxhost1 zxhost3"
+RUNSSE_ZX_HOSTS="zxhost2 zxhost3"
 export RUNSSE_ZX_HOSTS
 
 ZXHOST1="seti000-4"

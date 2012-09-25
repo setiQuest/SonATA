@@ -112,8 +112,8 @@ dx set trainsignifthresh -40.000000000 current
 dx set tripletthresh 48.000000000 current 
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
-sched set beam1 {on} current 
-sched set beam2 {off} current 
+sched set beam1 {off} current 
+sched set beam2 {on} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
