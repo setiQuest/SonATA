@@ -64,7 +64,7 @@ dx set badbandpulselim 300.000000000 current
 dx set badbandpulsetriplim 5000.000000000 current 
 dx set bandwidth 1536 current 
 dx set basedecay 0.899999976 current 
-dx set baseerrormeanlower 350.000000000 current 
+dx set baseerrormeanlower 300.000000000 current 
 dx set baseerrormeanupper 15000.000000000 current 
 dx set baseerror on current 
 dx set baseerrorrange 15000.000000000 current 
@@ -74,8 +74,8 @@ dx set baselines {on} current
 dx set baserep 20 current 
 dx set basestats {on} current 
 dx set basesubave 1 current 
-dx set basewarnmeanlower 400.000000000 current 
-dx set basewarnmeanupper 10000.000000000 current 
+dx set basewarnmeanlower 300.000000000 current 
+dx set basewarnmeanupper 15000.000000000 current 
 dx set basewarn on current 
 dx set basewarnrange 10000.000000000 current 
 dx set basewarnstddev 75.000000000 current 

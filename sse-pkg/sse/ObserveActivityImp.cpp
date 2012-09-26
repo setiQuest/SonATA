@@ -1303,7 +1303,9 @@ void ObserveActivityImp::completeRemainingDxPreparation()
 	startDataCollTime_ = calculateStartDataCollTime();
 
 // Update the start time in the database for SetiLive.
-	updateActivityStartDataCollTime();
+// Start time printed in systemlog so this is not necessary
+// and it causes an error in the demo
+	//updateActivityStartDataCollTime();
 
 	if (followUpObservationEnabled())
 	{
@@ -3754,7 +3756,8 @@ void ObserveActivityImp::beamformerInit(TscopeProxy *tscopeProxy)
 
 	// assign ants to beams
 	vector<string> preludeBeamsToUse(schedulerParameters_.getBeamsToUse());
-	assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
+	//JR - 09/25/2012 - Not necessary to assign beams
+	//assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
 
 	//JR - beamformerInit starts the bfinit program. But first we need
 	//to assign IP addresses for the --ip0 and --ip1 arguments to  bfinit
@@ -3825,7 +3828,8 @@ void ObserveActivityImp::beamformerAutoatten(TscopeProxy *tscopeProxy)
 
 	// assign ants to beams so that status can be read back
 	vector<string> preludeBeamsToUse(schedulerParameters_.getBeamsToUse());
-	assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
+	//JR - 09/25/2012 - Not necessary to assign beams
+	//assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
 
 	// point subarray at dark sky
 	// TBD get args from params
@@ -3860,7 +3864,8 @@ void ObserveActivityImp::pointAntsAndWait(TscopeProxy *tscopeProxy)
 
 	// assign ants to beams so that primary beam "ready" status can be determined
 	vector<string> preludeBeamsToUse(schedulerParameters_.getBeamsToUse());
-	assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
+	//JR - 09/25/2012 - Not necessary to assign beams
+	//assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
 
 	// Determine primary beam position.
 	calculatePrimaryBeamPointing(&primaryCenterRaRads_,
@@ -3941,7 +3946,8 @@ TBD: assignSubarraysToAtaBeams really only needs to be
 done once during an observing session.  Consider deleting
 it from here.
 */
-	assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
+	//JR - 09/25/2012 - Not necessary to assign beams
+	//assignSubarraysToAtaBeams(tscopeProxy, preludeBeamsToUse);
 
 	assignTargetsToAtaBeams(tscopeProxy, adjustedTargets);
 
