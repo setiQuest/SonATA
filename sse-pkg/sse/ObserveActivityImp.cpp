@@ -1303,9 +1303,9 @@ void ObserveActivityImp::completeRemainingDxPreparation()
 	startDataCollTime_ = calculateStartDataCollTime();
 
 // Update the start time in the database for SetiLive.
-// Start time printed in systemlog so this is not necessary
-// and it causes an error in the demo
-	//updateActivityStartDataCollTime();
+// But not for the demo
+//
+	if ( getActivityType() != "iftest") updateActivityStartDataCollTime();
 
 	if (followUpObservationEnabled())
 	{
