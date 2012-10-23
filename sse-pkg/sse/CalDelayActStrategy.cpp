@@ -65,7 +65,7 @@ string CalDelayActStrategy::getCalType()
 
 int CalDelayActStrategy::getNumCalCycles()
 {
-   return 2;
+   return 3;
 }
 
 int CalDelayActStrategy::getCalTimeSecs(double obsFreqMhz, double targetFluxJy)

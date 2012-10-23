@@ -87,7 +87,7 @@ stopDate=`date -u -d '3 days ago + 1 year' +"$dateFormat"`
 
 mailSubject="job"
 mailAddr="horizons@ssd.jpl.nasa.gov"
-returnAddr="$LOGNAME@seti.org"
+returnAddr="$jane@seti.org"
 
 for target in $targetlist 
 do

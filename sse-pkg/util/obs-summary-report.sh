@@ -39,7 +39,7 @@ MYSQL_ROOT=/usr/local/mysql
 LD_LIBRARY_PATH="${MYSQL_ROOT}/lib:/usr/local/lib"
 export LD_LIBRARY_PATH
 
-dbHost="sse100"
+dbHost="sse300"
 dbName="waterhole2x"
 hoursInterval="24"
 

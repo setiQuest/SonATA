@@ -97,9 +97,9 @@ Tscope::Tscope(SseProxy& sseProxy, const string &antControlServerName,
    controlEventHandler_(0),
    monitorEventCallback_(0),
    monitorEventHandler_(0),
-   verboseLevel_(0), 
+   verboseLevel_(2), 
    simulated_(false),
-   rcvrSkyTuneReqMhz_(1), 
+   rcvrSkyTuneReqMhz_(1000), 
    tracking_(false),
    tuned_(false),
    notTrackingTargetCount_(0),
@@ -122,12 +122,15 @@ Tscope::Tscope(SseProxy& sseProxy, const string &antControlServerName,
 						 monitorPort);
 
    setBackendHostInStatus(statusMultibeam_, antControlServerName);
+   // Clear the subarray assignments once at start up JJ 2012-10-16
+   ataAssignSubarray_.clear();
     
 };
 
 Tscope::~Tscope()
 {
    VERBOSE2(verboseLevel_, "Tscope destructor" << endl;);
+   //cout << "Tscope destructor" << endl;
 
    delete controlEventCallback_;
    delete controlEventHandler_;
@@ -191,6 +194,7 @@ bool Tscope::sendCommand(const string & command)
 	 SEVERITY_ERROR, errorStrm.str());
 
       VERBOSE1(getVerboseLevel(), errorStrm.str() << endl;);
+//cout << errorStrm.str() << endl;
 
       success = false;
    }
@@ -237,6 +241,8 @@ void Tscope::setSimulated(bool simulated)
 {
    VERBOSE1(getVerboseLevel(), "Tscope simulate mode: "
 	    << simulated << endl;);
+   //cout << "Tscope simulate mode: "
+	    //<< simulated << endl;
 
    simulated_ = simulated;
 
@@ -268,6 +274,7 @@ void Tscope::disconnect()
    // indicate via the status that the connection has been broken:
    TscopeStatusMultibeam defaultStatus;
    statusMultibeam_ = defaultStatus;
+   ataAssignSubarray_.clear();
 
    // send status to SSE
    requestStatus();
@@ -326,6 +333,7 @@ void Tscope::allocate(const TscopeSubarray & subarray)
    stringstream command;
    command << "ALLOCATE " << subarray.subarray << endl;
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
 
    handleCommand(command.str());
 }
@@ -335,6 +343,7 @@ void Tscope::deallocate(const TscopeSubarray & subarray)
    stringstream command;
    command << "DEALLOCATE " << subarray.subarray << endl;
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
    
    handleCommand(command.str());
 }
@@ -358,6 +367,7 @@ void Tscope::assignSubarray(const TscopeAssignSubarray & assignSub)
            << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
    if (!getSimulated())
    {
       if (!sendCommand(command.str()))
@@ -379,6 +389,7 @@ void Tscope::antgroupAutoselect(const TscopeAntgroupAutoselect &antAuto)
            << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
    
    //handleCommand(command.str());
 //JR - uncomment this to do bfantselect
@@ -393,6 +404,7 @@ void Tscope::beamformerStop()
 
    string command("BF STOP\n");
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command << endl;);
+   //cout << "Tscope command: " << command << endl;
 
    handleCommand(command);
 }
@@ -401,6 +413,7 @@ void Tscope::beamformerReset()
 {
    string command("BF RESET\n");
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command << endl;);
+   //cout << "Tscope command: " << command << endl;
 
    handleDeferredBfCommand(command);
 }
@@ -410,6 +423,7 @@ void Tscope::beamformerInit()
 {
    string command("BF INIT\n");
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command << endl;);
+   //cout << "Tscope command: " << command << endl;
 
    handleDeferredBfCommand(command);
 }
@@ -421,6 +435,7 @@ void Tscope::beamformerDest(TscopeBackendCmd args)
    cmd << args.cmdWithArgs << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 
 }
@@ -429,6 +444,7 @@ void Tscope::beamformerAutoatten()
 {
    string cmd("BF AUTOATTEN\n");
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd << endl;);
+   //cout << "Tscope command: " << cmd << endl;
 
    handleDeferredBfCommand(cmd);
 }
@@ -441,6 +457,7 @@ void Tscope::monitor(const TscopeMonitorRequest & request)
    command << "MONITOR " << request.periodSecs << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
    handleCommand(command.str());
 }
 
@@ -456,6 +473,7 @@ void Tscope::beginSendingCommandSequence()
 { 
    VERBOSE2(getVerboseLevel(), 
             "Tscope command: beginSendingCommandSequence" << endl;);
+   //cout << "Tscope command: beginSendingCommandSequence" << endl;
 
    commandSequenceState_ = COMMAND_SEQUENCE_INCOMING;
 
@@ -464,7 +482,8 @@ void Tscope::beginSendingCommandSequence()
 
    tuneRequests_.clear();
    subarrayPointingRequests_.clear();
-   ataAssignSubarray_.clear();
+   // Don't clear this, just use the previous assignment
+   //ataAssignSubarray_.clear();
 
    deferredBeamformerCmd_.erase();
 }
@@ -479,6 +498,7 @@ void Tscope::doneSendingCommandSequence()
 {
    VERBOSE2(getVerboseLevel(),
             "Tscope command: doneSendingCommandSequence " << endl;);
+   //cout << "Tscope command: doneSendingCommandSequence " << endl;
 
    commandSequenceState_ = COMMAND_SEQUENCE_FULLY_RECEIVED;
 
@@ -644,6 +664,8 @@ void Tscope::beamformerSetCoords(const TscopeBeamCoords & coords)
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
    VERBOSE2(getVerboseLevel(), "Coords: " << coords << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
+   //cout << "Coords: " << coords << endl;
 
    handleCommand(command.str());
 }
@@ -700,6 +722,8 @@ void Tscope::beamformerAddNullCoords(const TscopeBeamCoords & coords)
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
    VERBOSE2(getVerboseLevel(), "Coords: " << coords << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
+   //cout << "Coords: " << coords << endl;
 
    handleCommand(command.str());
 }
@@ -736,6 +760,7 @@ void Tscope::beamformerPoint()
    cmd << "BF POINT" << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
 
    handleDeferredBfCommand(cmd.str());
 }
@@ -781,6 +806,8 @@ void Tscope::beamformerCal(const TscopeCalRequest &cal)
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " 
             << command.str() << endl;); 
+   //cout << "Tscope command: " 
+            //<< command.str() << endl; 
 
    handleDeferredBfCommand(command.str());
 }
@@ -794,6 +821,7 @@ void Tscope::beamformerClearBeamCoords()
    cmd << "BF CLEAR COORDS ALL" << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 }
 
@@ -803,6 +831,7 @@ void Tscope::beamformerClearAnts()
    cmd << "BF CLEAR ANTS ALL" << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 }
 
@@ -852,6 +881,8 @@ void Tscope::pointSubarray(const TscopeSubarrayCoords & coords)
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
    VERBOSE2(getVerboseLevel(), "Coords: " << coords << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
+   //cout << "Coords: " << coords << endl;
  
    if (!getSimulated()) 
    {
@@ -877,6 +908,7 @@ void Tscope::pointSubarray(const TscopeSubarrayCoords & coords)
 void Tscope::requestStatus()
 {
    VERBOSE1(getVerboseLevel(), "TScope request status." << endl;);
+   //cout << "TScope request status." << endl;
 
    // TBD this does not request an updated status,
    // but sends the cached one which is presumably being updated
@@ -894,12 +926,14 @@ void Tscope::requestStatus()
 void Tscope::requestIntrinsics() 
 {
    VERBOSE1(getVerboseLevel(), "TScope request intrinsics." << endl;);
+   //cout << "TScope request intrinsics." << endl;
    getSseProxy().sendIntrinsics(intrinsics_);   
 }
 
 void Tscope::reset()
 {
    VERBOSE1(getVerboseLevel(), "TScope reset." << endl;);
+   //cout << "TScope reset." << endl;
 
    // TBD
 
@@ -939,6 +973,7 @@ void Tscope::tune(const TscopeTuneRequest & tuneReq)
    command << "TUNE " << tuningLetter << " " << tuneReq.skyFreqMhz << "\n";
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
 
    if (getSimulated())
    {
@@ -984,6 +1019,7 @@ void Tscope::zfocus(const TscopeZfocusRequest & zfocusReq)
 	   << zfocusReq.skyFreqMhz << "\n";
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
 
    if (getSimulated())
    {
@@ -1010,6 +1046,7 @@ void Tscope::lnaOn(const TscopeLnaOnRequest & lnaOnReq)
    cmd << "LNAON " << lnaOnReq.subarray << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 }
 
@@ -1019,6 +1056,7 @@ void Tscope::pamSet(const TscopePamSetRequest & pamSetReq)
    cmd << "PAMSET " << pamSetReq.subarray << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 }
 
@@ -1028,12 +1066,14 @@ void Tscope::sendBackendCmd(const TscopeBackendCmd & backendCmd)
    cmd << backendCmd.cmdWithArgs << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 }
 
 void Tscope::shutdown()
 {
    VERBOSE1(getVerboseLevel(), "Tscope: " << getName() << " shutdown." << endl;);
+   //cout << "Tscope: " << getName() << " shutdown." << endl;
    ACE_Reactor::end_event_loop ();
 }
 
@@ -1043,6 +1083,7 @@ void Tscope::stop(const TscopeStopRequest & stopReq)
    cmd << "STOP " << stopReq.subarray << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 }
 
@@ -1052,6 +1093,7 @@ void Tscope::stow(const TscopeStowRequest & stowReq)
    cmd << "STOW " << stowReq.subarray << endl;
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << cmd.str() << endl;);
+   //cout << "Tscope command: " << cmd.str() << endl;
    handleCommand(cmd.str());
 }
 
@@ -1063,6 +1105,7 @@ void Tscope::wrap(TscopeWrapRequest wrapReq)
            << wrapReq.wrapNumber << "\n";
 
    VERBOSE1(getVerboseLevel(), "Tscope command: " << command.str() << endl;);
+   //cout << "Tscope command: " << command.str() << endl;
 
    if (getSimulated())
    {
@@ -1173,6 +1216,7 @@ bool Tscope::isRequestedTargetPositionCloseToCurrentPosition(
    // current position is within the tolerance, then return true.
 
    const double tolDeg(maxPointingErrorDeg());
+//cout << "tolDeg " << tolDeg << endl;
 
    // Convert the requested & current coordinates to degrees as needed.
    // Use the status fields that match the requested coord sys
@@ -1201,7 +1245,8 @@ bool Tscope::isRequestedTargetPositionCloseToCurrentPosition(
 	
       currentCoord1Deg = current.azDeg;
       currentCoord2Deg = current.elDeg;
-
+//cout << "Requested AzEL coords " << requested.azDeg << ", " << requested.elDeg << endl;
+//cout << "Current AzEl coords " << current.azDeg << ", " << current.elDeg << endl;
       break;
 	
    case TscopePointing::J2000:
@@ -1210,8 +1255,13 @@ bool Tscope::isRequestedTargetPositionCloseToCurrentPosition(
          requested.raHours, requested.decDeg,
          current.raHours, current.decDeg);
 
+//cout << "Requested J2000 coords " << requested.raHours << ", " 
+	//<< requested.decDeg << endl;
+//cout << "Current J2000 coords " << current.raHours << ", " << current.decDeg << endl;
+//cout << "requestedToCurrentArcDistDeg " << requestedToCurrentArcDistDeg << endl;
       if (requestedToCurrentArcDistDeg < tolDeg)
       {
+	      //cout << "On target" << endl;
          return true;
       }
       else
@@ -1221,6 +1271,7 @@ bool Tscope::isRequestedTargetPositionCloseToCurrentPosition(
         string status = "J2000 pointing error: " + doubleToString(requestedToCurrentArcDistDeg) + " degrees Arc diff. Requested RA=" + doubleToString(requested.raHours) + ", DEC=" + doubleToString(requested.decDeg) + ", Actual RA=" + doubleToString(current.raHours) + ", DEC=" +  doubleToString(current.decDeg) + ", tol=" + doubleToString(tolDeg) ;
         printPointingRequestsAndStatus("debug of 'lost target tracking, invalid pointing': " + status);
 #endif
+	//cout << "Not on target" << endl;
         return false;
       }
 
@@ -1247,6 +1298,7 @@ bool Tscope::isRequestedTargetPositionCloseToCurrentPosition(
    if (absDiffDeg(requestedCoord1Deg, currentCoord1Deg) <= tolDeg 
        && absDiffDeg(requestedCoord2Deg, currentCoord2Deg) <= tolDeg)
    {
+//cout << "AzEl on target" << endl;
       return true;
    }
 
@@ -1272,6 +1324,8 @@ void Tscope::handleControlResponse(const string & totalMsg)
    {
       VERBOSE1(getVerboseLevel(), "Tscope::handleControlResponse: " 
 	       << "received command response: " << totalMsg << endl;);
+//cout << "Tscope::handleControlResponse: "
+	               //<< "received command response: " << totalMsg << endl;
 
       // split message into lines, process each
       vector<string> lines(SseUtil::tokenize(totalMsg, "\n"));
@@ -1369,6 +1423,16 @@ void Tscope::reportStatusToSse()
                << " pointingsReady=" << pointingsReady
                << endl;);
 
+      //cout << "reportStatusToSse():\n"
+               //<< "#tuningRequests=" << tuneRequests_.size()
+               //<< " #subarrayPointingRequests=" << subarrayPointingRequests_.size()
+               //<< endl;
+
+      //cout << "reportStatusToSse():\n"
+               //<< "tuningsReady=" << tuningsReady
+               //<< " pointingsReady=" << pointingsReady
+               //<< endl;
+
       if (tuningsReady && pointingsReady)
       {
 
@@ -1415,6 +1479,9 @@ void Tscope::reportTunings()
       VERBOSE2(getVerboseLevel(), "verifyTunings():\n"
                << "request: " << request << endl;);
 
+      //cout <<  "verifyTunings():\n"
+               //<< "request: " << request << endl;
+
       TscopeTuning tuningIndex = request.tuning;
       if (tuningIndex <= TSCOPE_INVALID_TUNING || 
           tuningIndex >= TSCOPE_N_TUNINGS)
@@ -1431,6 +1498,14 @@ void Tscope::reportTunings()
                << " status skyfreq: " 
                << statusMultibeam_.tuning[tuningIndex].skyFreqMhz
                << endl;);
+
+      //cout <<  "verifyTunings():\n"
+               //<< " tuning: " << SseTscopeMsg::tuningToName(tuningIndex)
+               //<< " req skyfreq: "
+               //<< request.skyFreqMhz
+               //<< " status skyfreq: " 
+               //<< statusMultibeam_.tuning[tuningIndex].skyFreqMhz
+               //<< endl;
 
       if (fabs(statusMultibeam_.tuning[tuningIndex].skyFreqMhz - 
                request.skyFreqMhz) > tuningTolMHz) 
@@ -1501,6 +1576,9 @@ void Tscope::reportTargetTracking()
    VERBOSE2(getVerboseLevel(), "reportTargetTracking():\n"
 	    "maxPointingErrDeg = " << maxPointingErrorDeg() << endl;);
 
+   //cout << "reportTargetTracking():\n"
+	    //"maxPointingErrDeg = " << maxPointingErrorDeg() << endl;
+
    const int maxNotTrackingTargetCount = 10;
    string GoodTrackStateKeyword("TRACK");
    string DriveErrorKeyword("DRIVE_ERROR");
@@ -1516,7 +1594,8 @@ void Tscope::reportTargetTracking()
    // TBD error if not.
    // Also assumes that all synth beam ant lists 
    // are a subset of the primary list.  TBD check for this?
-
+//cout << "reportTargetTracking(): " << " Size of subarrayPointingRequests "
+		//<< subarrayPointingRequests_.size() << endl;
    for(vector<TscopeSubarrayCoords>::iterator requestIt =
           subarrayPointingRequests_.begin();
        requestIt != subarrayPointingRequests_.end(); ++requestIt)
@@ -1531,7 +1610,11 @@ void Tscope::reportTargetTracking()
       VERBOSE2(getVerboseLevel(), "reportTargetTracking():\n"
 	    "checking pointing request: " << request << endl;);
 
+      //cout << "reportTargetTracking():\n"
+	    //"checking pointing request: " << request << endl;
+
       /* check the primary beam status for all assigned synth beams */
+      //cout << "Size of ataAssignSubarray " << ataAssignSubarray_.size() << endl;
       for (vector<TscopeAssignSubarray>::iterator synthIt = 
               ataAssignSubarray_.begin();
            synthIt != ataAssignSubarray_.end(); ++synthIt)
@@ -1587,20 +1670,30 @@ void Tscope::reportTargetTracking()
 
          bool goodPosition(isRequestedTargetPositionCloseToCurrentPosition(
             request.pointing, *primaryPointingStatus));
+
+	 //JR - Oct 09, 2012 - Added for debugging
+         //cout << "reportTargetTracking():\n"
+	    //<< "Primary pointing status: " << primaryPointingStatus << endl;
          
          bool goodGcError(statusMultibeam_.subarray[beamIndex].gcErrorDeg
                           <= maxPointingErrorDeg());
          
          if (!goodTrackState)
          {
+	    //JR - Oct 09, 2012 - Added for debugging
+            //cout << "reportTargetTracking():\n" << "Bad Track State" << endl;
             allGoodTrackState = false;
          }
          if (!goodPosition)
          {
+	    //JR - Oct 09, 2012 - Added for debugging
+            //cout << "reportTargetTracking():\n" << "Bad Position" << endl;
             allGoodPosition = false;
          }
          if (!goodGcError)
          {
+	    //JR - Oct 09, 2012 - Added for debugging
+            //cout << "reportTargetTracking():\n" << "GC Error" << endl;
             allGoodGcError = false;
          }
       }
@@ -2018,11 +2111,15 @@ void Tscope::dispatchStatusLineForParsing(vector<string> & words)
       {
 	 VERBOSE3(getVerboseLevel(), "parsing ARRAY line" << endl;);
 
+//cout <<  "parsing ARRAY line" << endl;
+
 	 parseArrayLine(statusMultibeam_, words);
       }
       else if (keyword.find("BEAM") != string::npos)
       {
 	 VERBOSE3(getVerboseLevel(), "parsing " << keyword << " line" << endl;);
+
+//cout << "parsing " << keyword << " line" << endl;
 
 	 TscopeBeam beam = SseTscopeMsg::nameToBeam(keyword);
 	 if (beam == TSCOPE_INVALID_BEAM)
@@ -2059,6 +2156,7 @@ void Tscope::dispatchStatusLineForParsing(vector<string> & words)
       else if (keyword.find("TUNING") != string::npos)
       {
 	 VERBOSE3(getVerboseLevel(), "parsing " << keyword << " line" << endl;);
+//cout << "parsing " << keyword << " line" << endl;
 
 	 TscopeTuning tuning = SseTscopeMsg::nameToTuning(keyword);
 	 if (tuning == TSCOPE_INVALID_TUNING)
@@ -2099,6 +2197,8 @@ void Tscope::dispatchStatusLineForParsing(vector<string> & words)
  */
 void Tscope::parseStatus(const string & msg)
 {
+//cout << "TscopeEventHandler::parse():\n" 
+	    //"parsing: ( " << msg << ")" << endl;
 #ifdef DEBUG_PARSE
    VERBOSE3(getVerboseLevel(), "TscopeEventHandler::parse():\n" 
 	    "parsing: ( " << msg << ")" << endl;);
@@ -2106,7 +2206,8 @@ void Tscope::parseStatus(const string & msg)
 
    // split up lines
    vector <string> lines = SseUtil::tokenize(msg, "\r\n");
-
+// This is for the cout debug
+   //printVector("lines", lines);
 #ifdef DEBUG_PARSE
    // debug
    printVector("lines", lines);
@@ -2122,6 +2223,8 @@ void Tscope::parseStatus(const string & msg)
 	 continue;
       }
 
+// This is for the cout debug
+      //printVector("words", words);
 #ifdef DEBUG_PARSE
       // debug
       printVector("words", words);

@@ -267,4 +267,6 @@ scripts_SCRIPTS = \
 	sonata-start-kepler-2beams-3800-4200-obs.tcl \
 	sonata-start-exoplanets-2beams-3800-4200-obs.tcl \
 	sonata-start-vger-2beams-8410-8430-obs.tcl \
+	sonata-cron-begin-vger-session.sh \
+	sonata-start-vger-2beams-8400-8440-obs.tcl \
 	data-capture-replay-env-vars.tcsh

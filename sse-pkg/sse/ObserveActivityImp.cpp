@@ -1980,6 +1980,28 @@ startActUnitWatchdogTimers()
      startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
 	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,
 			zxLookUpSetiLiveCandidatesWaitDurationSecs);
+	// current time, in abs seconds since the epoch
+	time_t currentTime = time(NULL);   
+
+	// when to start the obs, in abs seconds
+	time_t followupCutOffTime = currentTime + zxLookUpSetiLiveCandidatesWaitDurationSecs;
+
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": " 
+			<< "Zx followupCutOffTime "
+			<< SseUtil::isoDateTime(followupCutOffTime) << endl);
+
+	// log start time
+	stringstream strm;
+
+	strm << "Scheduled Zx followupCutOffTime :"
+		<< SseUtil::isoDateTime(followupCutOffTime) 
+		<< " " << followupCutOffTime << endl;
+
+	obsSummaryTxtStrm_ << strm.str();
+
+	SseArchive::SystemLog() << "Act " << getId() << ": " 
+		<< strm.str();
+
 }
 
 void ObserveActivityImp::
