@@ -205,12 +205,12 @@ DxParametersInternal::DxParametersInternal() :
       25, 0, 1000),
    pulseTrainSignifThresh(
       "trainsignifthresh", "signif",
-      "\n\t\tpulse train significance threshhold",
+      "pulse train significance threshhold\n\t\t\t\t",
       -40, -100, 100),
 
    secondaryPulseTrainSignifThresh(
       "secondarytrainsignifthresh", "signif",
-      "\n\t\tsecondary pulse train significance threshhold",
+      "\tsecondary pulse train significance threshhold\n\t\t\t\t\t",
       -17, -100, 100),
 
    maxPulsesPerHalfFrame(
@@ -234,7 +234,7 @@ DxParametersInternal::DxParametersInternal() :
       1, 1, 1000), 
    baselineInitAccumHalfFrames(
       "baseinitaccum", "# half frames",
-      "\n\t\t#half frames to accumulate initial baselines",
+      "#half frames to accumulate initial baselines\n\t\t\t\t",
       20, 1, 20),
 
    // Science Data Request
@@ -296,7 +296,7 @@ DxParametersInternal::DxParametersInternal() :
 
    bandwidth(
       "bandwidth", "# subchannels",
-      "\n\tassigned bandwidth (must be a multiple of 512)",
+      "assigned bandwidth (must be a multiple of 512)\n\t\t\t\t",
       2048, 512, 10240),
 
    baselineDecay(
@@ -1342,20 +1342,20 @@ bool DxParameters::recentRfiEnable() const
 
 void DxParameters::addAllImmedCmdHelp()
 {
-   addImmedCmdHelp("config [<dxname>='all'] - display dx configuration");
-   addImmedCmdHelp("dumpstruct - display dx activity parameters structure");
-   addImmedCmdHelp("intrin [<dxname>='all'] - display dx intrinsics ");
-   addImmedCmdHelp("load skyfreq <sky freq in MHz> <dxname | 'all'> - assign skyfreq to dx(s)");
-   addImmedCmdHelp("load chan <channel number> <dxname | 'all'> - assign channel to dx(s)");
-   addImmedCmdHelp("names - list all connected dxs");
-   addImmedCmdHelp("reqfreq <sky freq in MHz> <dxname | 'all'> - request compamp data by sky freq");
-   addImmedCmdHelp("reqstat [<dxname>='all'] - request dx status update ");
-   addImmedCmdHelp("reqchan <subchan> <dxname | 'all'> - request compamp data by subchannel");
-   addImmedCmdHelp("resetsocket <dxname | 'all'> - reset socket on dx(s)");
-   addImmedCmdHelp("restart <dxname | 'all'> - restart dx(s)");
-   addImmedCmdHelp("senddatareq <dxname | 'all'> - send science data request to dx(s)");
-   addImmedCmdHelp("shutdown <dxname [dxname...] | 'all'> - shutdown dx(s) ");
-   addImmedCmdHelp("status [<dxname>='all'] - display dx status  ");
-   addImmedCmdHelp("stop <dxname | 'all'> - stop dx(s) ");
+   addImmedCmdHelp("config [<dxname>='all'] \t\t\t\t display dx configuration");
+   addImmedCmdHelp("dumpstruct \t\t\t\t\t display dx activity parameters structure");
+   addImmedCmdHelp("intrin [<dxname>='all'] \t\t\t\t display dx intrinsics ");
+   addImmedCmdHelp("load skyfreq <sky freq in MHz> <dxname | 'all'> \t assign skyfreq to dx(s)");
+   addImmedCmdHelp("load chan <channel number> <dxname | 'all'> \t assign channel to dx(s)");
+   addImmedCmdHelp("names \t\t\t\t\t\t list all connected dxs");
+   addImmedCmdHelp("reqfreq <sky freq in MHz> <dxname | 'all'> \t request compamp data by sky freq");
+   addImmedCmdHelp("reqstat [<dxname>='all'] \t\t\t\t request dx status update ");
+   addImmedCmdHelp("reqchan <subchan> <dxname | 'all'> \t\t request compamp data by subchannel");
+   addImmedCmdHelp("resetsocket <dxname | 'all'> \t\t\t reset socket on dx(s)");
+   addImmedCmdHelp("restart <dxname | 'all'> \t\t\t\t restart dx(s)");
+   addImmedCmdHelp("senddatareq <dxname | 'all'> \t\t\t send science data request to dx(s)");
+   addImmedCmdHelp("shutdown <dxname [dxname...] | 'all'> \t\t shutdown dx(s) ");
+   addImmedCmdHelp("status [<dxname>='all'] \t\t\t\t display dx status  ");
+   addImmedCmdHelp("stop <dxname | 'all'> \t\t\t\t stop dx(s) ");
 
 }

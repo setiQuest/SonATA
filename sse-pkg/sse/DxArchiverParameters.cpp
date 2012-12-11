@@ -370,11 +370,11 @@ const char *DxArchiverParameters::intrin(const char *dxArchiverName) const
 
 void DxArchiverParameters::addAllImmedCmdHelp()
 {
-   addImmedCmdHelp("intrin [<archiverName>='all'] - display dx archiver intrinsics ");
-   addImmedCmdHelp("names - list all connected dx archivers");
-   addImmedCmdHelp("reqstat [<archiverName>='all'] - request dx archiver status update ");
-   addImmedCmdHelp("resetsocket <archiverName | 'all'> - reset socket on dx archiver(s)");
-   addImmedCmdHelp("restart <archiverName | 'all'> - restart dx archiver(s)");
-   addImmedCmdHelp("shutdown <archiverName | 'all'> - shutdown dx archivers(s) ");
-   addImmedCmdHelp("status [<archiverName>='all'] - display dx archiver status  ");
+   addImmedCmdHelp("intrin [<archiverName>='all'] \t\tdisplay dx archiver intrinsics ");
+   addImmedCmdHelp("names \t\t\t\t\tlist all connected dx archivers");
+   addImmedCmdHelp("reqstat [<archiverName>='all'] \t\trequest dx archiver status update ");
+   addImmedCmdHelp("resetsocket <archiverName | 'all'> \treset socket on dx archiver(s)");
+   addImmedCmdHelp("restart <archiverName | 'all'> \t\trestart dx archiver(s)");
+   addImmedCmdHelp("shutdown <archiverName | 'all'> \t\tshutdown dx archivers(s) ");
+   addImmedCmdHelp("status [<archiverName>='all'] \t\tdisplay dx archiver status  ");
 }

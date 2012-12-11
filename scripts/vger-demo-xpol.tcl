@@ -3,7 +3,7 @@
 
 act set type iftest
 act set watchdogs off
-act set delay 5
+act set delay 20
 
 sched set dxtune user
 sched set beam1 on
