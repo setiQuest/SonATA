@@ -2,6 +2,7 @@
 
 # sonata-cron-switch-to-exoplanets.sh
 
+verbose level 2
 # interrupt a SonATA observing session
 ${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-wrapup.tcl
 

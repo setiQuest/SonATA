@@ -1303,9 +1303,9 @@ void ObserveActivityImp::completeRemainingDxPreparation()
 	startDataCollTime_ = calculateStartDataCollTime();
 
 // Update the start time in the database for SetiLive.
-// Start time printed in systemlog so this is not necessary
-// and it causes an error in the demo
-	//updateActivityStartDataCollTime();
+// But not for the demo
+//
+	if ( getActivityType() != "iftest") updateActivityStartDataCollTime();
 
 	if (followUpObservationEnabled())
 	{
@@ -1973,13 +1973,44 @@ startActUnitWatchdogTimers()
 	startWatchdogTimer(actUnitCompleteTimeout_,
 			&ObserveActivityImp::handleActUnitCompleteTimeout,
 			sigDetectWaitDurationSecs);
+	//
 	// Set timer for Zxs to check database for SetiLive Candidates
-	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
- 	   static_cast<int>( 0.95*sigDetectWaitDurationSecs);
+	
+	int zxLookUpSetiLiveCandidatesWaitDurationSecs;
+	if (schedulerParameters_.pipeliningEnabled() )
+		zxLookUpSetiLiveCandidatesWaitDurationSecs =
+ 	   	static_cast<int>( 0.95*sigDetectWaitDurationSecs);
+        else 
+		zxLookUpSetiLiveCandidatesWaitDurationSecs =
+			startTimeOffset_ + dataCollectionLengthSecs_ +
+	                baselineAccumulationTimeSecs + 
+			static_cast<int>(0.25*dataCollectionLengthSecs_);
 
      startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
 	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,
 			zxLookUpSetiLiveCandidatesWaitDurationSecs);
+	// current time, in abs seconds since the epoch
+	time_t currentTime = time(NULL);   
+
+	// when to start the obs, in abs seconds
+	time_t followupCutOffTime = currentTime + zxLookUpSetiLiveCandidatesWaitDurationSecs;
+
+	VERBOSE2(verboseLevel_, "Act " << getId() << ": " 
+			<< "Zx followupCutOffTime "
+			<< SseUtil::isoDateTime(followupCutOffTime) << endl);
+
+	// log start time
+	stringstream strm;
+
+	strm << "Scheduled Zx followupCutOffTime :"
+		<< SseUtil::isoDateTime(followupCutOffTime) 
+		<< " " << followupCutOffTime << endl;
+
+	obsSummaryTxtStrm_ << strm.str();
+
+	SseArchive::SystemLog() << "Act " << getId() << ": " 
+		<< strm.str();
+
 }
 
 void ObserveActivityImp::

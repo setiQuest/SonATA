@@ -53,7 +53,7 @@ act set varwarnlower 8.000000000 current
 act set varwarn {on} current 
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
-db set host {localhost} current 
+db set host {sse300} current 
 db set name {kepler201208} current 
 db set passwd {} current 
 db set port 0 current 
@@ -112,9 +112,9 @@ dx set trainsignifthresh -40.000000000 current
 dx set tripletthresh 48.000000000 current 
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
-sched set beam1 {off} current 
+sched set beam1 {on} current 
 sched set beam2 {on} current 
-sched set beam3 {on} current 
+sched set beam3 {off} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 

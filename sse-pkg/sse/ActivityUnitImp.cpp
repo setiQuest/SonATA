@@ -595,6 +595,15 @@ void ActivityUnitImp::prepareFollowUpCandidateSignals(MYSQL *callerDbConn, int p
    lookUp->execute();
 
    // TBD what to do if the list is empty
+   //
+   vector<TargetId> targetsToExclude;
+   time_t refTime;
+   struct tm refHHMMSS;
+   time(&refTime);
+   gmtime_r(&refTime,&refHHMMSS);
+
+   if (zxMode_ && actOpsBitEnabled(OFF_OBSERVATION))
+	   sendRecentRfiMask(callerDbConn, targetsToExclude, &refHHMMSS );
 }
 
 

@@ -85,6 +85,7 @@ dist_setup_DATA = \
 	kes-expectedSonATAComponents-1beam-800KHz-1dx-1zx.cfg \
 	kes-expectedSonATAComponents-2beam-2dx.cfg \
 	earth.xyz \
+	dawn.xyz \
 	voyager1.xyz \
 	moon.xyz \
 	mars.xyz \
