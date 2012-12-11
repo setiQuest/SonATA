@@ -65,6 +65,7 @@ NOZXS="false"
 NOCHANS="false"
 NODX="true"
 
+
 # process command line args
 while [ "$1" != "" ]
 do
@@ -326,6 +327,7 @@ startComponent()
 	${compXtermOpts} ${COMMON_XTERM_OPTIONS} -e sh \
 	-c "${compCmd}; sh" &
     else
+	    echo "${compCmd}"
         ${compCmd} > "${componentLogPrefix}.${name}.txt" 2>&1 &
     fi
 

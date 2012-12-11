@@ -3,15 +3,17 @@
 
 isodate=`date --date=yesterday "+%F"`
 echo ${isodate}
+echo `date`
+cp -r /home/sonata/sonata_archive/${isodate} /nas-archive/sse100/2012
 
-cp -r /home/sonata/sonata_archive/${isodate} /Sse.Arc4/sonata_backup
+echo "Copied directory ${isodate} to /nas-archive/sse100/2012"
 
-echo "Copied directory ${isodate} to /Sse.Arc4/sonata_backup"
+echo `date`
+cp /home/sonata/sonata_archive/permlogs/systemlogs/systemlog-${isodate}.txt /nas-archive/sse100/systemlogs
 
-cp /home/sonata/sonata_archive/permlogs/systemlogs/systemlog-${isodate}.txt /Sse.Arc4/sonata_backup/systemlogs
+echo "Copied /home/sonata/sonata_archive/permlogs/systemlogs/systemlog-${isodate}.txt to /nas-archive/sse100/systemlogs"
 
-echo "Copied /home/sonata/sonata_archive/permlogs/systemlogs/systemlog-${isodate}.txt to /Sse.Arc4/sonata_backup/systemlogs"
-
+echo `date`
 #-------------------------------------------------
 echo "Disk space: "
 echo "------------"

@@ -8,7 +8,7 @@ exec setAlarm ARM,sonata,Voyager
 tscope setup
 
 # allow some setup time
-sh sleep 2
+sh sleep 20
 
 act set candarch {all} current 
 act set comparedxs {off} current 
@@ -111,7 +111,7 @@ dx set zerodrifttol 0.007000000 current
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
 sched set beam2 {on} current 
-sched set beam3 {off} current 
+sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
@@ -119,7 +119,7 @@ sched set beambandwidth 30.000000000 current
 sched set beginfreq 8400.00 current 
 sched set catshigh {spacecraft} current 
 sched set catshighmaxcounts 20000 current 
-sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
+sched set catslow {habcat} current 
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 
@@ -145,7 +145,7 @@ sched set dxtune {range} current
 sched set dxtunetol 0.010000000 current 
 sched set pipe {off} current 
 sched set primaryidcutoff 120 current 
-sched set repeatstrat 10 current 
+sched set repeatstrat 1 current 
 sched set restartpause 30 current 
 sched set rftune {auto} current 
 sched set rotateidsinterval 60.000000000 current 
