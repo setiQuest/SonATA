@@ -265,55 +265,55 @@ void TscopeParameters::addParameters()
 
 void TscopeParameters::addAllImmedCmdHelp() 
 {
-   addImmedCmdHelp("allocate <'antgroup' | antxx[,antxx...]> [<name='all'] - allocate subarray");
-   addImmedCmdHelp("assign beamxxx <'antgroup' | antxx[,antxx...]> [<name='all'] -  define the antennas that make up a beam");
-   addImmedCmdHelp("autoselectants <bf list like 1,2,3> - automatically select ants for the antgroups");
+   addImmedCmdHelp("allocate <'antgroup' | antxx[,antxx...]> [<name='all'] \t    allocate subarray");
+   addImmedCmdHelp("assign beamxxx <'antgroup' | antxx[,antxx...]> [<name='all'] \n\t\t\t\t\t\tdefine the antennas that make up a beam");
+   addImmedCmdHelp("autoselectants <bf list like 1,2,3>  \tautomatically select ants for the antgroups\n");
    addImmedCmdHelp("bfcal <delay|phase|freq> integrate <secs> cycles <count> [<name='all']");
-   addImmedCmdHelp("bfcal <delay|phase|freq> integrate <secs> cycles <count> [<name='all'] iterations <num>");
-   addImmedCmdHelp("bfinit - init beamformer with all ants previously assigned to beams");
-   addImmedCmdHelp("bfpoint - point all beams previously assigned coordinates");
-   addImmedCmdHelp("bfclearcoords - clear all assigned beam coordinates");
-   addImmedCmdHelp("bfclearants - clear antenna assignments for all beams");
+   addImmedCmdHelp("bfcal <delay|phase|freq> integrate <secs> cycles <count> [<name='all'] iterations <num>\n");
+   addImmedCmdHelp("bfinit \t\t\tinit beamformer with all ants previously assigned to beams");
+   addImmedCmdHelp("bfpoint \t\t\tpoint all beams previously assigned coordinates");
+   addImmedCmdHelp("bfclearcoords \t\tclear all assigned beam coordinates");
+   addImmedCmdHelp("bfclearants \t\tclear antenna assignments for all beams\n");
    
    addImmedCmdHelp("bfsetcoords beamName azel <Az deg> <El deg> [<name='all']");
    addImmedCmdHelp("bfsetcoords beamName gal <Long deg> <Lat deg> [<name='all']");
    addImmedCmdHelp("bfsetcoords beamName j2000 <RA hours> <Dec deg> [<name='all']");
-   addImmedCmdHelp("bfsetcoords beamName j2000deg <RA deg> <Dec deg> [<name='all']");
-   addImmedCmdHelp("bfreset - reset beamformer (requires recalibration)");
-   addImmedCmdHelp("bfstop - stop currently running beamformer command");
+   addImmedCmdHelp("bfsetcoords beamName j2000deg <RA deg> <Dec deg> [<name='all']\n");
+   addImmedCmdHelp("bfreset \t\t\t\t\treset beamformer (requires recalibration)");
+   addImmedCmdHelp("bfstop \t\t\t\t\tstop currently running beamformer command");
 
-   addImmedCmdHelp("cleanup [<name='all'] - disconnect from telescope");
-   addImmedCmdHelp("connect [<name='all'] - connect to telescope");
-   addImmedCmdHelp("deallocate <'antgroup' | antxx[,antxx...]> [<name='all'] - deallocate subarray");
-   addImmedCmdHelp("disconnect [<name='all'] - disconnect from telescope");
-   addImmedCmdHelp("intrin [<name>='all'] - display tscope intrinsics");
-   addImmedCmdHelp("monitor <periodSecs> [<name='all'] - monitor period");
-   addImmedCmdHelp("names - list names of all connected tscopes");
+   addImmedCmdHelp("cleanup [<name='all'] \t\t\tdisconnect from telescope");
+   addImmedCmdHelp("connect [<name='all'] \t\t\tconnect to telescope\n");
+   addImmedCmdHelp("deallocate <'antgroup' | antxx[,antxx...]> [<name='all'] \t deallocate subarray\n");
+   addImmedCmdHelp("disconnect [<name='all'] \t\t\tdisconnect from telescope");
+   addImmedCmdHelp("intrin [<name>='all'] \t\t\tdisplay tscope intrinsics");
+   addImmedCmdHelp("monitor <periodSecs> [<name='all'] \tmonitor period");
+   addImmedCmdHelp("names \t\t\t\t\tlist names of all connected tscopes\n");
 
    addImmedCmdHelp("point <'antgroup' | antxx[,antxx...]> azel <Az deg> <El deg> [<name='all']");
    addImmedCmdHelp("point <'antgroup' | antxx[,antxx...]> gal <Long deg> <Lat deg> [<name='all']");
    addImmedCmdHelp("point <'antgroup' | antxx[,antxx...]> j2000 <RA hours> <Dec deg> [<name='all']");
-   addImmedCmdHelp("point <'antgroup' | antxx[,antxx...]> j2000deg <RA deg> <Dec deg> [<name='all']");
+   addImmedCmdHelp("point <'antgroup' | antxx[,antxx...]> j2000deg <RA deg> <Dec deg> [<name='all']\n");
 
-   addImmedCmdHelp("reqstat [<name>='all'] - request tscope status update");
+   addImmedCmdHelp("reqstat [<name>='all'] \t\t\t\trequest tscope status update");
 
-//  addImmedCmdHelp("reset [<name='all'] - reset tscopes(s)");
+//  addImmedCmdHelp("reset [<name='all'] \t\t reset tscopes(s)");
 // reset currently does nothing
 
-   addImmedCmdHelp("send <name | 'all'> <command> [arg1] ... [arg8] - send backend command with arguments");
+   addImmedCmdHelp("send <name | 'all'> <command> [arg1] ... [arg8] \tsend backend command with arguments");
 
-   addImmedCmdHelp("resetsocket [<name='all'] - reset tscope socket");
-   addImmedCmdHelp("restart [<name='all'] - restart tscope(s)");
-   addImmedCmdHelp("tune <tuning{a-d}> <sky freq MHz> [<name='all'] - change tuning sky frequency");
-   addImmedCmdHelp("setup [<name='all'] - connect to telescope");
-   addImmedCmdHelp("shutdown [<name='all'] - run 'cleanup' & shutdown tscope server(s)");
-   addImmedCmdHelp("sim [<name='all'] - turn on simulator mode");
-   addImmedCmdHelp("status [<name>='all'] - display status of tscope(s)");
-   addImmedCmdHelp("stop <'antgroup' | antxx[,antxx...]> <name |'all'> - stop antenna array");
-   addImmedCmdHelp("stow <'antgroup' | antxx[,antxx...]> <name |'all'> - stow antenna array");
-   addImmedCmdHelp("unsim [<name='all'] - turn off simulator mode");
-   addImmedCmdHelp("wrap <'antgroup' | antxx[,antxx...]> <wrap number = 0, 1, 2> [<name='all'] - set array wrap");
-   addImmedCmdHelp("zfocus <'antgroup' | antxx[,antxx...]> <sky freq MHz> [<name='all'] - change zfocus sky frequency");
+   addImmedCmdHelp("resetsocket [<name='all'] \t\t\treset tscope socket");
+   addImmedCmdHelp("restart [<name='all'] \t\t\t\trestart tscope(s)");
+   addImmedCmdHelp("tune <tuning{a-d}> <sky freq MHz> [<name='all'] \tchange tuning sky frequency");
+   addImmedCmdHelp("setup [<name='all'] \t\t\t\tconnect to telescope");
+   addImmedCmdHelp("shutdown [<name='all'] \t\t\t\trun 'cleanup' & shutdown tscope server(s)");
+   addImmedCmdHelp("sim [<name='all'] \t\t\t\tturn on simulator mode");
+   addImmedCmdHelp("status [<name>='all'] \t\t\t\tdisplay status of tscope(s)\n");
+   addImmedCmdHelp("stop <'antgroup' | antxx[,antxx...]> <name |'all'> \tstop antenna array");
+   addImmedCmdHelp("stow <'antgroup' | antxx[,antxx...]> <name |'all'> \tstow antenna array");
+   addImmedCmdHelp("unsim [<name='all'] \t\t\t\t\tturn off simulator mode");
+   addImmedCmdHelp("wrap <'antgroup' | antxx[,antxx...]> <wrap number = 0, 1, 2> [<name='all']   \n\t\t\t\t\t\t\t\tset array wrap");
+   addImmedCmdHelp("zfocus <'antgroup' | antxx[,antxx...]> <sky freq MHz> [<name='all'] \n\t\t\t\t\t\t\t\tchange zfocus sky frequency");
 }
 
 // A base class that runs through all the tscopes in a list,

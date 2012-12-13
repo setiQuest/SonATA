@@ -109,7 +109,7 @@ void SeekerParameterGroup::help(ostream& os) const {
 
    int indentLevel = 2;
    indent(os, indentLevel);
-   os << "Immediate Commands:" << endl;
+   os << "\nImmediate Commands:" << endl;
 
    indentLevel=3;
    printAllImmedCmdHelp(os, indentLevel);

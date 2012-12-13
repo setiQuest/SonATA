@@ -462,13 +462,13 @@ const char *ChannelizerParameters::intrin(const char *channelizerName) const
 
 void ChannelizerParameters::addAllImmedCmdHelp()
 {
-   addImmedCmdHelp("intrin [<chanName>='all'] - display channelizer intrinsics ");
-   addImmedCmdHelp("names - list all connected channelizers");
-   addImmedCmdHelp("reqstat [<chanName>='all'] - request channelizer status update ");
-   addImmedCmdHelp("resetsocket <chanName | 'all'> - reset socket on channelizer(s)");
-   addImmedCmdHelp("restart <chanName | 'all'> - restart channelizer(s)");
-   addImmedCmdHelp("start <delay secs> <freq MHz> <chanName | 'all'> - start channelizer(s) in delay secs, tuned to freq MHz");
-   addImmedCmdHelp("shutdown <chanName | 'all'> - shutdown channelizers(s) ");
-   addImmedCmdHelp("status [<chanName>='all'] - display channelizer status  ");
-   addImmedCmdHelp("stop <chanName>='all'> - issue stop command ");
+   addImmedCmdHelp("intrin [<chanName>='all'] \tdisplay channelizer intrinsics ");
+   addImmedCmdHelp("names \t\t\t\tlist all connected channelizers");
+   addImmedCmdHelp("reqstat [<chanName>='all'] \trequest channelizer status update ");
+   addImmedCmdHelp("resetsocket <chanName | 'all'> \treset socket on channelizer(s)");
+   addImmedCmdHelp("restart <chanName | 'all'> \trestart channelizer(s)\n");
+   addImmedCmdHelp("start <delay secs> <freq MHz> <chanName | 'all'> \n\t\t\t\t\tstart channelizer(s) in delay secs, tuned to freq MHz");
+   addImmedCmdHelp("shutdown <chanName | 'all'> \tshutdown channelizers(s) ");
+   addImmedCmdHelp("status [<chanName>='all'] \tdisplay channelizer status  ");
+   addImmedCmdHelp("stop <chanName>='all'> \t\tissue stop command ");
 }

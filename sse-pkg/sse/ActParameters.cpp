@@ -184,7 +184,7 @@ ActParametersInternal::ActParametersInternal():
       "tscope ready watchdog timeout period", 
       TscopeTimeoutDefaultSecs, 15, 3600),
    freqInvert(
-      "freqinvert", "", "apply dx (DDC) freq inversion when using this part of the signal path",
+      "freqinvert", "", "apply dx (DDC) freq inversion when using this part \n\t\t\t\tof the signal path",
       FreqInvertOpts[Param::FREQ_INVERT_NEVER]),
    checkVarianceErrorLimits(
       "varerror", "", "check stx variance error limits",
@@ -222,11 +222,11 @@ ActParametersInternal::ActParametersInternal():
       7.0, 0.0, 28.0),
    dataCollCompleteTimeoutOffsetSecs(
       "datacolltimeoutoffset", 
-      "how long to wait after expected DC complete time before timing out",
+      "how long to wait after expected DC complete time \n\t\t\t\tbefore timing out",
       "secs", 
       10, 1, 30),
    doneSendingCwCohSigsTimeoutFactorPercent(
-      "cwcohdonetimeoutfactor", "percent of total signal detection timeout period to wait for 'done sending cw coherent signals' messages",
+      "cwcohdonetimeoutfactor", "percent of total signal detection timeout period \n\t\t\t\tto wait for 'done sending cw coherent signals' messages",
       "percent", 
       0.7, 0.1, 0.9),
    pointPrimaryBeam(
@@ -245,7 +245,7 @@ ActParametersInternal::ActParametersInternal():
       0, -MaxDecDeg, MaxDecDeg),
 
    offActNulls(
-      "offactnulls", "", "specify which type of nulls should be used in OFF acts",
+      "offactnulls", "", "specify which type of nulls should be used in OFF acts\n\t\t\t\t",
       NullTypeOpts[Param::NULL_PROJECTION]),
 
    multiTargetNulls(
@@ -429,9 +429,9 @@ void ActParameters::addfollowupactid(ActivityId_t actId)
 
 void ActParameters::addAllImmedCmdHelp()
 {
-   addImmedCmdHelp("status - display status for all activities ");
-   addImmedCmdHelp("clearfollowuplist - clear the list of pending followup activity Ids ");
-   addImmedCmdHelp("addfollowupactid <actId> - add actId to the list of pending followup activity Ids ");
+   addImmedCmdHelp("status \t\t\tdisplay status for all activities ");
+   addImmedCmdHelp("clearfollowuplist \tclear the list of pending followup activity Ids ");
+   addImmedCmdHelp("addfollowupactid <actId> \tadd actId to the list of pending followup activity Ids ");
 }
 
 

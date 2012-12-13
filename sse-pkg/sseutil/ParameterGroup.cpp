@@ -118,15 +118,14 @@ void ParameterGroup::help(ostream& os) const
 
    indent(os, 2);
    os <<"Parameters:    " << endl; 
-  
+     
+   const int width = 26;
    for (list<Parameter*>::const_iterator params = paramList_.begin();
 	params != paramList_.end(); params++)
    {
       indent(os, 3);
-
-      os << (*params)->getName().c_str();
+      os <<  left <<  std::setw(width) << (*params)->getName().c_str();
     
-      os << ": ";
       os << (*params)->getHelp().c_str();
 
       const string units = (*params)->getUnits();
@@ -145,16 +144,16 @@ void ParameterGroup::help(ostream& os) const
 
 
    indent(os, 3);
-   os << "default - set all parameters to their default values" << endl; 
+   os << "default \t\t\t set all parameters to their default values" << endl; 
   
    indent(os, 3);
-   os << "help - print this help info" << endl; 
+   os << "help \t\t\t print this help info" << endl; 
 
    indent(os, 3);
-   os << "isvalid - verify that all parameters are valid" << endl; 
+   os << "isvalid \t\t\t verify that all parameters are valid" << endl; 
   
    indent(os, 3);
-   os << "save <filename> - save parameters to file" << endl; 
+   os << "save <filename> \t\t save parameters to file\n" << endl; 
 
    indent(os, 3);
    os << "set <parameter> <value> [<current, default, min, max>=current]" 
@@ -340,12 +339,12 @@ ostream& operator << (ostream &strm, const class ParameterGroup& paramGroup)
 {
    strm << paramGroup.cmdName_ << " parameters: " << endl;
 
-   const int width = 14;
+   const int width = 10;
 
    // TBD width hard coded, use list to find max strlen
    strm << "  "
 	<< std::resetiosflags(std::ios::right)
-	<< std::setw(width) << setiosflags(std::ios::left) << "Name"
+	<< std::setw(width+10) << setiosflags(std::ios::left) << "Name"
 	<< " "
 	<< std::resetiosflags(std::ios::left)
 	<< std::setw(width) << setiosflags(std::ios::right) << "Current" 
@@ -360,7 +359,7 @@ ostream& operator << (ostream &strm, const class ParameterGroup& paramGroup)
 	<< std::setw(width) << setiosflags(std::ios::left) << "Units"
 	<< endl;
 
-   const int PrintPrecision = 9;    // show N places after the decimal
+   const int PrintPrecision = 3;    // show N places after the decimal
    strm.precision(PrintPrecision); 
    strm.setf(std::ios::fixed); // show all decimal places up to precision
    for (list<Parameter*>::const_iterator params = paramGroup.paramList_.begin();

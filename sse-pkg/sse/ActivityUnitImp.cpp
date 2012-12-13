@@ -5029,7 +5029,7 @@ findCounterpartResultsForSignal(
 	    if (signalSnr <= .400 && signalSnr >= .150)
 	    {
 		    // for a pfa of -20, the average snr is .100
-		    // above -20 is had to tell from the noise.
+		    // above -20 is hard to tell from the noise.
 	       if (counterpartSnr > .100 )
             	{
                	signalWasSeen = true;
