@@ -271,7 +271,6 @@ scripts_SCRIPTS = \
 	sonata-start-vger-2beams-8410-8430-obs.tcl \
 	sonata-cron-begin-vger-session.sh \
 	sonata-start-vger-2beams-8400-8440-obs.tcl \
-	sonata-start-vger-3beams-8410-8450-obs.tcl \
 	3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh \
 	sonata-cron-restart-obs-session.sh \
 	sonata-restart-obs.tcl \
