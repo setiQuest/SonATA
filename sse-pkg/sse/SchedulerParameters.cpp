@@ -132,34 +132,34 @@ SchedulerParametersInternal::SchedulerParametersInternal():
    rfTune("rftune", "", "method used to tune RF", 
           RfTuneOpts[RF_TUNE_AUTO]),
 
-   dxTune("dxtune", "", "method used to tune DXs",
+   dxTune("dxtune", "", "method used to tune DXs\n\t\t\t\t",
            TuneDxsOpts[Param::TUNE_DXS_USER]),
 
-   target("target", "", "method used to choose targets",
+   target("target", "", "method used to choose targets\n\t\t\t\t",
           ChooseTargetOpts[Param::CHOOSE_TARGET_USER]),
 
    beginObsFreqMhz("beginfreq", "MHz",
-		   "starting frequency for range/auto observations",
+		   "starting frequency for range/auto observations\n\t\t\t\t",
 		   defaultBeginSkyFreqMhz, AtaInformation::AtaMinSkyFreqMhz, 
 		   AtaInformation::AtaMaxSkyFreqMhz),
 
    endObsFreqMhz("endfreq", "MHz",
-		 "ending frequency for range/auto observations",
+		 "ending frequency for range/auto observations\n\t\t\t\t",
 		 defaultEndSkyFreqMhz, AtaInformation::AtaMinSkyFreqMhz, 
 		 AtaInformation::AtaMaxSkyFreqMhz),
 
    pipelining("pipe", "", "should activities be pipelined", ChoiceOn),
 
    followup("followup", "",
-	    "follow up activities when signals are confirmed",
+	    "follow up activities when signals are confirmed\n\t\t\t\t",
 	    ChoiceOff),
 
    followupMode("followupmode", "",
-		"mode for automatic or manual (user) followup of activities",
+		"mode for automatic or manual (user) followup\n\t\t\t\t of activities",
 		FollowupModeOpts[FOLLOWUP_MODE_AUTO]),
 
    dxRound("dxround", "MHz",
-	    "for range observations, rounds down to nearest multiple of dxround",
+	    "for range observations, rounds down to nearest\n\t\t\t\t multiple of dxround",
 	    0.0, 0.0, 100.0),
 
    dxOverlap("dxoverlap", "MHz",
@@ -167,11 +167,11 @@ SchedulerParametersInternal::SchedulerParametersInternal():
 	      0.0, 0.0, 100),
 
    dxTuningTolerance("dxtunetol", "MHz",
-		      "maximum difference between requested & actual DX center freq",
+		      "maximum difference between requested & \n\t\t\t\tactual DX center freq",
 		      0.0, 0.0, 100),
 
    minNumberReservedFollowupObs("minfollowups", "observations", 
-				"reserve time for the minimum number of followup observations", 
+				"reserve time for the minimum number of \n\t\t\t\tfollowup observations", 
 				12, 0, 100),
 
    useBeam1("beam1", "", "use beam 1", ChoiceOn),
@@ -186,7 +186,7 @@ SchedulerParametersInternal::SchedulerParametersInternal():
 			   225, 4, 1000),
 
    minDxPercentBwToUse("mindxbw", "%",
-			"minimum % of total available dx bandwidth to use", 
+			"minimum % of total available dx bandwidth to use\n\t\t\t\t", 
 			20, 0.0, 100.0),
 
    multipleTargets("multitarget", "", "observe multiple targets", ChoiceOff),
@@ -197,21 +197,21 @@ SchedulerParametersInternal::SchedulerParametersInternal():
    moonAvoidAngleDeg("moonavoid", "deg", "moon avoidance angle", 
 			10, 0, 180),
 
-   geosatAvoidAngleDeg("geosatavoid", "deg", "geostationary satellite band dec avoidance angle", 
+   geosatAvoidAngleDeg("geosatavoid", "deg", "geostationary satellite band dec \n\t\t\t\tavoidance angle", 
 			0, 0, 90),
 
    zenithAvoidAngleDeg("zenithavoid", "deg", "zenith avoidance angle", 
 			5, 0, 90),
 
    autoRiseTimeCutoffMinutes("autorisecutoff", "minutes",
-			     "time cutoff used to determine autorise targets", 
+			     "time cutoff used to determine autorise targets\n\t\t\t\t", 
 			     10, 0, 180),
 
    minTargetSepBeamsizes("mintargetsep", "beamsizes", "minimum target separation",
 			 5, 0, 100),
 
    waitTargetComplete("targetwait", "", 
-		      "wait for target complete before changing to next target", ChoiceOn),
+		      "wait for target complete before changing to \n\t\t\t\tnext target", ChoiceOn),
 
    decLowerLimitDeg("declowerlimit", "deg", "minimum target declination", 
 			-90, -90, 90),
@@ -223,41 +223,41 @@ SchedulerParametersInternal::SchedulerParametersInternal():
 	       1, 1, 1000000),
 
    maxActFailures("maxfailures", "count", 
-		  "maximum number of sequential activity failures allowed", 
+		  "maximum number of sequential activity failures \n\t\t\t\tallowed", 
 		  1, 1, 1000),
 
    pauseTimeBetweenActRestartsSecs(
       "restartpause", "secs", 
-      "number of seconds to pause between activity restart attempts", 
+      "number of seconds to pause between activity \n\t\t\t\trestart attempts", 
       30, 0, 1000),
 
    tscopeReadyMaxFailures(
       "tscopemaxfailures", "count", 
-      "maximum number of sequential 'tscope ready' act start failures allowed", 
+      "maximum number of sequential 'tscope ready' \n\t\t\t\tact start failures allowed", 
       5, 1, 1000),
 
    tscopeReadyPauseSecs(
       "tscopereadypause", "secs", 
-      "number of seconds to pause between 'tscope ready' activity restart attempts", 
+      "number of seconds to pause between \n\t\t\t\t'tscope ready' activity restart attempts", 
       25, 0, 1000),
 
    sendEmailOnStrategyFailure(
-      "emailstratfail", "", "send out email notification of strategy failure",
+      "emailstratfail", "", "send out email notification of strategy failure\n\t\t\t\t",
       ChoiceOff),
 
    strategyFailureEmailAddressList(
-      "emailaddr", "", "mailing addresses for strategy failure notification",
+      "emailaddr", "", "mailing addresses for strategy failure \n\t\t\t\tnotification",
       "observing@seti.org"),
 
    stopOnStrategyFailure(
       "stopstratfail", "", "stop on strategy failure",
       ChoiceOn),
 
-   checkTargets("checktargets", "", "validate targets (visible, etc.)", ChoiceOff),
+   checkTargets("checktargets", "", "validate targets (visible, etc.)\n\t\t\t\t", ChoiceOff),
 
    targetAvailActSetupTime(
       "targetavailactsetup", "secs", 
-      "estimated act setup time, used when determining target availability",
+      "estimated act setup time, used when determining \n\t\t\t\ttarget availability",
       60, 0, 120),
 
    beamBandwidthMhz("beambandwidth", "MHz", "beam input bandwidth", 
@@ -265,20 +265,20 @@ SchedulerParametersInternal::SchedulerParametersInternal():
 
    primaryTargetIdCountCutoff(
       "primaryidcutoff", "count", 
-      "min number of targets with shared primary target id that must be visible", 
+      "min number of targets with shared primary \n\t\t\t\ttarget id that must be visible", 
       120, 1, 1000),
 
    catalogsHighPriorityMaxCounts(
       "catshighmaxcounts", "count", 
-      "high priority catalog maximum counts cutoff", 
+      "high priority catalog maximum counts cutoff\n\t\t\t\t", 
       20000, 1, 50000),
 
    catalogsHighPriority(
-      "catshigh", "comma separated catalog names", "high priority catalog names",
+      "catshigh", "comma separated catalog names", "high priority catalog names\n\t\t\t\t",
       "habcat"),
 
    catalogsLowPriority(
-      "catslow", "comma separated catalog names", "low priority catalog names",
+      "catslow", "comma separated catalog names", "low priority catalog names\n\t\t\t\t",
       "tycho2subset,tycho2remainder"),
 
    commensalCalEnabled("comcal", "", "enable periodic commensal cals", ChoiceOff),
@@ -291,15 +291,15 @@ SchedulerParametersInternal::SchedulerParametersInternal():
                           "commensal cal duration", 
                           2, 1, 20),
    
-   rotatePrimaryIdsEnabled("rotateids", "", "enable periodic rotation of primary target ids", ChoiceOff),
+   rotatePrimaryIdsEnabled("rotateids", "", "enable periodic rotation of primary target ids\n\t\t\t\t", ChoiceOff),
 
    rotatePrimaryIdsIntervalMinutes("rotateidsinterval", "minutes",
-                                   "time interval between primary target ids rotation", 
+                                   "time interval between primary target ids \n\t\t\t\trotation", 
                                    60, 30, 360),
 
    tasks("tasks", "", "comma separated list of tasks to run", "obs"),
 
-   targetMeritFactors("targetmerit", "", "comma separated list of target merit factors to apply", "timeleft")
+   targetMeritFactors("targetmerit", "", "comma separated list of target merit factors \n\t\t\t\tto apply", "timeleft")
 {
   
    rfTune.addChoice(RfTuneOpts[RF_TUNE_AUTO]); // use automatic (non-direct) tuning

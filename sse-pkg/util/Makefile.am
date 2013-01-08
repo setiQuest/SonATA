@@ -88,6 +88,8 @@ bin_SCRIPTS = \
 	create-observing-targetmap.sh \
 	mybackup.sh \
 	db-backup.sh \
+	db-backup-sse100.sh \
+	sse100-backup.sh \
 	sse300-backup.sh \
 	db-backup.sse300.sh \
 	sonata-startup-cron-vger-wrapper.sh \

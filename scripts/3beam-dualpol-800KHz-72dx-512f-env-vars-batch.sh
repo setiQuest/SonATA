@@ -1,20 +1,18 @@
 #!/bin/sh
 
 # SonATA DX environment variables
-# 2beam-dualpol-800KHz-46dx-2zx-env-vars-batch.sh
+# 3beam-dualpol-800KHz-72dx-512f-env-vars-batch
 #---------------------------------
 
 FILTER_DIR="${HOME}/sonata_install/filters"
 SSE_SETUP="${HOME}/sonata_install/setup"
 export SSE_SETUP
 export FILTER_DIR
-echo $SSE_SETUP
 # Channelizer Environmental Variables
 #------------------------------------
 
 # Logical Channelizer Host Names
-#RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
-RUNSSE_CHAN_HOSTS="chanhost2x chanhost2y chanhost1x chanhost1y"
+RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
 export RUNSSE_CHAN_HOSTS
 
 # Actual Channelizer Host Names
@@ -66,8 +64,7 @@ export CHANHOST3Y_OPTS
 #---------------------------
 
 # Logical Host Names
-#RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
-RUNSSE_DX_HOSTS="dxhost4 dxhost5 dxhost6 dxhost1 dxhost2 dxhost3"
+RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
 export RUNSSE_DX_HOSTS
 
 # Actual Host Names
@@ -92,13 +89,13 @@ export DXHOST9
 # DX names
 DXHOST1_DX_NAMES="dx1000 dx1001 dx1002 dx1003 dx1004 dx1005 dx1006 dx1007"
 DXHOST2_DX_NAMES="dx1008 dx1009 dx1010 dx1011 dx1012 dx1013 dx1014 dx1015"
-DXHOST3_DX_NAMES="dx1016 dx1017 dx1018 dx1019 dx1020 dx1021 dx1022"
+DXHOST3_DX_NAMES="dx1016 dx1017 dx1018 dx1019 dx1020 dx1021 dx1022 dx1023"
 DXHOST4_DX_NAMES="dx2000 dx2001 dx2002 dx2003 dx2004 dx2005 dx2006 dx2007"
 DXHOST5_DX_NAMES="dx2008 dx2009 dx2010 dx2011 dx2012 dx2013 dx2014 dx2015"
-DXHOST6_DX_NAMES="dx2016 dx2017 dx2018 dx2019 dx2020 dx2021 dx2022"
+DXHOST6_DX_NAMES="dx2016 dx2017 dx2018 dx2019 dx2020 dx2021 dx2022 dx2023"
 DXHOST7_DX_NAMES="dx3000 dx3001 dx3002 dx3003 dx3004 dx3005 dx3006 dx3007"
 DXHOST8_DX_NAMES="dx3008 dx3009 dx3010 dx3011 dx3012 dx3013 dx3014 dx3015"
-DXHOST9_DX_NAMES="dx3016 dx3017 dx3018 dx3019 dx3020 dx3021 dx3022"
+DXHOST9_DX_NAMES="dx3016 dx3017 dx3018 dx3019 dx3020 dx3021 dx3022 dx3023"
 
 export DXHOST1_DX_NAMES
 export DXHOST2_DX_NAMES
@@ -111,7 +108,7 @@ export DXHOST8_DX_NAMES
 export DXHOST9_DX_NAMES
 
 # Command line arguments for all DXs
-DX_OPTS="-f 10 -z $FILTER_DIR/LS256c10f25o70d.flt -F 128 -w .8192 -T 2048"
+DX_OPTS="-f 10 -z $FILTER_DIR/LS256c10f25o70d.flt -F 512 -w .8192 -T 2048"
 
 # Beam Specific Command line options for DXs
 BEAM1_DX_OPTS="-j 51000 -J 227.1.1.1"
@@ -147,37 +144,12 @@ export DXHOST7_OPTS
 export DXHOST8_OPTS
 export DXHOST9_OPTS
 
-#RUNSSE_ZX_HOSTS="zxhost1 zxhost2 zxhost3"
-RUNSSE_ZX_HOSTS="zxhost2 zxhost1"
-export RUNSSE_ZX_HOSTS
-
-ZXHOST1="seti000-4"
-ZXHOST2="seti001-4"
-ZXHOST3="seti002-4"
-export ZXHOST1
-export ZXHOST2
-export ZXHOST3
-
-ZXHOST1_ZX_NAMES="zx1900"
-ZXHOST2_ZX_NAMES="zx2900"
-ZXHOST3_ZX_NAMES="zx3900"
-export ZXHOST1_ZX_NAMES
-export ZXHOST2_ZX_NAMES
-export ZXHOST3_ZX_NAMES
-
-ZX_OPTS="-Z -h 8890"
-export ZX_OPTS
-
-ZXHOST1_OPTS="$DX_OPTS $BEAM1_DX_OPTS $ZX_OPTS"
-ZXHOST2_OPTS="$DX_OPTS $BEAM2_DX_OPTS $ZX_OPTS"
-ZXHOST3_OPTS="$DX_OPTS $BEAM3_DX_OPTS $ZX_OPTS"
-export ZXHOST1_OPTS
-export ZXHOST2_OPTS
-export ZXHOST3_OPTS
-
 # Backend Server Host for use with ATA
 #-------------------------------------
 CONTROL_COMPONENTS_ANT_CONTROL_HOST=sonata
 export CONTROL_COMPONENTS_ANT_CONTROL_HOST
 
-${HOME}/sonata_install/scripts/switchConfigFile-2beam-800KHz-46dxs-2zx.tcsh
+${HOME}/sonata_install/scripts/switchConfigFile-3beam-800KHz-72dxs.tcsh
+SSE_SETUP="${HOME}/sonata_install/setup/"
+export SSE_SETUP
+echo $SSE_SETUP

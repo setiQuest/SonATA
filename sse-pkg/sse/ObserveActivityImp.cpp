@@ -1973,9 +1973,18 @@ startActUnitWatchdogTimers()
 	startWatchdogTimer(actUnitCompleteTimeout_,
 			&ObserveActivityImp::handleActUnitCompleteTimeout,
 			sigDetectWaitDurationSecs);
+	//
 	// Set timer for Zxs to check database for SetiLive Candidates
-	int  zxLookUpSetiLiveCandidatesWaitDurationSecs =
- 	   static_cast<int>( 0.95*sigDetectWaitDurationSecs);
+	
+	int zxLookUpSetiLiveCandidatesWaitDurationSecs;
+	if (schedulerParameters_.pipeliningEnabled() )
+		zxLookUpSetiLiveCandidatesWaitDurationSecs =
+ 	   	static_cast<int>( 0.95*sigDetectWaitDurationSecs);
+        else 
+		zxLookUpSetiLiveCandidatesWaitDurationSecs =
+			startTimeOffset_ + dataCollectionLengthSecs_ +
+	                baselineAccumulationTimeSecs + 
+			static_cast<int>(0.25*dataCollectionLengthSecs_);
 
      startWatchdogTimer(zxLookUpSetiLiveCandidatesTimeout_,
 	& ObserveActivityImp::handleZxLookUpSetiLiveCandidatesTimeout,

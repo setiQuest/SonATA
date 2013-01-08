@@ -453,23 +453,23 @@ void ComponentControlImmedCmds::help(ostream& os) const
    indent(os, indentLevel);
    os << "Immediate Commands for controlling components:" << endl;
 
-   printImmedCmdHelp(os, "start <component1> [<componentN> ...] - start components");
-   printImmedCmdHelp(os, "shutdown <'all' | component1> [<componentN> ...] - shutdown components");
-   printImmedCmdHelp(os, "restart <'all' | component1> [<componentN> ...] - restart components (i.e., shutdown followed by start)");
+   printImmedCmdHelp(os, "start <component1> [<componentN> ...] \n\t\t\t\tstart components");
+   printImmedCmdHelp(os, "shutdown <'all' | component1> [<componentN> ...] \n\t\t\t\tshutdown components");
+   printImmedCmdHelp(os, "restart <'all' | component1> [<componentN> ...] \n\t\t\t\trestart components (shutdown/start)");
    os << endl;
 
    indent(os, indentLevel);
    os << "Immediate Commands for component controller itself:" << endl;
 
-   printImmedCmdHelp(os, "help - print this help text");
-   printImmedCmdHelp(os, "intrin [<name>='all'] - display ComponentControl intrinsics");
-   printImmedCmdHelp(os, "names - list names of all connected ComponentControls");
-   printImmedCmdHelp(os, "reqstat [<name>='all'] - request ComponentControl status update");
-   printImmedCmdHelp(os, "reset <name | 'all'> - reset ComponentControl(s)");
-   printImmedCmdHelp(os, "resetsocket <name | 'all'> - reset ComponentControl socket");
-   printImmedCmdHelp(os, "send <name | 'all'> <command> [arg1] [arg2] ... [arg5] - send command with arguments to ComponentControl(s)");
-   printImmedCmdHelp(os, "selfshutdown <name | 'all'> - shutdown ComponentControl(s)");
-   printImmedCmdHelp(os, "status [<name>='all'] - display status of ComponentControl(s)");
+   printImmedCmdHelp(os, "help \t\t\tprint this help text");
+   printImmedCmdHelp(os, "intrin [<name>='all'] \tdisplay ComponentControl intrinsics");
+   printImmedCmdHelp(os, "names \t\t\tlist names of all connected ComponentControls");
+   printImmedCmdHelp(os, "reqstat [<name>='all'] \trequest ComponentControl status update");
+   printImmedCmdHelp(os, "reset <name | 'all'> \treset ComponentControl(s)");
+   printImmedCmdHelp(os, "resetsocket <name | 'all'> \n\t\t\t\treset ComponentControl socket");
+   printImmedCmdHelp(os, "send <name | 'all'> <command> [arg1] [arg2] ... [arg5] \n\t\t\t\tsend command with arguments to \n\t\t\t\tComponentControl(s)");
+   printImmedCmdHelp(os, "selfshutdown <name | 'all'> \n\t\t\t\tshutdown ComponentControl(s)");
+   printImmedCmdHelp(os, "status [<name>='all'] \tdisplay status of ComponentControl(s)");
 
 }
 

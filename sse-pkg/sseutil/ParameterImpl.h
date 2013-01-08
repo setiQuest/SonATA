@@ -97,14 +97,14 @@ class ParameterImpl : public Parameter
     
    friend ostream& operator << (ostream &strm, const ParameterImpl<T>& param)
    {
-      const int width = 14;
+      const int width = 10;
       
       // TBD width hard coded, use list to find max strlen
       strm << std::resetiosflags(std::ios::adjustfield)
 	 
 	 // print param name
 	   << std::setiosflags(std::ios::left) 
-	   << std::setw(width) << param.getName() << " "
+	   << std::setw(width+10) << param.getName() << " "
 	 
 	 // print current & default param values
 	   << std::resetiosflags(std::ios::adjustfield)

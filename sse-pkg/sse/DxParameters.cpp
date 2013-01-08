@@ -149,7 +149,7 @@ const int defaultClusteringFreqTolerance = dxHzPerSubchannel / 2;
 DxParametersInternal::DxParametersInternal() :
 
    dataCollectionLengthSecs(
-      "length", "sec", "data collection length (13,24,48,94,195,388,774)",
+      "length", "sec", "data collection length (13,24,48,94,195,388,774)\n\t\t\t\t",
       12, 1, 774),
    maxNumberOfCandidates(
       "maxcand", "count", "max number of candidates",
@@ -205,19 +205,19 @@ DxParametersInternal::DxParametersInternal() :
       25, 0, 1000),
    pulseTrainSignifThresh(
       "trainsignifthresh", "signif",
-      "\n\t\tpulse train significance threshhold",
+      "pulse train significance threshhold",
       -40, -100, 100),
 
    secondaryPulseTrainSignifThresh(
-      "secondarytrainsignifthresh", "signif",
-      "\n\t\tsecondary pulse train significance threshhold",
+      "secondarytrainsignifthresh", "\n\t\t\t\tsignif",
+      "\n\t\t\t\tsecondary pulse train significance threshhold",
       -17, -100, 100),
 
    maxPulsesPerHalfFrame(
-      "maxpulsesperhf", "# pulses", "max pulses per half frame",
+      "maxpulsesperhf", "\n\t\t\t\t# pulses", "max pulses per half frame",
       1000, 1, 10000),
    maxPulsesPerSubchannelPerHalfFrame(
-      "maxpulsespersubperhf", "# pulses", "max pulses per subchannel per half frame",
+      "maxpulsespersubperhf", "\n\t\t\t\t# pulses", "max pulses per subchannel per half frame",
       10, 1, 100),
    pulseThreshold(
       "pulsethresh", "sigma", "pulse threshold",
@@ -229,12 +229,12 @@ DxParametersInternal::DxParametersInternal() :
       "singletthresh", "sigma", "singlet threshold",
       100, 0, 100), 
    baselineSubchannelAverage(
-      "basesubave", "# subchannels",
+      "basesubave", "\n\t\t\t\t# subchannels",
       "# subchannels to average for baseline stats",
       1, 1, 1000), 
    baselineInitAccumHalfFrames(
-      "baseinitaccum", "# half frames",
-      "\n\t\t#half frames to accumulate initial baselines",
+      "baseinitaccum", "\n\t\t\t\t# half frames",
+      "#half frames to accumulate initial baselines",
       20, 1, 20),
 
    // Science Data Request
@@ -258,7 +258,7 @@ DxParametersInternal::DxParametersInternal() :
       ChoiceOn),
 
    baselineReportingHalfFrames(
-      "baserep", "# half frames",
+      "baserep", "\n\t\t\t\t# half frames",
       "baseline reporting interval",
       20, 1, 512),
 
@@ -285,9 +285,9 @@ DxParametersInternal::DxParametersInternal() :
       AtaInformation::AtaMaxSkyFreqMhz),
 
    dataRequestMaxCompampSubchannels(
-      "datareqmaxcompampsubchan", "Max # of subchannels ",
+      "datareqmaxcompampsubchan", "\n\t\t\t\tMax # of subchannels ",
       "Max # of subchannels",
-      1, 0, 10),
+      1, 0, 12),
 
    manualBandwidth(
       "manualbw",  "", 
@@ -295,8 +295,8 @@ DxParametersInternal::DxParametersInternal() :
       ChoiceOff),
 
    bandwidth(
-      "bandwidth", "# subchannels",
-      "\n\tassigned bandwidth (must be a multiple of 512)",
+      "bandwidth", "\n\t\t\t\t# subchannels",
+      "assigned bandwidth (must be a multiple of 512)",
       2048, 512, 10240),
 
    baselineDecay(
@@ -359,7 +359,7 @@ DxParametersInternal::DxParametersInternal() :
       1000, dxHzPerSubchannel, 10000),
 
    recentRfiMaskSizeMax(
-      "recentrfimasksizemax", "count",
+      "recentrfimasksizemax", "\n\t\t\t\tcount",
       "max number of elements in a recent rfi mask",
       MaxRecentRfiMaskSize, MaxRecentRfiMaskSize, MaxRecentRfiMaskSize)
 
@@ -1342,20 +1342,20 @@ bool DxParameters::recentRfiEnable() const
 
 void DxParameters::addAllImmedCmdHelp()
 {
-   addImmedCmdHelp("config [<dxname>='all'] - display dx configuration");
-   addImmedCmdHelp("dumpstruct - display dx activity parameters structure");
-   addImmedCmdHelp("intrin [<dxname>='all'] - display dx intrinsics ");
-   addImmedCmdHelp("load skyfreq <sky freq in MHz> <dxname | 'all'> - assign skyfreq to dx(s)");
-   addImmedCmdHelp("load chan <channel number> <dxname | 'all'> - assign channel to dx(s)");
-   addImmedCmdHelp("names - list all connected dxs");
-   addImmedCmdHelp("reqfreq <sky freq in MHz> <dxname | 'all'> - request compamp data by sky freq");
-   addImmedCmdHelp("reqstat [<dxname>='all'] - request dx status update ");
-   addImmedCmdHelp("reqchan <subchan> <dxname | 'all'> - request compamp data by subchannel");
-   addImmedCmdHelp("resetsocket <dxname | 'all'> - reset socket on dx(s)");
-   addImmedCmdHelp("restart <dxname | 'all'> - restart dx(s)");
-   addImmedCmdHelp("senddatareq <dxname | 'all'> - send science data request to dx(s)");
-   addImmedCmdHelp("shutdown <dxname [dxname...] | 'all'> - shutdown dx(s) ");
-   addImmedCmdHelp("status [<dxname>='all'] - display dx status  ");
-   addImmedCmdHelp("stop <dxname | 'all'> - stop dx(s) ");
+   addImmedCmdHelp("config [<dxname>='all'] \tdisplay dx configuration");
+   addImmedCmdHelp("dumpstruct \t\tdisplay dx activity parameters structure");
+   addImmedCmdHelp("intrin [<dxname>='all'] \tdisplay dx intrinsics ");
+   addImmedCmdHelp("load skyfreq <sky freq in MHz> <dxname | 'all'> \n\t\t\t\tassign skyfreq to dx(s)");
+   addImmedCmdHelp("load chan <channel number> <dxname | 'all'> \n\t\t\t\tassign channel to dx(s)");
+   addImmedCmdHelp("names \t\t\tlist all connected dxs");
+   addImmedCmdHelp("reqfreq <sky freq in MHz> <dxname | 'all'> \n\t\t\t\trequest compamp data by sky freq");
+   addImmedCmdHelp("reqstat [<dxname>='all'] \trequest dx status update ");
+   addImmedCmdHelp("reqchan <subchan> <dxname | 'all'> \n\t\t\t\trequest compamp data by subchannel");
+   addImmedCmdHelp("resetsocket <dxname | 'all'> \n\t\t\t\treset socket on dx(s)");
+   addImmedCmdHelp("restart <dxname | 'all'> \n\t\t\t\trestart dx(s)");
+   addImmedCmdHelp("senddatareq <dxname | 'all'> \n\t\t\t\tsend science data request to dx(s)");
+   addImmedCmdHelp("shutdown <dxname [dxname...] | 'all'> \n\t\t\t\tshutdown dx(s) ");
+   addImmedCmdHelp("status [<dxname>='all'] \tdisplay dx status  ");
+   addImmedCmdHelp("stop <dxname | 'all'> \tstop dx(s) ");
 
 }

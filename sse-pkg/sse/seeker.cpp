@@ -332,7 +332,7 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
    Scheduler *scheduler = Scheduler::instance();
    Site* site;
    try {
-
+cerr << "get new Site" << endl;
       site = new Site(seekerParser->getDxPort(),
                       seekerParser->getZxPort(),
                       seekerParser->getDxArchiverPort(),
@@ -351,12 +351,14 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
                       seekerParser->getNoUi());
       delete seekerParser;
     
+      cerr << "parser deleted" << endl;
       paraGlobal.setSite(site);  // attach the site to the Text UI
       paraGlobal.act_->setScheduler(scheduler);
       scheduler->setSite(site);
 
       addActivityTypesToScheduler(scheduler);
       addActStrategyTypesToScheduler(scheduler);
+      cerr << "strategies added " << endl;
    }
    catch (NssAcceptHandlerException &exception) {
       scheduler->failed();
@@ -406,6 +408,7 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
 
       exit(1);
    }
+cerr << "before releasing startingSeeker" << endl;
 
    startingSeeker->release();
 
@@ -413,7 +416,7 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
    // when a system call is interrupted (ie, errno == EINTR)
    // by enabling restart.
    //
-   //cerr << "restart Reactor" << endl;
+   cerr << "restart Reactor" << endl;
    ACE_Reactor::instance()->restart(1);
 
    //int status =

@@ -221,6 +221,7 @@ scripts_SCRIPTS = \
 	exoplanets-2beam-beam1-beam3-1420-1450.tcl \
 	exoplanets-2beam-beam1-beam3-1410-1650.tcl \
 	mars-2beam-beam1-beam3-8405-8445.tcl \
+	mars-2beam-beam1-beam3-8414-8440.tcl \
 	switchConfigFile-1beam-beam3-800KHz-24dxs.tcsh \
 	1beam-beam3-dualpol-800KHz-24dx-env-vars.tcsh \
 	exoplanets-1beam-beam3-1420-1450.tcl \
@@ -239,6 +240,7 @@ scripts_SCRIPTS = \
 	sonata-start-kepler-3beams-1152-1352-obs.tcl \
 	sonata-start-exoplanets-3beams-1152-1352-obs.tcl \
 	sonata-start-vger-3beam-8412-8432-obs.tcl \
+	sonata-start-vger-3beams-8414-8440-obs.tcl \
 	sonata-cron-switch-to-exoplanets.sh \
 	sonata-switch-to-exoplanets.tcl \
 	sonata-switch-to-kepler.tcl \
@@ -269,4 +271,7 @@ scripts_SCRIPTS = \
 	sonata-start-vger-2beams-8410-8430-obs.tcl \
 	sonata-cron-begin-vger-session.sh \
 	sonata-start-vger-2beams-8400-8440-obs.tcl \
+	3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh \
+	sonata-cron-restart-obs-session.sh \
+	sonata-restart-obs.tcl \
 	data-capture-replay-env-vars.tcsh
