@@ -466,8 +466,8 @@ void ChannelizerParameters::addAllImmedCmdHelp()
    addImmedCmdHelp("names \t\t\t\tlist all connected channelizers");
    addImmedCmdHelp("reqstat [<chanName>='all'] \trequest channelizer status update ");
    addImmedCmdHelp("resetsocket <chanName | 'all'> \treset socket on channelizer(s)");
-   addImmedCmdHelp("restart <chanName | 'all'> \trestart channelizer(s)\n");
-   addImmedCmdHelp("start <delay secs> <freq MHz> <chanName | 'all'> \n\t\t\t\t\tstart channelizer(s) in delay secs, tuned to freq MHz");
+   addImmedCmdHelp("restart <chanName | 'all'> \trestart channelizer(s)");
+   addImmedCmdHelp("start <delay secs> <freq MHz> <chanName | 'all'> \n\t\t\t\t\tstart channelizer(s) in delay secs, \n\t\t\t\t\ttuned to freq MHz");
    addImmedCmdHelp("shutdown <chanName | 'all'> \tshutdown channelizers(s) ");
    addImmedCmdHelp("status [<chanName>='all'] \tdisplay channelizer status  ");
    addImmedCmdHelp("stop <chanName>='all'> \t\tissue stop command ");

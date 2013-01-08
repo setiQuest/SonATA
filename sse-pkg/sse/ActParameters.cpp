@@ -124,22 +124,22 @@ ActParametersInternal::ActParametersInternal():
       "type", "", "activity type",
       "iftest"),   // TBD: assumes this type exists
    targetIdBeam1(
-      "targetbeam1", "SETI target id", "SETI target id for beam1",
+      "targetbeam1", "target id", "SETI target id for beam1",
       0, 0, MaxTargetId),
    targetIdBeam2(
-      "targetbeam2", "SETI target id", "SETI target id for beam2",
+      "targetbeam2", "target id", "SETI target id for beam2",
       0, 0, MaxTargetId),
    targetIdBeam3(
-      "targetbeam3", "SETI target id", "SETI target id for beam3",
+      "targetbeam3", "target id", "SETI target id for beam3",
       0, 0, MaxTargetId),
    targetIdBeam4(
-      "targetbeam4", "SETI target id", "SETI target id for beam4",
+      "targetbeam4", "target id", "SETI target id for beam4",
       0, 0, MaxTargetId),
    targetIdBeam5(
-      "targetbeam5", "SETI target id", "SETI target id for beam5",
+      "targetbeam5", "target id", "SETI target id for beam5",
       0, 0, MaxTargetId),
    targetIdBeam6(
-      "targetbeam6", "SETI target id", "SETI target id for beam6",
+      "targetbeam6", "target id", "SETI target id for beam6",
       0, 0, MaxTargetId),
    primaryTargetId(
       "targetprimary", "target id", "target id at the primary FOV center",
@@ -172,7 +172,7 @@ ActParametersInternal::ActParametersInternal():
       "watchdogs", "", "use component watchdog timers",
       ChoiceOn),
    sigDetWaitFactor(
-      "sigdetwait", "X times data coll time",
+      "sigdetwait", "\n\t\t\t\tX times data coll time",
       "signal detection watchdog timer wait factor", 
       3, 1, 20),
    componentReadyTimeoutSecs(
@@ -222,11 +222,11 @@ ActParametersInternal::ActParametersInternal():
       7.0, 0.0, 28.0),
    dataCollCompleteTimeoutOffsetSecs(
       "datacolltimeoutoffset", 
-      "how long to wait after expected DC complete time \n\t\t\t\tbefore timing out",
+      "\n\t\t\t\thow long to wait after expected DC complete time\n\t\t\t\tbefore timing out",
       "secs", 
       10, 1, 30),
    doneSendingCwCohSigsTimeoutFactorPercent(
-      "cwcohdonetimeoutfactor", "percent of total signal detection timeout period \n\t\t\t\tto wait for 'done sending cw coherent signals' messages",
+      "cwcohdonetimeoutfactor", "\n\t\t\t\tpercent of total signal detection timeout period\n\t\t\t\tto wait for 'done sending cw coherent \n\t\t\t\tsignals' messages",
       "percent", 
       0.7, 0.1, 0.9),
    pointPrimaryBeam(
@@ -240,7 +240,7 @@ ActParametersInternal::ActParametersInternal():
       "primary beam pointing position RA", 
       0, 0, MaxRaHours),
    primaryBeamDecDeg(
-      "primarydecdeg", "j2000 degrees",
+      "primarydecdeg", "j2000 deg",
       "primary beam pointing position Dec", 
       0, -MaxDecDeg, MaxDecDeg),
 
