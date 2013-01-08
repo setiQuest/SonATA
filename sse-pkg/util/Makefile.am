@@ -89,7 +89,9 @@ bin_SCRIPTS = \
 	mybackup.sh \
 	db-backup.sh \
 	sse300-backup.sh \
+	db-backup.sse300.sh \
 	sonata-startup-cron-vger-wrapper.sh \
+	setilive-summary.sh \
 	opensonata-build-test.sh 
 
 bin_PROGRAMS = \
