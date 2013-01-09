@@ -274,4 +274,10 @@ scripts_SCRIPTS = \
 	3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh \
 	sonata-cron-restart-obs-session.sh \
 	sonata-restart-obs.tcl \
+	sonata-cron-begin-casa-grid-session.sh \
+	sonata-start-casa-grid-2beams-6567-6767-obs.tcl \
+	sonata-cron-switch-to-casa-grid.sh \
+	sonata-switch-to-casa-grid.tcl \
+	sonata-start-exoplanets-2beams-6567-6767-obs.tcl \
+	sonata-start-kepler-2beams-6567-6767-obs.tcl \
 	data-capture-replay-env-vars.tcsh

@@ -1,11 +1,8 @@
-# sonata-start-kepler-3beams-3800-4200-obs.tcl
+# sonata-start-casa-grid-2beams-6567-6767-obs.tcl
 #
 # SSE seeker commands to start observing
 
-# send out "taking the array" email
-#sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
-
-exec setAlarm ARM,sonata,Kepler
+exec setAlarm ARM,sonata,CasA
 
 # connect to the backend server
 tscope setup
@@ -13,7 +10,7 @@ tscope setup
 # allow some setup time
 sh sleep 20
 
-act set candarch {confirmed} current 
+act set candarch {all} current 
 act set comparedxs {off} current 
 act set cwcohdonetimeoutfactor 0.700000000 current 
 act set datacolltimeoutoffset 10 current 
@@ -30,7 +27,7 @@ act set nulldepth 7.000000000 current
 act set offactnulls {projection} current 
 act set pointprimary {on} current 
 act set prevactid 0 current 
-act set primarybempos {targetid} current 
+act set primarybeampos {targetid} current 
 act set primarydecdeg 0.000000000 current 
 act set primaryrahours 0.000000000 current 
 act set readytimeout 60 current 
@@ -53,8 +50,8 @@ act set varwarnlower 8.000000000 current
 act set varwarn {on} current 
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
-db set host {sse300} current 
-db set name {kepler201208} current 
+db set host {sse100} current 
+db set name {casa} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -84,8 +81,8 @@ dx set coherentdetlim 0.000000000 current
 dx set compamps {on} current 
 dx set cwclustdeltafreq 2 current 
 dx set cwthresh 0.000000000 current 
-dx set daddres 2 current 
-dx set daddthresh 9.5 current 
+dx set daddres 4 current 
+dx set daddthresh 6.0 current 
 dx set datareqfreq 1420.800100000 current 
 dx set datareqmaxcompampsubchan 12 max
 dx set datareqmaxcompampsubchan 12
@@ -119,19 +116,19 @@ sched set beam4 {off} current
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 3800.00 current 
-sched set catshigh {keplerHZ,exokepler} current 
+sched set beginfreq 6567.00 current 
+sched set catshigh {casagrid,habcat} current 
 sched set catshighmaxcounts 20000 current 
-sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
+sched set catslow {exoplanets,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 
-sched set comcal {off} current 
+sched set comcal {on} current 
 sched set declowerlimit -90.000000000 current 
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 4200.000000000 current 
+sched set endfreq 6767.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -157,9 +154,8 @@ sched set stopstratfail {off} current
 sched set sunavoid 55.000000000 current 
 sched set target {auto} current 
 sched set targetavailactsetup 60 current 
-sched set targetmerit {catalog,meridian,completelyobs,timeleft} current 
+sched set targetmerit {primaryid,catalog,completelyobs,timeleft,meridian} current 
 sched set targetwait {on} current 
-#sched set tasks {autoselectants,prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
 sched set tasks {prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
 sched set tscopemaxfailures 10 current 
 sched set tscopereadypause 120 current 
@@ -167,10 +163,6 @@ sched set zenithavoid 5.000000000 current
 tscope set antsmaxsefd 20000 current 
 
 tscope set antlistsource param
-#tscope set antlistsource {antgroup} current 
-#tscope set antsprimary {antgroup} current 
-#tscope set antsxpol {antgroup} current 
-#tscope set antsypol {antgroup} current 
 tscope set beamsize 348.000000000 current 
 tscope set calcycles 2 current 
 tscope set caltime 90 current 
