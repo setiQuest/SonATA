@@ -44,7 +44,7 @@ This is how it was installed on sse100:
 1) Put the tomcat release into /usr/local/jakarta-tomcat.
 2) made new directory /home/sonata/java
 3) put jdk-1_5_0_22-linux-amd64.bin in /home/sonata/java and executed it.
-4) In .cshrc ${HOME}/OpenSonATA/scripts is added to the path.
+4) In .cshrc ${HOME}/SonATA/scripts is added to the path.
 4) In .cshrc  add this at end:
 # For tomcat
 setenv CATALINA_HOME /usr/local/jakarta-tomcat
@@ -52,7 +52,7 @@ setenv CATALINA_BASE /home/sonata/OpenSonATA/sse-pkg/web/sse-tomcat
 setenv CATALINA_OPTS -Djava.awt.headless=true
 setenv JAVA_OPTS "-Xms128m -Xmx128m -Djava.awt.headless=true"
 setenv DISPLAY localhost:1.0
-5) In /etc/init.d create new file "xvfb". It should contin this command:
+5) In /etc/init.d create new file "xvfb". It should contain this command:
    /usr/bin/Xvfb :1 -screen 0 1024x768x16 &
 6) In /etc/init.d/rc3.d "ln -s ../xvfb S99xvfb"
 
