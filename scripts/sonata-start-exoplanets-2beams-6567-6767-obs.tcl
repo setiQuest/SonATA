@@ -13,7 +13,7 @@ tscope setup
 # allow some setup time
 sh sleep 20
 
-act set candarch {all} current 
+act set candarch {confirmed} current 
 act set comparedxs {off} current 
 act set cwcohdonetimeoutfactor 0.700000000 current 
 act set datacolltimeoutoffset 10 current 
@@ -112,8 +112,8 @@ dx set trainsignifthresh -40.000000000 current
 dx set tripletthresh 48.000000000 current 
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
-sched set beam1 {on} current 
-sched set beam2 {off} current 
+sched set beam1 {off} current 
+sched set beam2 {on} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 

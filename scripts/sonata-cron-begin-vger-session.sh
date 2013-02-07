@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # sonata-cron-begin-vger-session.sh
-
+# use antlist for 8400 mhz
+cp /home/sonata/sonata_install/scripts/antenna-list-master-8400mhz.tcl /home/sonata/sonata_install/scripts/antenna-list-master.tcl
 #run the test to see if we should be running. If not - exit the script.
 /home/sonata/scripts/should_start_obs.rb
 if [ $? -ne 0 ]; then
@@ -20,4 +21,6 @@ ${HOME}/sonata_install/bin/sonata-startup-cron-wrapper.sh -batch
 sleep 120
 
 #send command to SSE to start Observing
-${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-vger-3beams-8410-8450-obs.tcl
+${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-vger-2beams-8414-8424-obs.tcl
+# restore antenna-list-master.tcl
+cp /home/sonata/SonATA/scripts/antenna-list-master.tcl /home/sonata/sonata_install/scripts/antenna-list-master.tcl

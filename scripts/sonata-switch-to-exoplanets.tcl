@@ -14,8 +14,8 @@ exec setAlarm ARM,sonata,Switching To exoplanets
 # change database to exoplanets
 #db set host sse100
 #db set name exoplanets6667mhz
-db set host sse300
-db set name exoplanets201208
+db set host sse100
+db set name exoplanets6667mhz
 
 # change catalog priorities
 sched set catshigh exoplanets,habcat

@@ -96,9 +96,9 @@ set autoRestart_ 0
 
 # TBD check for env override of SSE_ARCHIVE dir
 set tempLogDir_ "$env(HOME)/sonata_archive/templogs"
-#set logFilename_ "${tempLogDir_}/controlcomponents-log.txt"
-set dateStamp [ timestamp -format %Y%m%d-%H:%M ]
-set logFilename_ "${tempLogDir_}/controlcomponents-log-${dateStamp}.txt"
+set logFilename_ "${tempLogDir_}/controlcomponents-log.txt"
+#set dateStamp [ timestamp -format %Y%m%d-%H:%M ]
+#set logFilename_ "${tempLogDir_}/controlcomponents-log-${dateStamp}.txt"
 
 
 # get the "setup" dir for config files

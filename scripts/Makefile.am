@@ -257,6 +257,7 @@ scripts_SCRIPTS = \
 	sonata-start-rfiscan-1700-5000-4g-obs.tcl \
 	sonata-start-rfiscan-1400-1750-4g-obs.tcl \
 	antenna-list-master.tcl \
+	antenna-list-master-8400mhz.tcl \
 	run-rosetta-demo.tcsh \
 	run-voyager-demo.tcsh \
 	run-kepler-demo.tcsh \
@@ -269,6 +270,7 @@ scripts_SCRIPTS = \
 	sonata-start-kepler-2beams-3800-4200-obs.tcl \
 	sonata-start-exoplanets-2beams-3800-4200-obs.tcl \
 	sonata-start-vger-2beams-8410-8430-obs.tcl \
+	sonata-start-vger-2beams-8414-8424-obs.tcl \
 	sonata-cron-begin-vger-session.sh \
 	sonata-start-vger-2beams-8400-8440-obs.tcl \
 	3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh \
