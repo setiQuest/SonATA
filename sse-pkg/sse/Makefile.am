@@ -44,7 +44,7 @@ DEFS = -DHAVE_CONFIG_H -I. -I$(srcdir) -I$(top_builddir) \
 #GPROF_FLAGS = -pg
 #DEBUGFLAGS=$(GPROF_FLAGS)
 # for ggdb
-GGBD_FLAGS = -ggdb
+GGBD_FLAGS = -g
 DEBUGFLAGS=$(GGBD_FLAGS)
 
 CXXFLAGS = @CXXFLAGS@ $(DEBUGFLAGS) 
