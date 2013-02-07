@@ -82,7 +82,7 @@ protected:
 	virtual int32_t saturate(float f) {
 		if (fabs(f) > 32767)
 			f = (f > 0 ? 32767 : -32767);
-		return (rint(f));
+		return (lrintf(f));
 	}
 
 public:

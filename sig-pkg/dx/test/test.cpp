@@ -334,8 +334,8 @@ createSpectrum(const ComplexFloat32 *td, ComplexPair *fd)
 		else
 			fd[(i-half)*stride] = v;
 #else
-		int32_t re = (int32_t) rint(spectrum[i].real());
-		int32_t im = (int32_t) rint(spectrum[i].imag());
+		int32_t re = (int32_t) lrintf(spectrum[i].real());
+		int32_t im = (int32_t) lrintf(spectrum[i].imag());
 		if (re > 7)
 			re = 7;
 		if (re < -7)

@@ -527,8 +527,8 @@ Spectrometer::computeCdData(ComplexFloat32 *data)
 	const int32_t max = MAX_CD_VAL, min = -MAX_CD_VAL;
 
 	for (int32_t i = 0; i < n; ++i) {
-		int32_t re = (int32_t) rint(data[i].real());
-		int32_t im = (int32_t) rint(data[i].imag());
+		int32_t re = (int32_t) lrintf(data[i].real());
+		int32_t im = (int32_t) lrintf(data[i].imag());
 		if (re > max)
 			re = max;
 		if (re < min)
