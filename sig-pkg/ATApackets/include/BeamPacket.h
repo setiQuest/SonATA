@@ -119,7 +119,7 @@ protected:
 	virtual int32_t saturate(float f) {
 		if (fabs(f) > 127)
 			f = (f > 0 ? 127 : -127);
-		return (rint(f));
+		return (lrintf(f));
 	}
 #endif
 };

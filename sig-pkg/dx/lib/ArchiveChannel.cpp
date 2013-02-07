@@ -283,8 +283,8 @@ ArchiveChannel::convert(const ComplexFloat32 *acData, ComplexPair *cdData,
 		ComplexFloat4 v(acData[i]);
 		cdData[i] = (ComplexPair) v;
 #else
-		int32_t re = (int32_t) rint(acData[i].real());
-		int32_t im = (int32_t) rint(acData[i].imag());
+		int32_t re = (int32_t) lrintf(acData[i].real());
+		int32_t im = (int32_t) lrintf(acData[i].imag());
 		if (re > 7)
 			re = 7;
 		if (re < -7)
@@ -510,7 +510,7 @@ int32_t
 ArchiveChannel::getSamplesPerSignalSample(float64_t widthHz)
 {
 	float64_t tmp = MHZ_TO_HZ(ac.widthMHz) / widthHz;
-	int32_t samplesPerBlk = (int32_t) rint(tmp);
+	int32_t samplesPerBlk = (int32_t) lrint(tmp);
 	return (samplesPerBlk);
 }
 
@@ -570,7 +570,7 @@ ComplexFloat32
 ArchiveChannel::extractBin(float64_t fMHz, float64_t wHz, int32_t spectrum,
 		bool overlap)
 {
-	int32_t fftLen = rint(MHZ_TO_HZ(ac.widthMHz) / wHz);
+	int32_t fftLen = lrint(MHZ_TO_HZ(ac.widthMHz) / wHz);
 	bin.spectra = 1;
 	bin.widthMHz = ac.widthMHz;
 	if (bin.samples < fftLen) {
@@ -586,7 +586,7 @@ ArchiveChannel::extractBin(float64_t fMHz, float64_t wHz, int32_t spectrum,
 		Assert(bin.data);
 	}
 	float64_t dfHz = MHZ_TO_HZ(fMHz - freqMHz);
-	int32_t b = rint(dfHz / wHz);
+	int32_t b = lrint(dfHz / wHz);
 	int32_t spectra = ac.samples / fftLen;
 	int32_t ofs = spectrum * fftLen;;
 	if (overlap) {
