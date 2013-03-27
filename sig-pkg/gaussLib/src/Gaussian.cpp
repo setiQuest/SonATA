@@ -176,8 +176,8 @@ Gaussian::getSamples(ComplexPair *data, int32_t n)
 		ComplexFloat64 f = getSample();
 
 		// using 4-bit integers, so saturate the output
-		int32_t re = (int32_t) rint(f.real());
-		int32_t im = (int32_t) rint(f.imag());
+		int32_t re = (int32_t) lrint(f.real());
+		int32_t im = (int32_t) lrint(f.imag());
 		if (re > max)
 			re = max;
 		else if (re < min)
@@ -235,8 +235,8 @@ Gaussian::getSamples(ComplexInt8 *data, int32_t n)
 		ComplexFloat64 f = getSample();
 
 		// using 4-bit integers, so saturate the output
-		int32_t re = (int32_t) rint(f.real());
-		int32_t im = (int32_t) rint(f.imag());
+		int32_t re = (int32_t) lrint(f.real());
+		int32_t im = (int32_t) lrint(f.imag());
 		if (re > max)
 			re = max;
 		else if (re < min)
@@ -270,8 +270,8 @@ Gaussian::getSamples(ComplexInt16 *data, int32_t n)
 		ComplexFloat64 f = getSample();
 
 		// using 4-bit integers, so saturate the output
-		int32_t re = (int32_t) rint(f.real());
-		int32_t im = (int32_t) rint(f.imag());
+		int32_t re = (int32_t) lrint(f.real());
+		int32_t im = (int32_t) lrint(f.imag());
 		if (re > max)
 			re = max;
 		else if (re < min)
