@@ -97,8 +97,8 @@ dist_setup_DATA = \
 	cassini.xyz \
 	kepler.xyz \
 	ifAttnDbOffset.cfg \
-	DA14.xyz \
-        DA14comp.xyz
+	da14.xyz \
+        da14comp.xyz
 
 
 
