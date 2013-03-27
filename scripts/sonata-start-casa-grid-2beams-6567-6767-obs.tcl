@@ -10,7 +10,7 @@ tscope setup
 # allow some setup time
 sh sleep 20
 
-act set candarch {all} current 
+act set candarch {confirmed} current 
 act set comparedxs {off} current 
 act set cwcohdonetimeoutfactor 0.700000000 current 
 act set datacolltimeoutoffset 10 current 

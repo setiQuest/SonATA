@@ -67,8 +67,8 @@ then
 fi
 
 # load any env var overrides
-envFile="${HOME}/sonata_install/scripts/3beam-dualpol-800KHz-72dx-env-vars-batch.sh"
-#envFile="${HOME}/sonata_install/scripts/3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh"
+#envFile="${HOME}/sonata_install/scripts/3beam-dualpol-800KHz-72dx-env-vars-batch.sh"
+envFile="${HOME}/sonata_install/scripts/3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh"
 if [ -r ${envFile} ]
 then
    . ${envFile}

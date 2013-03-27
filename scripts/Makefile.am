@@ -271,6 +271,7 @@ scripts_SCRIPTS = \
 	sonata-start-exoplanets-2beams-3800-4200-obs.tcl \
 	sonata-start-vger-2beams-8410-8430-obs.tcl \
 	sonata-start-vger-2beams-8414-8424-obs.tcl \
+	sonata-start-vger-1beam-8414-8424-obs.tcl \
 	sonata-cron-begin-vger-session.sh \
 	sonata-start-vger-2beams-8400-8440-obs.tcl \
 	3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh \
@@ -282,4 +283,16 @@ scripts_SCRIPTS = \
 	sonata-switch-to-casa-grid.tcl \
 	sonata-start-exoplanets-2beams-6567-6767-obs.tcl \
 	sonata-start-kepler-2beams-6567-6767-obs.tcl \
-	data-capture-replay-env-vars.tcsh
+	sonata-start-da14-2beam-8400-8850-obs.tcl \
+	sonata-cron-begin-da14-session.sh \
+	data-capture-replay-env-vars.tcsh \
+        sonata-start-perseusa-grid-2900-3100-obs.tcl \
+        sonata-start-perseusa-grid-1400-1600-obs.tcl \
+        sonata-start-ldn1622-grid-2900-3100-obs.tcl \
+        sonata-start-ldn1622-grid-1400-1600-obs.tcl \
+        sonata-cron-begin-perseusa-grid-session.sh \
+        sonata-cron-begin-ldn1622-grid-session.sh  \
+	sonata-start-rfiscan-1480.tcl  \
+	sonata-cron-begin-rfiscan.sh \
+	sonata-start-rfiscan-1430.tcl \
+	sonata-switch-to-perseusa.tcl

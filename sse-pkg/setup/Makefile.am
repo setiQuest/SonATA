@@ -96,7 +96,9 @@ dist_setup_DATA = \
 	deepimpact.xyz \
 	cassini.xyz \
 	kepler.xyz \
-	ifAttnDbOffset.cfg
+	ifAttnDbOffset.cfg \
+	DA14.xyz \
+        DA14comp.xyz
 
 
 

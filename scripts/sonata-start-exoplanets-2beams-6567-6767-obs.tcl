@@ -85,7 +85,7 @@ dx set compamps {on} current
 dx set cwclustdeltafreq 2 current 
 dx set cwthresh 0.000000000 current 
 dx set daddres 4 current 
-dx set daddthresh 6.0 current 
+dx set daddthresh 6.5 current 
 dx set datareqfreq 1420.800100000 current 
 dx set datareqmaxcompampsubchan 12 max
 dx set datareqmaxcompampsubchan 12
@@ -112,8 +112,8 @@ dx set trainsignifthresh -40.000000000 current
 dx set tripletthresh 48.000000000 current 
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
-sched set beam1 {off} current 
-sched set beam2 {on} current 
+sched set beam1 {on} current 
+sched set beam2 {off} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
@@ -177,7 +177,7 @@ tscope set caltime 90 current
 tscope set caltype {delay} current 
 tscope set centertuneoffset 0.000000000 current 
 tscope set primaryfov 3.500000000 current 
-tscope set sitehoriz 18.000000000 current 
+tscope set sitehoriz 16.5 current 
 tscope set sitelat 40.817361111 current 
 tscope set sitelong 121.471802778 current 
 tscope set sitename {ATA} current 

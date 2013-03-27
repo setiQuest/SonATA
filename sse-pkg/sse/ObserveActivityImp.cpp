@@ -1946,6 +1946,18 @@ startActUnitWatchdogTimers()
 	startWatchdogTimer(dataCollectionCompleteTimeout_,
 			&ObserveActivityImp::handleDataCollectionCompleteTimeout,
 			dcWaitDurationSecs);
+	// log start time
+	stringstream dcstrm;
+
+	dcstrm << "Data Collection timeout time: "
+		<< SseUtil::isoDateTime(dcWaitDurationSecs) 
+		<< " " << dcWaitDurationSecs << endl;
+
+	obsSummaryTxtStrm_ << dcstrm.str();
+
+	SseArchive::SystemLog() << "Act " << getId() << ": " 
+		<< dcstrm.str();
+
 
 	int estimatedSignalDetectionLength = actParameters_.getSigDetWaitFactor()
 		* dataCollectionLengthSecs_;

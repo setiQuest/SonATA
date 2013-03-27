@@ -111,7 +111,7 @@ void printGrid(double beamScale, double targetRaDeg, double targetDecDeg, double
    double lowerLeftDecDeg = targetDecDeg - beamOffsetPerStepDeg;
 
 
-   int nsteps = 3;
+   int nsteps = 4;
 
    double outRaDeg = lowerLeftRaDeg;
 

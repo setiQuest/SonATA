@@ -34,6 +34,14 @@ mysqldump -h sse300 spacecraft > /Sse.Arc6/sonata/sonata_archive/databases/dump-
 echo "Dumped database spacecraft to /Sse.Arc6/sonata/sonata_archive/databases/spacecraft-${isodate}"
 
 echo `date`
+mysqldump -h sse100 ldn1622_1500 > /Sse.Arc6/sonata/sonata_archive/databases/dump-ldn1622_1500-${isodate}
+echo "Dumped database ldn1622_1500 to /Sse.Arc6/sonata/sonata_archive/databases/dump-ldn1622_1500-${isodate}"
+
+echo `date`
+mysqldump -h sse100 perseusa_1500 > /Sse.Arc6/sonata/sonata_archive/databases/dump-perseusa_1500-${isodate}
+echo "Dumped database perseusa_1500 to /Sse.Arc6/sonata/sonata_archive/databases/dump-perseusa_1500-${isodate}"
+
+echo `date`
 #-------------------------------------------------
 echo "Disk space: "
 echo "------------"
