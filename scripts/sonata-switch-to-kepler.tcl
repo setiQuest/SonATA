@@ -11,10 +11,11 @@ sh sleep 10
 exec setAlarm ARM,sonata,Switching To KEPLER
 
 # change database to kepler
-#db set name kepler6667mhz
-#db set host sse100
 db set host sse100
 db set name kepler6667mhz
+
+#set minNumberReservedFollowups to 12
+sched set minNumberReservedFollowups 12 current
 
 # change catalog priorities
 sched set catshigh keplerHZ,exokepler

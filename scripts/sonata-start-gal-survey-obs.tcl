@@ -129,7 +129,7 @@ sched set beam5 {off} current
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
 sched set beginfreq 1410.000000000 current 
-sched set catshigh {galsurvey,habcat} current 
+sched set catshigh {galsurveygrid,habcat} current 
 sched set catshighmaxcounts 20000 current 
 sched set catslow {tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 

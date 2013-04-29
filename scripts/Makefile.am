@@ -282,6 +282,7 @@ scripts_SCRIPTS = \
 	sonata-cron-switch-to-casa-grid.sh \
 	sonata-switch-to-casa-grid.tcl \
 	sonata-start-exoplanets-2beams-6567-6767-obs.tcl \
+	sonata-start-exoplanets-3beams-6567-6767-obs.tcl \
 	sonata-start-kepler-2beams-6567-6767-obs.tcl \
 	sonata-start-da14-2beam-8400-8850-obs.tcl \
 	sonata-cron-begin-da14-session.sh \
@@ -295,4 +296,13 @@ scripts_SCRIPTS = \
 	sonata-start-rfiscan-1480.tcl  \
 	sonata-cron-begin-rfiscan.sh \
 	sonata-start-rfiscan-1430.tcl \
-	sonata-switch-to-perseusa.tcl
+	sonata-switch-to-perseusa.tcl \
+	switchConfigFile-1beam-beam3-800KHz-1dx-1zx.tcsh \
+	switchConfigFile-1beam-beam3-800KHz-2dx-1zx.tcsh \
+	1beam-beam3-dualpol-2dx-1zx-512F-env-vars.tcsh \
+	1beam-beam3-dualpol-800KHz-9dx-1zx-256F-env-vars-batch.sh \
+	switchConfigFile-1beam-beam3-800KHz-9dxs-1zx.tcsh \
+	testgrid.tcl \
+	sonata-switch-to-galcenter.tcl \
+	sonata-cron-switch-to-galcenter.sh \
+	1beam-dualpol-1dx-1zx-512F-env-vars.tcsh
