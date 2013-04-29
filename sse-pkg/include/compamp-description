@@ -1,0 +1,60 @@
+// ---- begin Complex Amplitudes (variable length message) -------
+
+struct ComplexPair
+{
+    uint8_t pair;    // time samples: RRRRIIII real and imaginary.
+                     // 4 bit signed (2's complement), high bits on the left.
+
+    ComplexPair();
+};
+
+struct SubchannelCoef1KHz
+{
+    ComplexPair coef[MAX_SUBCHANNEL_BINS_PER_1KHZ_HALF_FRAME];
+
+    SubchannelCoef1KHz();
+    void marshall();
+    void demarshall();
+    friend ostream& operator << (ostream &strm, const SubchannelCoef1KHz &subchannel);
+};
+
+// variable length
+struct ComplexAmplitudeHeader
+{
+    float64_t rfCenterFreq;  // center freq of first subchannel (MHz)
+    int32_t halfFrameNumber;
+//  int32_t alignPad;               // replaced by activityId for sonata
+    int32_t activityId;
+    float64_t hzPerSubchannel;          
+    int32_t startSubchannelId;
+    int32_t numberOfSubchannels;
+//  Resolution res;                 // deprecated, then replaced by overSampling
+                                    // for sonata
+    float32_t overSampling;         // % by which subchannel is oversampled
+    Polarization pol;
+
+    ComplexAmplitudeHeader();
+    void marshall();
+    void demarshall();
+    friend ostream& operator << (ostream &strm, const ComplexAmplitudeHeader &compAmpHdr);
+
+};
+// ComplexAmplitudeHeader is followed by this array:
+// SubchannelCoef1KHz subchannelArray[numberOfSubchannels]
+
+
+
+// This fixed length ComplexAmplitudes struct is deprecated.
+// It's here for backwards compatibility.
+struct ComplexAmplitudes
+{
+    ComplexAmplitudeHeader header;
+    SubchannelCoef1KHz compamp;
+
+    void marshall();
+    void demarshall();
+    friend ostream& operator << (ostream &strm, const ComplexAmplitudes &compAmps);
+};
+
+// ---- end Complex Amplitudes -------
+

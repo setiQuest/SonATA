@@ -1,0 +1,28 @@
+Antpols 8400 MHz
+1ax    1ay
+1cx    1cy
+1dx    1dy
+       1ey
+1fx    1fy
+1hx    1hy
+1kx   
+2ex    2ey
+2fx    2fy
+2gx    2gy
+2jx    2jy
+2kx    2ky
+2mx   
+3dx    3dy
+3jx    3jy
+3lx    3ly
+4gx   
+4jx    4jy
+4kx    4ky
+5bx   
+5cx    5cy
+5ex    5ey
+
+tscope set antsprimary 1a,1c,1d,1k,2g,2j,2k,3d,3j,3l,4e,4k,4l,5b,5c,5e
+tscope set antsxpol 1a,1d,1k,2g,2j,2k,3d,3j,3l,4e,4k,4l,5b,5c,5e
+tscope set antsypol 1a,1c,1k,2g,2j,3d,3j,4e,4k,4l,5c,5e
+ 
