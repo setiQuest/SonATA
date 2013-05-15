@@ -51,7 +51,7 @@ act set varwarn {on} current
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
 db set host {sse100} current 
-db set name {galcenter} current 
+db set name {testgridanu} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -110,7 +110,7 @@ dx set tripletthresh 48.000000000 current
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
-sched set beam2 {off} current 
+sched set beam2 {on} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
@@ -128,7 +128,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 6767.000000000 current 
+sched set endfreq 6587.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -136,7 +136,7 @@ sched set maxdistly 225.000000000 current
 sched set maxfailures 3 current 
 sched set minfollowups 12 current 
 sched set mindxbw 20.000000000 current 
-sched set mintargetsep 2.500000000 current 
+sched set mintargetsep 2.000000000 current 
 sched set moonavoid 10.000000000 current 
 sched set multitarget {on} current 
 sched set dxoverlap 0.001000000 current 

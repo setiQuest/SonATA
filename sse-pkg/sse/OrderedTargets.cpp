@@ -1424,6 +1424,11 @@ void OrderedTargets::cullByMinTargetSeparation(
 	    << " minSepRads = " << minSepRads
 	    << endl;);    
 
+   cout <<  methodName << "chosenTargetId = " << chosenTargetId
+	    << ": chosenTarget RaDec = " << chosenTargetRaDec 
+	    << " minSepRads = " << minSepRads
+	    << endl;  
+
    for (TargetMap::iterator i = targetMap.begin();
 	i != targetMap.end(); )
    {
@@ -1446,6 +1451,8 @@ void OrderedTargets::cullByMinTargetSeparation(
 
    VERBOSE2(getVerboseLevel(), methodName << ": " << targetMap.size() 
 	    << " targets remain after culling" << endl;);    
+    cout <<  methodName << ": " << targetMap.size() 
+	    << " targets remain after culling" << endl;    
 
    selectionLogStrm_ << methodName << "targets left: "
                      << targetMap.size() << endl;

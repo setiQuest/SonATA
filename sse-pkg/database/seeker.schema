@@ -60,7 +60,7 @@ create table TargetCat
                 "galsurvey", "tycho2subset", "tycho2remainder",
                 "caldelay", "calphase", "radecgrid", "cygnusx3", "antisolar",
 		"quietsky", "explorer", "keplerHZ","exokepler","casagrid",
-                "perseusagrid","galcentergrid","testgrid") not null,
+                "perseusagrid","galcentergrid","testgrid","galcentergrid2") not null,
   ra2000Hours   double not null default -99, 
   dec2000Deg    double not null default -99, 
   pmRaMasYr     double not null default 0,  -- proper motion, RA, milliArcsec per yr

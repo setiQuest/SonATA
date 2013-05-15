@@ -283,6 +283,9 @@ scripts_SCRIPTS = \
 	sonata-switch-to-casa-grid.tcl \
 	sonata-start-exoplanets-2beams-6567-6767-obs.tcl \
 	sonata-start-exoplanets-3beams-6567-6767-obs.tcl \
+	sonata-start-exoplanets-3beams-6767-6967-obs.tcl \
+	sonata-start-kepler-3beams-6767-6967-obs.tcl \
+	sonata-start-exoplanets-3beams-6967-7167-obs.tcl \
 	sonata-start-kepler-2beams-6567-6767-obs.tcl \
 	sonata-start-da14-2beam-8400-8850-obs.tcl \
 	sonata-cron-begin-da14-session.sh \

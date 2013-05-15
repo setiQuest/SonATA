@@ -2,7 +2,7 @@
 
 # tscope-setup-1beam-beam3-4l.tcl
 
-sh echo "SonATA taking array" | mailx -s 'SonATA taking ant4l & bf3 for Testing' -r jjordan@seti.org ata-staff@seti.org
+#sh echo "SonATA taking array" | mailx -s 'SonATA taking ant4l & bf3 for Testing' -r jjordan@seti.org ata-staff@seti.org
 
 sched set beginfreq 1410.0
 sched set endfreq 1450.2

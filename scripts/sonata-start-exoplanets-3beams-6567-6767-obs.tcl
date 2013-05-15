@@ -119,6 +119,7 @@ sched set beam4 {off} current
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
+#ADD NEW FREQ sched set beginfreq 6567.00 current 
 sched set beginfreq 6567.00 current 
 sched set catshigh {exoplanets,keplerHZ,exokepler} current 
 sched set catshighmaxcounts 20000 current 
@@ -131,6 +132,7 @@ sched set declowerlimit -90.000000000 current
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
+# ADD NEW FREQ sched set endfreq 6767.000000000 current 
 sched set endfreq 6767.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
@@ -140,7 +142,8 @@ sched set maxfailures 3 current
 sched set minfollowups 12 current 
 sched set mindxbw 20.000000000 current 
 sched set mintargetsep 2.500000000 current 
-sched set moonavoid 10.000000000 current 
+#sched set moonavoid 10.000000000 current 
+sched set moonavoid 2.500000000 current 
 sched set multitarget {on} current 
 sched set dxoverlap 0.001000000 current 
 sched set dxround 0.100000000 current 

@@ -2,7 +2,7 @@
 
 # tscope-setup-3beam-1a.tcl
 
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Testing' -r jjordan@seti.org ata-staff@seti.org
+#sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Testing' -r jjordan@seti.org ata-staff@seti.org
 
 act set targetbeam1 170
 act set targetbeam2 170
