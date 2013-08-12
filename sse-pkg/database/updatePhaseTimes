@@ -1,0 +1,47 @@
+#!/bin/sh
+## Set these as needed:
+dbhost="sse100"
+dbname="janetest"
+
+if [ "$dbhost" = "" ]
+then
+    echo "Must set dbhost in script"
+    exit 1
+fi
+
+if [ "$dbname" = "" ]
+then
+    echo "Must set dbname in script"
+    exit 1
+fi
+
+#set -x
+
+# location of catalog data files
+
+catalogDir="~/peter/catalogs/observing"
+
+sourceFile()
+{
+    # Source the file, showing any warnings, but
+    # ignoring any expected "note" messages (e.g., Unknown table)
+
+    filename=$1
+    mysql -h ${dbhost} ${dbname} --show-warnings -e \
+      "set sql_notes=0; source ${filename};"
+}
+
+loadData()
+{
+    table=$1
+    filename=$2
+
+    nHeaderLines=2
+    mysql --local-infile=1 -h ${dbhost} ${dbname} --show-warnings -e \
+    "load data local infile '$filename' into table ${table}\
+    fields terminated by ',' ignore $nHeaderLines lines;"
+}
+
+echo "cal phase"
+loadData BfCalPhaseTime seeker.bf.calphase.times.load-data
+

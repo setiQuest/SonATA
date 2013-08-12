@@ -1,0 +1,9 @@
+Target body name: Voyager I Spacecraft (-31)      {source: pfile_a54418u.nio}
+Frame: J2000
+Corrected: LT
+Start time      : A.D. 2012-Oct-09 00:00:00.0000 CT 
+Stop  time      : A.D. 2013-Nov-08 00:00:00.0000 CT 
+
+
+Julian Date         X (km)         Y (km)         Z (km)     Vx (km/s)  Vy (km/s)  Vz (km/s) LT(sec) Range(km) RRate(km/s)
+================== ============== ============== ============== ========== ========== ========== ========== ========== ==========   

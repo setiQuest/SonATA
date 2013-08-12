@@ -13,15 +13,19 @@ echo $SSE_SETUP
 #------------------------------------
 
 # Logical Channelizer Host Names
-RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
+#RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y chanhost3x chanhost3y"
+#2013-08-10 beam3 doesn't get good cals, seti014-2 is down
+# redirecting Beam2 to seti002
+
+RUNSSE_CHAN_HOSTS="chanhost1x chanhost1y chanhost2x chanhost2y"
 export RUNSSE_CHAN_HOSTS
 
 # Actual Channelizer Host Names
 CHANHOST1X="seti000-2"
-CHANHOST2X="seti001-1"
+CHANHOST2X="seti002-1"
 CHANHOST3X="seti002-1"
 CHANHOST1Y="seti000-2"
-CHANHOST2Y="seti001-1"
+CHANHOST2Y="seti002-1"
 CHANHOST3Y="seti002-1"
 export CHANHOST1X
 export CHANHOST2X
@@ -64,17 +68,21 @@ export CHANHOST3Y_OPTS
 # DX Environmental Variables
 #---------------------------
 
+#2013-08-10 beam3 doesn't get good cals, seti014-2 is down
+# redirecting Beam2 to seti002
+
 # Logical Host Names
-RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
+#RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6 dxhost7 dxhost8 dxhost9"
+RUNSSE_DX_HOSTS="dxhost1 dxhost2 dxhost3 dxhost4 dxhost5 dxhost6"
 export RUNSSE_DX_HOSTS
 
 # Actual Host Names
 DXHOST1="seti000-1"
 DXHOST2="seti000-3"
 DXHOST3="seti000-4"
-DXHOST4="seti001-2"
-DXHOST5="seti001-3"
-DXHOST6="seti001-4"
+DXHOST4="seti002-2"
+DXHOST5="seti002-3"
+DXHOST6="seti002-4"
 DXHOST7="seti002-2"
 DXHOST8="seti002-3"
 DXHOST9="seti002-4"
@@ -145,11 +153,13 @@ export DXHOST7_OPTS
 export DXHOST8_OPTS
 export DXHOST9_OPTS
 
-RUNSSE_ZX_HOSTS="zxhost1 zxhost2 zxhost3"
+#RUNSSE_ZX_HOSTS="zxhost1 zxhost2 zxhost3"
+RUNSSE_ZX_HOSTS="zxhost1 zxhost2"
 export RUNSSE_ZX_HOSTS
 
+#JR - July 19, 2013 - Swapped 1 and 3
 ZXHOST1="seti000-4"
-ZXHOST2="seti001-4"
+ZXHOST2="seti002-4"
 ZXHOST3="seti002-4"
 export ZXHOST1
 export ZXHOST2

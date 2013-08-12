@@ -41,7 +41,7 @@
 #define LINESINHEADER   9       /* number of lines to skip over */
 #define MAXCHARS        900     /* more chars than reasonable in header */
 #define ARGSINROW       10       /* numbers in each row of input table */
-#define MAXROWS         400     /* more rows than reasonable in a table */
+#define MAXROWS         800     /* more rows than reasonable in a table */
 #define STATE_VECT_LEN 12 /* x y z vx vy vz ax ay az lt range rangerate */
 
 long skipheader( FILE *ephemfile );

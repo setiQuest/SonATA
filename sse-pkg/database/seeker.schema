@@ -59,7 +59,8 @@ create table TargetCat
   catalog       enum("none", "spacecraft", "habcat", "nearest", "exoplanets",
                 "galsurvey", "tycho2subset", "tycho2remainder",
                 "caldelay", "calphase", "radecgrid", "cygnusx3", "antisolar",
-		"quietsky", "explorer", "keplerHZ","exokepler") not null,
+		"quietsky", "explorer", "keplerHZ","exokepler","casagrid",
+                "perseusagrid","galcentergrid","testgrid","galcentergrid2") not null,
   ra2000Hours   double not null default -99, 
   dec2000Deg    double not null default -99, 
   pmRaMasYr     double not null default 0,  -- proper motion, RA, milliArcsec per yr
@@ -140,25 +141,25 @@ create table Activities
   ts			       timestamp not null,
   startOfDataCollection        datetime,
   length                       int,  -- obs length sec
-  type                         text,
+  type                         text,	--activity type
 
   actParametersId              int,
-  ifc1ParametersId             int,
-  ifc2ParametersId             int,
-  ifc3ParametersId             int,
+  ifc1ParametersId             int,	--obsolete, but still in system
+  ifc2ParametersId             int,	--obsolete, but still in system
+  ifc3ParametersId             int,	--obsolete, but still in system
   dxParametersId              int,
   schedParametersId            int,
-  tsig1ParametersId             int,
-  tsig2ParametersId             int,
-  tsig3ParametersId             int,
+  tsig1ParametersId             int,	--obsolete, but still in system
+  tsig2ParametersId             int,	--obsolete, but still in system
+  tsig3ParametersId             int,	--obsolete, but still in system
   tscopeParametersId           int,
 
   validObservation             enum("No", "Yes") not null,
 
-  tuningaSkyFreqMhz	       double,
-  tuningbSkyFreqMhz	       double,
-  tuningcSkyFreqMhz	       double,
-  tuningdSkyFreqMhz	       double,
+  tuningaSkyFreqMhz	       double,	--FXA LO
+  tuningbSkyFreqMhz	       double,	--FXA LO
+  tuningcSkyFreqMhz	       double,	--FXC LO, BF1 LO
+  tuningdSkyFreqMhz	       double,	--BF2, BF3 LO
 
   minDxSkyFreqMhz             double,
   maxDxSkyFreqMhz	       double,
@@ -251,7 +252,7 @@ create table ActivityUnits
   dxIntrinsicsId 		int default null,
   dxNumber			int default -1,
   dxTuneFreq			double default 0,  -- MHz, center, requested 
-  dxTuneFreqActual		double default 0,  -- MHz, center, returned by DX
+  dxTuneFreqActual		double default 0,  -- MHz, center, returned by DX, obsolete
   dxLowFreqMhz 		double default 0, -- dx left edge freq
   dxHighFreqMhz 		double default 0, -- dx right edge freq
   targetId			int default -1,
@@ -351,6 +352,8 @@ create table SchedulerParameters
 -- IfcParameters --
 -- MySQL analog of sse/IfcParameters.cpp
 -- note: ifc table names start with lowercase to match ui ifc commands
+-- IFC no longer exists, but runs in simulaltor mode because it is
+-- too complicated to remove the references.
 -- -----------------------------------------------------------------------
 drop table if exists ifc1Parameters;
 
@@ -398,6 +401,8 @@ create table ifcStatus
 
 -- -----------------------------------------------------------------------
 -- tsigParameters (test signal control)
+-- There is no capability to inject a test signal at the ATA
+-- so this is not used
 -- -----------------------------------------------------------------------
 
 -- MySQL analog of sse/TestSigParameters.cpp
@@ -511,7 +516,11 @@ alter table TscopeBeamStatus drop column beamNumber;
 
 drop table if exists TscopeSubarrayStatus;
 
+-- --------------------------------------------------------
 -- tscope subarray status at start of observation
+-- This is for the occasion that the array is used as multiple subarrays
+-- Hasn't happened yet
+-- -------------------------------------------------------------------
 
 create table TscopeSubarrayStatus
 (
@@ -642,7 +651,7 @@ create table DxActivityParameters
 
   dataCollectionLength       int,  	-- sec
   rcvrSkyFrequency           double,	-- MHz
-  ifcSkyFrequency            double,	-- MHz
+  ifcSkyFrequency            double,	-- MHz always the same as rcvrSkyFrequency @ ATA
   dxSkyFrequency            double,	-- MHz
   channelNumber	             int,	
   operations                 int,	-- bit mask
@@ -840,6 +849,7 @@ alter table ZxCandidateSignals add index targetIdIndex (targetId);
 
 -- -----------------------------------------------------------------------
 -- Coherent Segments Description  --
+-- No longer in use
 -- -----------------------------------------------------------------------
 drop table if exists CandidateCoherentSegments;
 

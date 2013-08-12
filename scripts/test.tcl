@@ -1,14 +1,14 @@
 tscope sim
  sched set beam1 on
- sched set beam2 on
- sched set beam3 off
+ sched set beam2 off
+ sched set beam3 on
  dx set length 93
  sched set dxtune range
  sched set multitarget on
- db set name kepler201208
+ db set name sonatadb
  db set usedb on
- db set host sse200
- db set user jane
+ db set host sse100
+ db set user sonata
  db set usedb on
  dx set basewarn off
  dx set baseerror off

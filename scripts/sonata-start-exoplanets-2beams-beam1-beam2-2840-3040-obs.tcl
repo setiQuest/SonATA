@@ -3,7 +3,7 @@
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-sh echo "SonATA taking array. Using Beam 1 and 2." | mailx -s 'SonATA taking array for exoplanets' -r jrichards@seti.org ata-staff@seti.org
+#sh echo "SonATA taking array. Using Beam 1 and 2." | mailx -s 'SonATA taking array for exoplanets' -r jrichards@seti.org ata-staff@seti.org
 
 exec setAlarm ARM,sonata,exoplanets
 

@@ -113,6 +113,7 @@ scripts_SCRIPTS = \
 	sonata-cron-begin-cygnus-exoplanets-session.sh \
 	sonata-cron-begin-cygnusx3-session.sh \
 	sonata-cron-begin-exoplanets-session.sh \
+	sonata-cron-begin-kepler-session.sh \
 	sonata-cron-begin-waterhole2x-2840-3040MHz-session.sh \
 	sonata-cron-begin-waterhole2x-3040-3240MHz-session.sh \
 	sonata-cron-begin-waterhole2x-3240-3440MHz-session.sh \
@@ -257,6 +258,7 @@ scripts_SCRIPTS = \
 	sonata-start-rfiscan-1700-5000-4g-obs.tcl \
 	sonata-start-rfiscan-1400-1750-4g-obs.tcl \
 	antenna-list-master.tcl \
+	antenna-list-master-8400mhz.tcl \
 	run-rosetta-demo.tcsh \
 	run-voyager-demo.tcsh \
 	run-kepler-demo.tcsh \
@@ -269,9 +271,68 @@ scripts_SCRIPTS = \
 	sonata-start-kepler-2beams-3800-4200-obs.tcl \
 	sonata-start-exoplanets-2beams-3800-4200-obs.tcl \
 	sonata-start-vger-2beams-8410-8430-obs.tcl \
+	sonata-start-vger-2beams-8414-8424-obs.tcl \
+	sonata-start-vger-1beam-8414-8424-obs.tcl \
 	sonata-cron-begin-vger-session.sh \
 	sonata-start-vger-2beams-8400-8440-obs.tcl \
 	3beam-dualpol-800KHz-72dx-512f-env-vars-batch.sh \
 	sonata-cron-restart-obs-session.sh \
 	sonata-restart-obs.tcl \
-	data-capture-replay-env-vars.tcsh
+	sonata-cron-begin-casa-grid-session.sh \
+	sonata-start-casa-grid-2beams-6567-6767-obs.tcl \
+	sonata-cron-switch-to-casa-grid.sh \
+	sonata-switch-to-casa-grid.tcl \
+	sonata-start-exoplanets-2beams-6567-6767-obs.tcl \
+	sonata-start-exoplanets-3beams-6567-6767-obs.tcl \
+	sonata-start-exoplanets-3beams-6767-6967-obs.tcl \
+	sonata-start-kepler-3beams-6767-6967-obs.tcl \
+	sonata-start-galcenter-3beams-6767-6967-obs.tcl \
+	sonata-start-exoplanets-3beams-6967-7167-obs.tcl \
+	sonata-start-exoplanets-3beams-8920-9000-obs.tcl \
+	sonata-start-exoplanets-3beams-8840-8920-obs.tcl\
+	sonata-start-exoplanets-3beams-8760-8840-obs.tcl\
+	sonata-start-exoplanets-3beams-8680-8760-obs.tcl\
+	sonata-start-exoplanets-3beams-8600-8680-obs.tcl\
+	sonata-start-exoplanets-3beams-8520-8600-obs.tcl\
+	sonata-start-exoplanets-3beams-8440-8520-obs.tcl\
+	sonata-start-exoplanets-3beams-8360-8440-obs.tcl\
+	sonata-start-exoplanets-3beams-8280-8360-obs.tcl\
+	sonata-start-exoplanets-3beams-8200-8280-obs.tcl\
+	sonata-start-kepler-3beams-8760-8840-obs.tcl\
+	sonata-start-kepler-3beams-8680-8760-obs.tcl\
+	sonata-start-kepler-3beams-8600-8680-obs.tcl\
+	sonata-start-kepler-3beams-8120-8200-obs.tcl\
+	sonata-start-kepler-3beams-8040-8120-obs.tcl\
+	sonata-start-kepler-3beams-7960-8040-obs.tcl\
+	sonata-start-kepler-3beams-7Ghz-8Ghz-obs.tcl\
+	sonata-cron-begin-galcenter-session.sh \
+	sonata-start-galcenter-3beams-7960-8040-obs.tcl\
+	sonata-start-galcenter-3beams-3000-3080-obs.tcl\
+	sonata-start-galcenter-2beams-7045-7120-obs.tcl\
+	sonata-start-galcenter-2beams-6970-7045-obs.tcl\
+	sonata-start-kepler-3beams-6967-7167-obs.tcl \
+	sonata-start-kepler-2beams-6567-6767-obs.tcl \
+	sonata-start-da14-2beam-8400-8850-obs.tcl \
+	sonata-cron-begin-da14-session.sh \
+	data-capture-replay-env-vars.tcsh \
+        sonata-start-perseusa-grid-2900-3100-obs.tcl \
+        sonata-start-perseusa-grid-1400-1600-obs.tcl \
+        sonata-start-ldn1622-grid-2900-3100-obs.tcl \
+        sonata-start-ldn1622-grid-1400-1600-obs.tcl \
+        sonata-cron-begin-perseusa-grid-session.sh \
+        sonata-cron-begin-ldn1622-grid-session.sh  \
+	sonata-start-rfiscan-1480.tcl  \
+	sonata-cron-begin-rfiscan.sh \
+	sonata-start-rfiscan-1430.tcl \
+	sonata-switch-to-perseusa.tcl \
+	switchConfigFile-1beam-beam3-800KHz-1dx-1zx.tcsh \
+	switchConfigFile-1beam-beam3-800KHz-2dx-1zx.tcsh \
+	1beam-beam3-dualpol-2dx-1zx-512F-env-vars.tcsh \
+	1beam-beam3-dualpol-800KHz-9dx-1zx-256F-env-vars-batch.sh \
+	switchConfigFile-1beam-beam3-800KHz-9dxs-1zx.tcsh \
+	testgrid.tcl \
+	sonata-switch-to-galcenter.tcl \
+	sonata-cron-switch-to-galcenter.sh \
+	1beam-dualpol-1dx-1zx-512F-env-vars.tcsh \
+	sonata-start-kepler-3beams-8760-8840-obs.tcl \
+	sonata-start-test-2beams-8405-8442-obs.tcl

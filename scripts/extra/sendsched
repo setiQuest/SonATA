@@ -1,0 +1,35 @@
+
+################################################################################
+#
+# File:    sendsched
+# Project: OpenSonATA
+# Authors: Jon Richards, SETI Institute
+#
+# Copyright 2013 The SETI Institute
+#
+# OpenSonATA is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# OpenSonATA is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with OpenSonATA.  If not, see<http://www.gnu.org/licenses/>.
+# 
+# Implementers of this code are requested to include the caption
+# "Licensed through SETI" with a link to setiQuest.org.
+# 
+# For alternate licensing arrangements, please contact
+# The SETI Institute at www.seti.org or setiquest.org. 
+#
+################################################################################
+
+# Sends the schedule in the crontab to setiquest.info
+
+cd /home/sonata/jrichards/dev/seekerWatch
+java -classpath /home/sonata/java/jdk1.5.0_22/lib:/home/sonata/jrichards/dev/lib/commons-codec-1.3.jar:/home/sonata/jrichards/dev/lib/commons-logging-1.1.1.jar:/home/sonata/jrichards/dev/lib/junit-4.8.1.jar:/home/sonata/jrichards/dev/lib/commons-httpclient-3.1.jar:/home/sonata/jrichards/dev/lib/jcommon-1.0.16.jar:/home/sonata/jrichards/dev/lib/mysql-connector-java-5.1.13-bin.jar:.:/home/sonata/jrichards/dev/lib/commons-math-2.1.jar:/home/sonata/jrichards/dev/lib/orekit-5.0.jar:/home/sonata/jrichards/dev/lib/jackson-all-1.7.2.jar:/home/sonata/jrichards/dev/lib/openmap.jar:/home/sonata/jrichards/dev/common:/home/sonata/jrichards/dev/lib/jtransforms-2.3.jar:/home/sonata/jrichards/dev/lib/plot.jar:/home/sonata/jrichards/dev/lib/AbsoluteLayout.jar:/home/sonata/jrichards/dev/lib/commons-io-2.1.jar:/home/sonata/jrichards/dev/lib/commons-io-2.1.jar:/home/sonata/jrichards/dev/lib/apache-mime4j-0.6.jar:/home/sonata/jrichards/dev/lib/httpcore-4.1.2.jar:/home/sonata/jrichards/dev/lib/httpmime-4.1.2.jar:/home/sonata/jrichards/dev/lib/httpclient-4.1.2.jar seekerWatcher.Cron
+cd ~

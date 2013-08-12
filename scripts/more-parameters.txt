@@ -1,0 +1,243 @@
+Script started on Wed 28 Nov 2012 07:19:32 PM UTC
+sse100[master]% seeker
+get new Site
+Can't read 'expected components' config file /home/sonata/SonATA/sse-pkg/setup//expectedSonATAComponents.cfg
+Assert(zcm)
+Assert(internal->expectedNssComponensTree_)
+setExpectedNssComponentsTree
+finished set
+parser deleted
+strategies added 
+before releasing startingSeeker
+restart Reactor
+Using ~/sonata_install/scripts/sserc.tcl
+seeker>> show all
+Wrong # args.:show  argument 1
+while evaluating {show all}
+seeker>> act show
+act parameters: 
+  Name                  Current        Default            Min            Max  Units         
+  candarch            confirmed      confirmed              (confirmed | all | none)                
+  comparedxs                off            off              (off | on)                
+  cwcohdonetimeoutfactor    0.700000000    0.700000000    0.100000000    0.900000000  percent of total signal detection timeout period to wait for 'done sending cw coherent signals' messages
+  datacolltimeoutoffset             10             10              1             30  how long to wait after expected DC complete time before timing out
+  delay                      10             10              0            768  sec           
+  diskfullerror    99.000000000   99.000000000    0.000000000  100.000000000  %             
+  diskfullwarn     95.000000000   95.000000000    0.000000000  100.000000000  %             
+  dut              -0.359341000   -0.359341000   -1.000000000    1.000000000  sec           
+  earthephem          earth.xyz      earth.xyz                
+  emailactstat              off            off              (off | on)                
+  emailaddr      observing@seti.org observing@seti.org                
+  freqinvert              never          never              (never | rf | if | always)                
+  multitargetnulls             on             on              (on | off)                
+  nulldepth         7.000000000    7.000000000    0.000000000  100.000000000  dB            
+  offactnulls        projection     projection              (projection | none | axial)                
+  pointprimary               on             on              (on | off)                
+  prevactid                   0              0              0     1000000000                
+  primarybeampos       targetid       targetid              (targetid | coords)                
+  primarydecdeg     0.000000000    0.000000000  -90.000000000   90.000000000  j2000 degrees 
+  primaryrahours    0.000000000    0.000000000    0.000000000   24.000000000  j2000 hours   
+  readytimeout               60             60             15            120  sec           
+  rfiagelimit       7.000000000    7.000000000    0.000000000   28.000000000  days          
+  sigdetwait                  3              3              1             20  X times data coll time
+  site                      ATA            ATA              (ATA)                
+  targetbeam1                 0              0              0       99000000  SETI target id
+  targetbeam2                 0              0              0       99000000  SETI target id
+  targetbeam3                 0              0              0       99000000  SETI target id
+  targetbeam4                 0              0              0       99000000  SETI target id
+  targetbeam5                 0              0              0       99000000  SETI target id
+  targetbeam6                 0              0              0       99000000  SETI target id
+  targetprimary               1              1              1       99000000  target id     
+  tscopetimeout            1200           1200             15           3600  sec           
+  type                   iftest         iftest              (autoselectants | bfautoatten | bfinit | bfreset | birdiescan | cal | datacollect | dxtest | freeants | grideast | gridnorth | gridon | gridsouth | gridwest | iftest | iftestoff | ifteston | iftestzerodrift | pointantswait | prepants | rfbirdiescan | rfiscan | rftest | rftestfollowup | rftestforcedarchive | rftestzerodrift | target | target1-on | target1off | target2-on | target2off | target3-on | target3off | target4-on | target4off | target5-on-nofollowup | tscopesetup)                
+  varerror                   on             on              (on | off)                
+  varerrorlower     1.000000000    1.000000000    0.000000000 10000.000000000                
+  varerrorupper  20000.000000000 20000.000000000    0.000000000 100000.000000000                
+  varwarn                    on             on              (on | off)                
+  varwarnlower     12.000000000   12.000000000    0.000000000 10000.000000000                
+  varwarnupper    100.000000000  100.000000000    0.000000000 100000.000000000                
+  watchdogs                  on             on              (on | off)                
+
+seeker>> arch show
+arch parameters: 
+  Name                  Current        Default            Min            Max  Units         
+
+seeker>> dx show
+dx parameters: 
+  Name                  Current        Default            Min            Max  Units         
+  badbandcwpathlim  250.000000000  250.000000000    0.000000000 1000.000000000                
+  badbandpulselim  300.000000000  300.000000000    0.000000000 100000.000000000                
+  badbandpulsetriplim 5000.000000000 5000.000000000    0.000000000 1000000.000000000                
+  bandwidth                2048           2048            512          10240  # subchannels 
+  basedecay         0.899999976    0.899999976    0.000000000    1.000000000                
+  baseerror                  on             on              (on | off)                
+  baseerrormeanlower  500.000000000  500.000000000    0.000000000 100000.000000000  power         
+  baseerrormeanupper 8000.000000000 8000.000000000    0.000000000 100000.000000000  power         
+  baseerrorrange 3000.000000000 3000.000000000    0.000000000 1000000.000000000  power         
+  baseerrorstddev  100.000000000  100.000000000    1.000000000  200.000000000  percent       
+  baseinitaccum              20             20              1             20  # half frames 
+  baselines                  on             on              (on | off)                
+  baserep                    20             20              1            512  # half frames 
+  basestats                  on             on              (on | off)                
+  basesubave                  1              1              1           1000  # subchannels 
+  basewarn                   on             on              (on | off)                
+  basewarnmeanlower  500.000000000  500.000000000    0.000000000 100000.000000000  power         
+  basewarnmeanupper 7000.000000000 7000.000000000    0.000000000 100000.000000000  power         
+  basewarnrange  1000.000000000 1000.000000000    0.000000000 1000000.000000000  power         
+  basewarnstddev   75.000000000   75.000000000    1.000000000  100.000000000  percent       
+  clustfreqtol    266.000000000  266.000000000    0.000000000 5000.000000000  Hz            
+  coherentdetlim    0.000000000    0.000000000   -1.000000000    1.000000000                
+  compamps                   on             on              (on | off)                
+  cwclustdeltafreq              2              2              0           1000  bins          
+  cwthresh          0.000000000    0.000000000 -100.000000000    0.000000000  sigma         
+  daddres                     1              1              (1 | 2 | 4)  Hz            
+  daddthresh        8.500000000    8.500000000    1.000000000   20.000000000  sigma         
+  datareqfreq    1420.800100000 1420.800100000    0.000000000 11200.000000000  MHz RF        
+  datareqmaxcompampsubchan              1              1              0             10  Max # of subchannels 
+  datareqsubchan            384            384              0           1535  subchannel #  
+  datareqtype           subchan        subchan              (subchan | freq)                
+  length                     12             12              1            774  sec           
+  manualbw                  off            off              (off | on)                
+  maxcand                     8              8              1           1000  count         
+  maxdrifttol       1.000000000    1.000000000    0.000000000   10.000000000  Hz/Sec        
+  maxpulsesperhf           1000           1000              1          10000  # pulses      
+  maxpulsespersubperhf             10             10              1            100  # pulses      
+  pulseclustdeltafreq             25             25              0           1000  bins          
+  pulsedetect                on             on              (on | off)                
+  pulsethresh      12.000000000   12.000000000    0.000000000  100.000000000  sigma         
+  recentrfienable             on             on              (on | off)                
+  recentrfimaskelemwidmin 1000.000000000 1000.000000000  533.000000000 10000.000000000  Hz            
+  recentrfimasksizemax           4096           4096           4096           4096  count         
+  secondarycwthresh  -20.000000000  -20.000000000 -100.000000000    0.000000000  sigma         
+  secondarypfamargin    3.000000000    3.000000000    1.000000000   10.000000000  sigma         
+  secondarytrainsignifthresh  -17.000000000  -17.000000000 -100.000000000  100.000000000  signif        
+  singletthresh   100.000000000  100.000000000    0.000000000  100.000000000  sigma         
+  trainsignifthresh  -40.000000000  -40.000000000 -100.000000000  100.000000000  signif        
+  tripletthresh    48.000000000   48.000000000    0.000000000  768.000000000  sigma         
+  zerodrifttol      0.007000000    0.007000000    0.000000000    1.000000000  Hz/Sec        
+
+seeker>> tscope show
+tscope parameters: 
+  Name                  Current        Default            Min            Max  Units         
+  antlistsource           param          param              (param | antgroup)                
+  antsprimary                9z             9z                
+  antsxpol                   9z             9z                
+  antsypol                   9z             9z                
+  beamsize        348.000000000  348.000000000    0.000000000 12600.000000000  arcsec @1GHz  
+  calcycles                   2              2              1             10  count         
+  caliterations               0              0              0              5                
+  caltime                   120            120              1           1200  secs          
+  caltype                 phase          phase              (phase | delay | freq)                
+  centertuneoffset    0.000000000    0.000000000  -50.000000000   50.000000000  MHz           
+  primaryfov        3.500000000    3.500000000    0.000000000    5.000000000  deg @1GHz     
+  sitehoriz        18.000000000   18.000000000   15.000000000   90.000000000  deg           
+  sitelat          40.817361111   40.817361111  -90.000000000   90.000000000  north deg     
+  sitelong        121.471802778  121.471802778 -180.000000000  180.000000000  west deg      
+  sitename                  ATA            ATA                
+  tuneoffset        0.000000000    0.000000000  -50.000000000   50.000000000  MHz           
+  tuninga        1420.000000000 1420.000000000  500.000000000 11200.000000000  MHz           
+  tuningb        1420.000000000 1420.000000000  500.000000000 11200.000000000  MHz           
+  tuningc        1420.000000000 1420.000000000  500.000000000 11200.000000000  MHz           
+  tuningd        1420.000000000 1420.000000000  500.000000000 11200.000000000  MHz           
+
+seeker>> db show
+db parameters: 
+  Name                  Current        Default            Min            Max  Units         
+  host                localhost      localhost                
+  name                 sonatadb       sonatadb                
+  passwd                                                      
+  port                        0              0              0          65535  number        
+  usedb                     off            off              (off | on)                
+  user                                                        
+
+seeker>> sched show
+sched parameters: 
+  Name                  Current        Default            Min            Max  Units         
+  autorisecutoff   10.000000000   10.000000000    0.000000000  180.000000000  minutes       
+  beam1                      on             on              (on | off)                
+  beam2                     off            off              (off | on)                
+  beam3                     off            off              (off | on)                
+  beam4                     off            off              (off | on)                
+  beam5                     off            off              (off | on)                
+  beam6                     off            off              (off | on)                
+  beambandwidth    30.000000000   30.000000000    5.000000000   50.000000000  MHz           
+  beginfreq      1755.000000000 1755.000000000  500.000000000 11200.000000000  MHz           
+  catshigh               habcat         habcat  comma separated catalog names
+  catshighmaxcounts          20000          20000              1          50000  count         
+  catslow        tycho2subset,tycho2remainder tycho2subset,tycho2remainder  comma separated catalog names
+  checktargets              off            off              (off | warn | on)                
+  comcal                    off            off              (off | on)                
+  comcalinterval   60.000000000   60.000000000   30.000000000  360.000000000  minutes       
+  comcallength      2.000000000    2.000000000    1.000000000   20.000000000  minutes       
+  declowerlimit   -90.000000000  -90.000000000  -90.000000000   90.000000000  deg           
+  decupperlimit    90.000000000   90.000000000  -90.000000000   90.000000000  deg           
+  dxoverlap         0.000000000    0.000000000    0.000000000  100.000000000  MHz           
+  dxround           0.000000000    0.000000000    0.000000000  100.000000000  MHz           
+  dxtune                   user           user              (user | range | forever)                
+  dxtunetol         0.000000000    0.000000000    0.000000000  100.000000000  MHz           
+  emailaddr      observing@seti.org observing@seti.org                
+  emailstratfail            off            off              (off | on)                
+  endfreq        3005.000000000 3005.000000000  500.000000000 11200.000000000  MHz           
+  followup                  off            off              (off | on)                
+  followupmode             auto           auto              (auto | user)                
+  geosatavoid       0.000000000    0.000000000    0.000000000   90.000000000  deg           
+  maxdistly       225.000000000  225.000000000    4.000000000 1000.000000000  light years   
+  maxfailures                 1              1              1           1000  count         
+  mindxbw          20.000000000   20.000000000    0.000000000  100.000000000  %             
+  minfollowups               12             12              0            100  observations  
+  mintargetsep      5.000000000    5.000000000    0.000000000  100.000000000  beamsizes     
+  moonavoid        10.000000000   10.000000000    0.000000000  180.000000000  deg           
+  multitarget               off            off              (off | on)                
+  pipe                       on             on              (on | off)                
+  primaryidcutoff            120            120              1           1000  count         
+  repeatstrat                 1              1              1        1000000  count         
+  restartpause               30             30              0           1000  secs          
+  rftune                   auto           auto              (auto | user)                
+  rotateids                 off            off              (off | on)                
+  rotateidsinterval   60.000000000   60.000000000   30.000000000  360.000000000  minutes       
+  stopstratfail              on             on              (on | off)                
+  sunavoid         60.000000000   60.000000000    0.000000000  180.000000000  deg           
+  target                   user           user              (user | semiauto | auto | autorise | commensal)                
+  targetavailactsetup             60             60              0            120  secs          
+  targetmerit          timeleft       timeleft              (timeleft | dist | catalog | dec | completelyobs | meridian | primaryid)                
+  targetwait                 on             on              (on | off)                
+  tasks                     obs            obs              (obs | tscopesetup | autoselectants | prepants | freeants | bfreset | bfinit | bfautoatten | caldelay | calphase | calfreq)                
+  tscopemaxfailures              5              5              1           1000  count         
+  tscopereadypause             25             25              0           1000  secs          
+  zenithavoid       5.000000000    5.000000000    0.000000000   90.000000000  deg           
+
+seeker>> control show
+Invalid method. Must be one of: configure cget -acquire -disown -delete intrin names reset reqstat resetsocket send start shutdown restart selfshutdown status stat help
+while evaluating {control show}
+seeker>> help
+SSE/seeker help
+===============
+help all - displays help for all subsystems
+help <subsystem>  - displays help for the given subsystem:
+   act (activity)
+   arch (archiver)
+   channel (channelizer)
+   control (component control)
+   db (database)
+   dx (detection module)
+   sched (scheduler)
+   tscope (telescope & RF control)
+help misc - displays the misc. commands
+
+The subsystem control is split into two parts, 
+Parameter Commands and Immediate commands:
+
+help param - overview of subsystem parameter control
+help immed - overview of subsystem immediate commands
+
+
+seeker>> channel show
+channel parameters: 
+  Name                  Current        Default            Min            Max  Units         
+  delay                       3              3              3             10  sec           
+
+seeker>> exit
+sse100[master]% exit
+exit
+
+Script done on Wed 28 Nov 2012 07:20:57 PM UTC

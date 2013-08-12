@@ -2,7 +2,7 @@
 # kes-tscope-vger-full-array.tcl
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Vger Test' -r kes@smolek.com kes@smolek.com
+#sh echo "SonATA taking array" | mailx -s 'SonATA taking array for Vger Test' -r kes@smolek.com kes@smolek.com
 
 # connect to telescope array
 tscope setup

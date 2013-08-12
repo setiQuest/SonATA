@@ -414,13 +414,9 @@ void Site::loadExpectedComponentsConfig(const string &expectedComponentsFilename
 // Do the same for the Zx
    DxComponentManager *zcm = dynamic_cast<DxComponentManager*>(
       internal_->zxManager_);
-   cerr << "Assert(zcm)" << endl;
    Assert(zcm);
-   cerr << "Assert(internal->expectedNssComponensTree_)" << endl;
    Assert(internal_->expectedNssComponentsTree_);
-   cerr << "setExpectedNssComponentsTree" << endl;
    zcm->setExpectedNssComponentsTree(internal_->expectedNssComponentsTree_);
-   cerr << "finished set" << endl;
 }
 
 ExpectedNssComponentsTree * Site::getExpectedNssComponentsTree()

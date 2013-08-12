@@ -2,7 +2,7 @@
 # mars-express-1beam-beam2-8419-8439.tcl
 
 # send out "taking the array" email
-sh echo " SonATA taking array" | mailx -s 'SonATA taking ant1a and bf2 for Testing' -r jjordan@seti.org ata-staff@seti.org
+#sh echo " SonATA taking array" | mailx -s 'SonATA taking ant1a and bf2 for Testing' -r jjordan@seti.org ata-staff@seti.org
 
 # connect to telescope array
 #tscope setup

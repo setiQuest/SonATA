@@ -64,7 +64,7 @@ static const char *AntListSourceParam = "param";
 static const char *AntListSourceAntGroup = "antgroup";
 static const char *AntListDefault = "9z";  
 static const int AntsMaxSefdDefaultJy = 20000;
-static const double AtaDefaultHorizDeg = 18;
+static const double AtaDefaultHorizDeg = 16.5;
 
 struct TscopeParametersInternal
 {

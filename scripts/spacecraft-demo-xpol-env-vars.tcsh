@@ -63,6 +63,34 @@ setenv YPOL_ONLY "-p y"
 
 setenv DXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS $XPOL_ONLY"
 
+# Logical Host Names
+#setenv RUNSSE_ZX_HOSTS  "zxhost1"
+
+# Actual Host Names
+#setenv ZXHOST1 "localhost"
+#setenv ZXHOST2 "localhost"
+#setenv ZXHOST3 "localhost"
+
+# ZX names
+#setenv ZXHOST1_ZX_NAMES "zx1900"
+#setenv ZXHOST2_ZX_NAMES "zx2900"
+#setenv ZXHOST3_ZX_NAMES "zx3900"
+
+# Command line arguments for all ZXs
+#setenv ZX_OPTS "-Z -h 8890"
+
+
+## Set up command line arguments for each ZX_HOST
+# BEAM1 setenv ZX_HOSTn_OPTS "$DX_OPTS $BEAM1_DX_OPTS"
+# BEAM2 setenv ZX_HOSTn_OPTS "$DX_OPTS $BEAM2_DX_OPTS"
+# BEAM3 setenv ZX_HOSTn_OPTS "$DX_OPTS $BEAM3_DX_OPTS"
+# XPOL_ONLY or YPOL_ONLY if appropriate
+
+#setenv ZXHOST1_OPTS "$DX_OPTS $BEAM1_DX_OPTS $ZX_OPTS $XPOL_ONLY"
+#setenv ZXHOST2_OPTS "$DX_OPTS $BEAM2_DX_OPTS $ZX_OPTS $XPOL_ONLY"
+#setenv ZXHOST3_OPTS "$DX_OPTS $BEAM3_DX_OPTS $ZX_OPTS $XPOL_ONLY"
+
+
 # Backend Server Host for use with ATA
 #-------------------------------------
 #setenv CONTROL_COMPONENTS_ANT_CONTROL_HOST sonata

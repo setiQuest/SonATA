@@ -660,7 +660,8 @@ void OrderedTargets::getTargets(
 
    // set declination limits
    targetCatQuery << " and dec2000Deg >= " << decLowerLimitDeg
-      		  << " and dec2000Deg <= " << decUpperLimitDeg;
+      		  << " and dec2000Deg <= " << decUpperLimitDeg
+		  << " order by ra2000Hours ";
 
    VERBOSE2(getVerboseLevel(), methodName 
 	    << " query: " << targetCatQuery.str() << endl;);    
@@ -734,6 +735,12 @@ void OrderedTargets::getTargets(
 /*
   Get the observing history based on dx tuning information in
   the ActivityUnits table. Only valid observations are used.
+  Change  Log
+   *  20 -May-2013  Anu Found a bug where wrong variable is compared
+   * to result from database
+   * The commented line is old, replaced Low with High
+   *  //<< " and dxLowFreqMhz <= " << freqRangeLimitsMhz_.high_; //commenting out on 5/20/2013 Anu
+   *  << " and dxHighFreqMhz <= " << freqRangeLimitsMhz_.high_;
 */
 void OrderedTargets::retrieveObsHistFromDbForTargets(TargetMap & targetMap)
 {
@@ -746,9 +753,13 @@ void OrderedTargets::retrieveObsHistFromDbForTargets(TargetMap & targetMap)
            << " where "
            << " validObservation = 'Yes'"
            << " and dxLowFreqMhz >= " << freqRangeLimitsMhz_.low_
-           << " and dxLowFreqMhz <= " << freqRangeLimitsMhz_.high_;
+           << " and dxHighFreqMhz <= " << freqRangeLimitsMhz_.high_;
 
-   // restrict to targetIds in the map
+/*
+           // << " and dxLowFreqMhz <= " << freqRangeLimitsMhz_.high_;//commenting out on May 20, 2013 - Anu Bhagat
+           << " and dxHighFreqMhz <= " << freqRangeLimitsMhz_.high_;//added this line- Anu Bhagat on May 20, 2013
+ */
+	   // restrict to targetIds in the map
    sqlstmt << " and targetId in (";
    for (TargetMap::iterator it = targetMap.begin();
         it != targetMap.end(); ++it)
@@ -1424,6 +1435,11 @@ void OrderedTargets::cullByMinTargetSeparation(
 	    << " minSepRads = " << minSepRads
 	    << endl;);    
 
+   cout <<  methodName << "chosenTargetId = " << chosenTargetId
+	    << ": chosenTarget RaDec = " << chosenTargetRaDec 
+	    << " minSepRads = " << minSepRads
+	    << endl;  
+
    for (TargetMap::iterator i = targetMap.begin();
 	i != targetMap.end(); )
    {
@@ -1446,6 +1462,8 @@ void OrderedTargets::cullByMinTargetSeparation(
 
    VERBOSE2(getVerboseLevel(), methodName << ": " << targetMap.size() 
 	    << " targets remain after culling" << endl;);    
+    cout <<  methodName << ": " << targetMap.size() 
+	    << " targets remain after culling" << endl;    
 
    selectionLogStrm_ << methodName << "targets left: "
                      << targetMap.size() << endl;

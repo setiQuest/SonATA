@@ -96,7 +96,12 @@ dist_setup_DATA = \
 	deepimpact.xyz \
 	cassini.xyz \
 	kepler.xyz \
-	ifAttnDbOffset.cfg
+	ifAttnDbOffset.cfg \
+	da14.xyz \
+	expectedSonATAComponents-1beam-beam3-800KHz-1dx-1zx.cfg \
+	expectedSonATAComponents-1beam-beam3-800KHz-2dx-1zx.cfg \
+	expectedSonATAComponents-1beam-beam3-800KHz-9dx-1zx.cfg \ 
+        da14comp.xyz
 
 
 

@@ -2,7 +2,7 @@
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-sh echo "SonATA taking array" | mailx -s 'SonATA Testing taking array for vger' -r kes@smolek.com ata-staff@seti.org
+#sh echo "SonATA taking array" | mailx -s 'SonATA Testing taking array for vger' -r kes@smolek.com ata-staff@seti.org
 
 # connect to the backend server
 tscope setup

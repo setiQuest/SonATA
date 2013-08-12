@@ -1,0 +1,863 @@
+Script started on Wed 28 Nov 2012 06:46:37 PM UTC
+sse100[master]% seeker
+get new Site
+Can't read 'expected components' config file /home/sonata/SonATA/sse-pkg/setup//expectedSonATAComponents.cfg
+Assert(zcm)
+Assert(internal->expectedNssComponensTree_)
+setExpectedNssComponentsTree
+finished set
+parser deleted
+strategies added 
+before releasing startingSeeker
+restart Reactor
+Using ~/sonata_install/scripts/sserc.tcl
+seeker>> help
+SSE/seeker help
+===============
+help all - displays help for all subsystems
+help <subsystem>  - displays help for the given subsystem:
+   act (activity)
+   arch (archiver)
+   channel (channelizer)
+   control (component control)
+   db (database)
+   dx (detection module)
+   sched (scheduler)
+   tscope (telescope & RF control)
+help misc - displays the misc. commands
+
+The subsystem control is split into two parts, 
+Parameter Commands and Immediate commands:
+
+help param - overview of subsystem parameter control
+help immed - overview of subsystem immediate commands
+
+
+seeker>> help all
+NssParameters help:
+
+  Command: "act"
+    Parameters:    
+      candarch: candidates to archive (confirmed | all | none) 
+      comparedxs: compare dx data products (off | on) 
+      cwcohdonetimeoutfactor: percent {percent of total signal detection timeout period to wait for 'done sending cw coherent signals' messages}
+      datacolltimeoutoffset: secs {how long to wait after expected DC complete time before timing out}
+      delay: data collection delay {sec}
+      diskfullerror: archive disk full error limit {%}
+      diskfullwarn: archive disk full warning limit {%}
+      dut: UTC diff from UT1 (UT1R-UTC from IERS Bulletin B) {sec}
+      earthephem: earth ephemeris file in $SSE_SETUP directory
+      emailactstat: send out email notification of activity status (off | on) 
+      emailaddr: mailing addresses for activity status notification
+      freqinvert: apply dx (DDC) freq inversion when using this part of the signal path (never | rf | if | always) 
+      multitargetnulls: insert nulls for targets used on other beams (on | off) 
+      nulldepth: expected minimum null effectiveness {dB}
+      offactnulls: specify which type of nulls should be used in OFF acts (projection | none | axial) 
+      pointprimary: point primary beam (on | off) 
+      prevactid: previous activity ID (for followup observation)
+      primarybeampos: primary beam pointing position type (targetid | coords) 
+      primarydecdeg: primary beam pointing position Dec {j2000 degrees}
+      primaryrahours: primary beam pointing position RA {j2000 hours}
+      readytimeout: component ready watchdog timeout period {sec}
+      rfiagelimit: recent RFI age limit {days}
+      sigdetwait: signal detection watchdog timer wait factor {X times data coll time}
+      site: name of site (ATA) 
+      targetbeam1: SETI target id for beam1 {SETI target id}
+      targetbeam2: SETI target id for beam2 {SETI target id}
+      targetbeam3: SETI target id for beam3 {SETI target id}
+      targetbeam4: SETI target id for beam4 {SETI target id}
+      targetbeam5: SETI target id for beam5 {SETI target id}
+      targetbeam6: SETI target id for beam6 {SETI target id}
+      targetprimary: target id at the primary FOV center {target id}
+      tscopetimeout: tscope ready watchdog timeout period {sec}
+      type: activity type (autoselectants | bfautoatten | bfinit | bfreset | birdiescan | cal | datacollect | dxtest | freeants | grideast | gridnorth | gridon | gridsouth | gridwest | iftest | iftestoff | ifteston | iftestzerodrift | pointantswait | prepants | rfbirdiescan | rfiscan | rftest | rftestfollowup | rftestforcedarchive | rftestzerodrift | target | target1-on | target1off | target2-on | target2off | target3-on | target3off | target4-on | target4off | target5-on-nofollowup | tscopesetup) 
+      varerror: check stx variance error limits (on | off) 
+      varerrorlower: stx variance error lower limit
+      varerrorupper: stx variance error upper limit
+      varwarn: check stx variance warning limits (on | off) 
+      varwarnlower: stx variance warn lower limit
+      varwarnupper: stx variance warn upper limit
+      watchdogs: use component watchdog timers (on | off) 
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      status - display status for all activities 
+      clearfollowuplist - clear the list of pending followup activity Ids 
+      addfollowupactid <actId> - add actId to the list of pending followup activity Ids 
+
+  Command: "arch"
+    Parameters:    
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      intrin [<archiverName>='all'] - display dx archiver intrinsics 
+      names - list all connected dx archivers
+      reqstat [<archiverName>='all'] - request dx archiver status update 
+      resetsocket <archiverName | 'all'> - reset socket on dx archiver(s)
+      restart <archiverName | 'all'> - restart dx archiver(s)
+      shutdown <archiverName | 'all'> - shutdown dx archivers(s) 
+      status [<archiverName>='all'] - display dx archiver status  
+
+  Command: "channel"
+    Parameters:    
+      delay: Channelizer Start Delay {sec}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      intrin [<chanName>='all'] - display channelizer intrinsics 
+      names - list all connected channelizers
+      reqstat [<chanName>='all'] - request channelizer status update 
+      resetsocket <chanName | 'all'> - reset socket on channelizer(s)
+      restart <chanName | 'all'> - restart channelizer(s)
+      start <delay secs> <freq MHz> <chanName | 'all'> - start channelizer(s) in delay secs, tuned to freq MHz
+      shutdown <chanName | 'all'> - shutdown channelizers(s) 
+      status [<chanName>='all'] - display channelizer status  
+      stop <chanName>='all'> - issue stop command 
+
+  Command: "control"
+    Immediate Commands for controlling components:
+      start <component1> [<componentN> ...] - start components
+      shutdown <'all' | component1> [<componentN> ...] - shutdown components
+      restart <'all' | component1> [<componentN> ...] - restart components (i.e., shutdown followed by start)
+
+    Immediate Commands for component controller itself:
+      help - print this help text
+      intrin [<name>='all'] - display ComponentControl intrinsics
+      names - list names of all connected ComponentControls
+      reqstat [<name>='all'] - request ComponentControl status update
+      reset <name | 'all'> - reset ComponentControl(s)
+      resetsocket <name | 'all'> - reset ComponentControl socket
+      send <name | 'all'> <command> [arg1] [arg2] ... [arg5] - send command with arguments to ComponentControl(s)
+      selfshutdown <name | 'all'> - shutdown ComponentControl(s)
+      status [<name>='all'] - display status of ComponentControl(s)
+
+  Command: "db"
+    Parameters:    
+      host: database server host
+      name: database name
+      passwd: database password
+      port: database server port {number}
+      usedb: use database (off | on) 
+      user: database user name
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+
+  Command: "dx"
+    Parameters:    
+      badbandcwpathlim: bad band CW path limit per KHz
+      badbandpulselim: bad band pulse limit per KHz
+      badbandpulsetriplim: bad band pulse triplet limit per KHz
+      bandwidth: 
+	assigned bandwidth (must be a multiple of 512) {# subchannels}
+      basedecay: baseline decay factor
+      baseerror: report baseline error limits exceeded (on | off) 
+      baseerrormeanlower: baseline error mean lower bound limit {power}
+      baseerrormeanupper: baseline error mean upper bound limit {power}
+      baseerrorrange: baseline error max range {power}
+      baseerrorstddev: baseline error std dev {percent}
+      baseinitaccum: 
+		#half frames to accumulate initial baselines {# half frames}
+      baselines: enable baseline reporting (on | off) 
+      baserep: baseline reporting interval {# half frames}
+      basestats: report baseline statistics (on | off) 
+      basesubave: # subchannels to average for baseline stats {# subchannels}
+      basewarn: report baseline warning limits exceeded (on | off) 
+      basewarnmeanlower: baseline warning mean lower bound limit {power}
+      basewarnmeanupper: baseline warning mean upper bound limit {power}
+      basewarnrange: baseline warning max range {power}
+      basewarnstddev: baseline warning std dev {percent}
+      clustfreqtol: clustering freq tolerance {Hz}
+      coherentdetlim: limits for coherent detection
+      compamps: enable reporting of complex amplitudes (on | off) 
+      cwclustdeltafreq: cw clustering delta freq {bins}
+      cwthresh: cw coherent threshold {sigma}
+      daddres: dadd resolution (1 | 2 | 4)  {Hz}
+      daddthresh: dadd threshold {sigma}
+      datareqfreq: request subchannel containing freq {MHz RF}
+      datareqmaxcompampsubchan: Max # of subchannels {Max # of subchannels }
+      datareqsubchan: request subchannel by number {subchannel #}
+      datareqtype: type of complex amplitudes request (subchan | freq) 
+      length: data collection length (13,24,48,94,195,388,774) {sec}
+      manualbw: set the assigned bandwidth manually (off | on) 
+      maxcand: max number of candidates {count}
+      maxdrifttol: max driftrate tolerance {Hz/Sec}
+      maxpulsesperhf: max pulses per half frame {# pulses}
+      maxpulsespersubperhf: max pulses per subchannel per half frame {# pulses}
+      pulseclustdeltafreq: pulse clustering delta freq {bins}
+      pulsedetect: allow pulse detection (on | off) 
+      pulsethresh: pulse threshold {sigma}
+      recentrfienable: enable use of the recent RFI mask (on | off) 
+      recentrfimaskelemwidmin: min width of a recent rfi mask element {Hz}
+      recentrfimasksizemax: max number of elements in a recent rfi mask {count}
+      secondarycwthresh: secondary cw coherent threshold {sigma}
+      secondarypfamargin: secondary cw coherent pfa margin {sigma}
+      secondarytrainsignifthresh: 
+		secondary pulse train significance threshhold {signif}
+      singletthresh: singlet threshold {sigma}
+      trainsignifthresh: 
+		pulse train significance threshhold {signif}
+      tripletthresh: triplet threshold {sigma}
+      zerodrifttol: zero drift tolerance {Hz/Sec}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      config [<dxname>='all'] - display dx configuration
+      dumpstruct - display dx activity parameters structure
+      intrin [<dxname>='all'] - display dx intrinsics 
+      load skyfreq <sky freq in MHz> <dxname | 'all'> - assign skyfreq to dx(s)
+      load chan <channel number> <dxname | 'all'> - assign channel to dx(s)
+      names - list all connected dxs
+      reqfreq <sky freq in MHz> <dxname | 'all'> - request compamp data by sky freq
+      reqstat [<dxname>='all'] - request dx status update 
+      reqchan <subchan> <dxname | 'all'> - request compamp data by subchannel
+      resetsocket <dxname | 'all'> - reset socket on dx(s)
+      restart <dxname | 'all'> - restart dx(s)
+      senddatareq <dxname | 'all'> - send science data request to dx(s)
+      shutdown <dxname [dxname...] | 'all'> - shutdown dx(s) 
+      status [<dxname>='all'] - display dx status  
+      stop <dxname | 'all'> - stop dx(s) 
+
+  Command: "sched"
+    Parameters:    
+      autorisecutoff: time cutoff used to determine autorise targets {minutes}
+      beam1: use beam 1 (on | off) 
+      beam2: use beam 2 (off | on) 
+      beam3: use beam 3 (off | on) 
+      beam4: use beam 4 (off | on) 
+      beam5: use beam 5 (off | on) 
+      beam6: use beam 6 (off | on) 
+      beambandwidth: beam input bandwidth {MHz}
+      beginfreq: starting frequency for range/auto observations {MHz}
+      catshigh: high priority catalog names {comma separated catalog names}
+      catshighmaxcounts: high priority catalog maximum counts cutoff {count}
+      catslow: low priority catalog names {comma separated catalog names}
+      checktargets: validate targets (visible, etc.) (off | warn | on) 
+      comcal: enable periodic commensal cals (off | on) 
+      comcalinterval: wait interval between commensal cals {minutes}
+      comcallength: commensal cal duration {minutes}
+      declowerlimit: minimum target declination {deg}
+      decupperlimit: maximum target declination {deg}
+      dxoverlap: overlap between adjacent DXs {MHz}
+      dxround: for range observations, rounds down to nearest multiple of dxround {MHz}
+      dxtune: method used to tune DXs (user | range | forever) 
+      dxtunetol: maximum difference between requested & actual DX center freq {MHz}
+      emailaddr: mailing addresses for strategy failure notification
+      emailstratfail: send out email notification of strategy failure (off | on) 
+      endfreq: ending frequency for range/auto observations {MHz}
+      followup: follow up activities when signals are confirmed (off | on) 
+      followupmode: mode for automatic or manual (user) followup of activities (auto | user) 
+      geosatavoid: geostationary satellite band dec avoidance angle {deg}
+      maxdistly: maximum target distance {light years}
+      maxfailures: maximum number of sequential activity failures allowed {count}
+      mindxbw: minimum % of total available dx bandwidth to use {%}
+      minfollowups: reserve time for the minimum number of followup observations {observations}
+      mintargetsep: minimum target separation {beamsizes}
+      moonavoid: moon avoidance angle {deg}
+      multitarget: observe multiple targets (off | on) 
+      pipe: should activities be pipelined (on | off) 
+      primaryidcutoff: min number of targets with shared primary target id that must be visible {count}
+      repeatstrat: repeat strategy <count> times {count}
+      restartpause: number of seconds to pause between activity restart attempts {secs}
+      rftune: method used to tune RF (auto | user) 
+      rotateids: enable periodic rotation of primary target ids (off | on) 
+      rotateidsinterval: time interval between primary target ids rotation {minutes}
+      stopstratfail: stop on strategy failure (on | off) 
+      sunavoid: sun avoidance angle {deg}
+      target: method used to choose targets (user | semiauto | auto | autorise | commensal) 
+      targetavailactsetup: estimated act setup time, used when determining target availability {secs}
+      targetmerit: comma separated list of target merit factors to apply (timeleft | dist | catalog | dec | completelyobs | meridian | primaryid) 
+      targetwait: wait for target complete before changing to next target (on | off) 
+      tasks: comma separated list of tasks to run (obs | tscopesetup | autoselectants | prepants | freeants | bfreset | bfinit | bfautoatten | caldelay | calphase | calfreq) 
+      tscopemaxfailures: maximum number of sequential 'tscope ready' act start failures allowed {count}
+      tscopereadypause: number of seconds to pause between 'tscope ready' activity restart attempts {secs}
+      zenithavoid: zenith avoidance angle {deg}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+
+  Command: "tscope"
+    Parameters:    
+      antlistsource: where to specify the ant lists (param | antgroup) 
+      antsprimary: comma separated primary ant names
+      antsxpol: comma separated X pol ant names
+      antsypol: comma separated Y pol ant names
+      beamsize: synth beamsize at 1 GHz {arcsec @1GHz}
+      calcycles: number of times calibration is repeated {count}
+      caliterations: number of bf calibration iterations
+      caltime: calibration integration time {secs}
+      caltype: calibration type (phase | delay | freq) 
+      centertuneoffset: center tune offset (diff between SonATA band center and bf band center) {MHz}
+      primaryfov: primary Field-Of-View at 1 GHz {deg @1GHz}
+      sitehoriz: site horizon {deg}
+      sitelat: site latitude {north deg}
+      sitelong: site longitude {west deg}
+      sitename: site name
+      tuneoffset: baseband tune offset (automatically added to tuning[a-d]) {MHz}
+      tuninga: sky freq for ATA tuning 'A' {MHz}
+      tuningb: sky freq for ATA tuning 'B' {MHz}
+      tuningc: sky freq for ATA tuning 'C' {MHz}
+      tuningd: sky freq for ATA tuning 'D' {MHz}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      allocate <'antgroup' | antxx[,antxx...]> [<name='all'] - allocate subarray
+      assign beamxxx <'antgroup' | antxx[,antxx...]> [<name='all'] -  define the antennas that make up a beam
+      autoselectants <bf list like 1,2,3> - automatically select ants for the antgroups
+      bfcal <delay|phase|freq> integrate <secs> cycles <count> [<name='all']
+      bfcal <delay|phase|freq> integrate <secs> cycles <count> [<name='all'] iterations <num>
+      bfinit - init beamformer with all ants previously assigned to beams
+      bfpoint - point all beams previously assigned coordinates
+      bfclearcoords - clear all assigned beam coordinates
+      bfclearants - clear antenna assignments for all beams
+      bfsetcoords beamName azel <Az deg> <El deg> [<name='all']
+      bfsetcoords beamName gal <Long deg> <Lat deg> [<name='all']
+      bfsetcoords beamName j2000 <RA hours> <Dec deg> [<name='all']
+      bfsetcoords beamName j2000deg <RA deg> <Dec deg> [<name='all']
+      bfreset - reset beamformer (requires recalibration)
+      bfstop - stop currently running beamformer command
+      cleanup [<name='all'] - disconnect from telescope
+      connect [<name='all'] - connect to telescope
+      deallocate <'antgroup' | antxx[,antxx...]> [<name='all'] - deallocate subarray
+      disconnect [<name='all'] - disconnect from telescope
+      intrin [<name>='all'] - display tscope intrinsics
+      monitor <periodSecs> [<name='all'] - monitor period
+      names - list names of all connected tscopes
+      point <'antgroup' | antxx[,antxx...]> azel <Az deg> <El deg> [<name='all']
+      point <'antgroup' | antxx[,antxx...]> gal <Long deg> <Lat deg> [<name='all']
+      point <'antgroup' | antxx[,antxx...]> j2000 <RA hours> <Dec deg> [<name='all']
+      point <'antgroup' | antxx[,antxx...]> j2000deg <RA deg> <Dec deg> [<name='all']
+      reqstat [<name>='all'] - request tscope status update
+      send <name | 'all'> <command> [arg1] ... [arg8] - send backend command with arguments
+      resetsocket [<name='all'] - reset tscope socket
+      restart [<name='all'] - restart tscope(s)
+      tune <tuning{a-d}> <sky freq MHz> [<name='all'] - change tuning sky frequency
+      setup [<name='all'] - connect to telescope
+      shutdown [<name='all'] - run 'cleanup' & shutdown tscope server(s)
+      sim [<name='all'] - turn on simulator mode
+      status [<name>='all'] - display status of tscope(s)
+      stop <'antgroup' | antxx[,antxx...]> <name |'all'> - stop antenna array
+      stow <'antgroup' | antxx[,antxx...]> <name |'all'> - stow antenna array
+      unsim [<name='all'] - turn off simulator mode
+      wrap <'antgroup' | antxx[,antxx...]> <wrap number = 0, 1, 2> [<name='all'] - set array wrap
+      zfocus <'antgroup' | antxx[,antxx...]> <sky freq MHz> [<name='all'] - change zfocus sky frequency
+
+  Misc commands:
+    exec <command> - execute an operating system command
+    exit - exit sse/seeker
+    expectedcomponents - display the 'expected NSS components' config file info
+    followup <prev act id> - start a followup of a previous activity
+    freeants - shorthand for 'start freeants'
+    grid <prev act id> - start a grid pointing followup of a previous activity
+    help [<subsystem> = 'all'] - display help information
+    interfaceversions - display component interface versions
+    log <message> - write message to the system log
+    names - list names of all connected components
+    para default - set all parameters to their default values
+    quit - exit sse/seeker (alias for exit)
+    reconfig [<filename>] - load components config from <filename>
+    restore <filename> - load parameter settings from <filename>
+    save <filename> - save parameter settings to <filename>
+    sh <command> - use the unix shell to execute an operating system command
+    show - show all parameter settings
+    start <'tasks' | <task>[,<task>...]>- start selected tasks (i.e., strategies)
+    status -  display status of all components
+    stop - stop all activities
+    wrapup - complete currently running activities & any followups, then stop
+    targetidallbeams <id> - set the target id on all beams in act params
+    tclerror - display last tcl error
+    utc - display current UTC time
+    verbose level <0=off, 1=some, 2=more> 
+		Set verbose level. Msgs go to log.
+    verbose showlevel - display current verbose level
+    version - display sse version number
+
+
+seeker>> act help
+  Command: "act"
+    Parameters:    
+      candarch: candidates to archive (confirmed | all | none) 
+      comparedxs: compare dx data products (off | on) 
+      cwcohdonetimeoutfactor: percent {percent of total signal detection timeout period to wait for 'done sending cw coherent signals' messages}
+      datacolltimeoutoffset: secs {how long to wait after expected DC complete time before timing out}
+      delay: data collection delay {sec}
+      diskfullerror: archive disk full error limit {%}
+      diskfullwarn: archive disk full warning limit {%}
+      dut: UTC diff from UT1 (UT1R-UTC from IERS Bulletin B) {sec}
+      earthephem: earth ephemeris file in $SSE_SETUP directory
+      emailactstat: send out email notification of activity status (off | on) 
+      emailaddr: mailing addresses for activity status notification
+      freqinvert: apply dx (DDC) freq inversion when using this part of the signal path (never | rf | if | always) 
+      multitargetnulls: insert nulls for targets used on other beams (on | off) 
+      nulldepth: expected minimum null effectiveness {dB}
+      offactnulls: specify which type of nulls should be used in OFF acts (projection | none | axial) 
+      pointprimary: point primary beam (on | off) 
+      prevactid: previous activity ID (for followup observation)
+      primarybeampos: primary beam pointing position type (targetid | coords) 
+      primarydecdeg: primary beam pointing position Dec {j2000 degrees}
+      primaryrahours: primary beam pointing position RA {j2000 hours}
+      readytimeout: component ready watchdog timeout period {sec}
+      rfiagelimit: recent RFI age limit {days}
+      sigdetwait: signal detection watchdog timer wait factor {X times data coll time}
+      site: name of site (ATA) 
+      targetbeam1: SETI target id for beam1 {SETI target id}
+      targetbeam2: SETI target id for beam2 {SETI target id}
+      targetbeam3: SETI target id for beam3 {SETI target id}
+      targetbeam4: SETI target id for beam4 {SETI target id}
+      targetbeam5: SETI target id for beam5 {SETI target id}
+      targetbeam6: SETI target id for beam6 {SETI target id}
+      targetprimary: target id at the primary FOV center {target id}
+      tscopetimeout: tscope ready watchdog timeout period {sec}
+      type: activity type (autoselectants | bfautoatten | bfinit | bfreset | birdiescan | cal | datacollect | dxtest | freeants | grideast | gridnorth | gridon | gridsouth | gridwest | iftest | iftestoff | ifteston | iftestzerodrift | pointantswait | prepants | rfbirdiescan | rfiscan | rftest | rftestfollowup | rftestforcedarchive | rftestzerodrift | target | target1-on | target1off | target2-on | target2off | target3-on | target3off | target4-on | target4off | target5-on-nofollowup | tscopesetup) 
+      varerror: check stx variance error limits (on | off) 
+      varerrorlower: stx variance error lower limit
+      varerrorupper: stx variance error upper limit
+      varwarn: check stx variance warning limits (on | off) 
+      varwarnlower: stx variance warn lower limit
+      varwarnupper: stx variance warn upper limit
+      watchdogs: use component watchdog timers (on | off) 
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      status - display status for all activities 
+      clearfollowuplist - clear the list of pending followup activity Ids 
+      addfollowupactid <actId> - add actId to the list of pending followup activity Ids 
+
+seeker>> dx help
+  Command: "dx"
+    Parameters:    
+      badbandcwpathlim: bad band CW path limit per KHz
+      badbandpulselim: bad band pulse limit per KHz
+      badbandpulsetriplim: bad band pulse triplet limit per KHz
+      bandwidth: 
+	assigned bandwidth (must be a multiple of 512) {# subchannels}
+      basedecay: baseline decay factor
+      baseerror: report baseline error limits exceeded (on | off) 
+      baseerrormeanlower: baseline error mean lower bound limit {power}
+      baseerrormeanupper: baseline error mean upper bound limit {power}
+      baseerrorrange: baseline error max range {power}
+      baseerrorstddev: baseline error std dev {percent}
+      baseinitaccum: 
+		#half frames to accumulate initial baselines {# half frames}
+      baselines: enable baseline reporting (on | off) 
+      baserep: baseline reporting interval {# half frames}
+      basestats: report baseline statistics (on | off) 
+      basesubave: # subchannels to average for baseline stats {# subchannels}
+      basewarn: report baseline warning limits exceeded (on | off) 
+      basewarnmeanlower: baseline warning mean lower bound limit {power}
+      basewarnmeanupper: baseline warning mean upper bound limit {power}
+      basewarnrange: baseline warning max range {power}
+      basewarnstddev: baseline warning std dev {percent}
+      clustfreqtol: clustering freq tolerance {Hz}
+      coherentdetlim: limits for coherent detection
+      compamps: enable reporting of complex amplitudes (on | off) 
+      cwclustdeltafreq: cw clustering delta freq {bins}
+      cwthresh: cw coherent threshold {sigma}
+      daddres: dadd resolution (1 | 2 | 4)  {Hz}
+      daddthresh: dadd threshold {sigma}
+      datareqfreq: request subchannel containing freq {MHz RF}
+      datareqmaxcompampsubchan: Max # of subchannels {Max # of subchannels }
+      datareqsubchan: request subchannel by number {subchannel #}
+      datareqtype: type of complex amplitudes request (subchan | freq) 
+      length: data collection length (13,24,48,94,195,388,774) {sec}
+      manualbw: set the assigned bandwidth manually (off | on) 
+      maxcand: max number of candidates {count}
+      maxdrifttol: max driftrate tolerance {Hz/Sec}
+      maxpulsesperhf: max pulses per half frame {# pulses}
+      maxpulsespersubperhf: max pulses per subchannel per half frame {# pulses}
+      pulseclustdeltafreq: pulse clustering delta freq {bins}
+      pulsedetect: allow pulse detection (on | off) 
+      pulsethresh: pulse threshold {sigma}
+      recentrfienable: enable use of the recent RFI mask (on | off) 
+      recentrfimaskelemwidmin: min width of a recent rfi mask element {Hz}
+      recentrfimasksizemax: max number of elements in a recent rfi mask {count}
+      secondarycwthresh: secondary cw coherent threshold {sigma}
+      secondarypfamargin: secondary cw coherent pfa margin {sigma}
+      secondarytrainsignifthresh: 
+		secondary pulse train significance threshhold {signif}
+      singletthresh: singlet threshold {sigma}
+      trainsignifthresh: 
+		pulse train significance threshhold {signif}
+      tripletthresh: triplet threshold {sigma}
+      zerodrifttol: zero drift tolerance {Hz/Sec}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      config [<dxname>='all'] - display dx configuration
+      dumpstruct - display dx activity parameters structure
+      intrin [<dxname>='all'] - display dx intrinsics 
+      load skyfreq <sky freq in MHz> <dxname | 'all'> - assign skyfreq to dx(s)
+      load chan <channel number> <dxname | 'all'> - assign channel to dx(s)
+      names - list all connected dxs
+      reqfreq <sky freq in MHz> <dxname | 'all'> - request compamp data by sky freq
+      reqstat [<dxname>='all'] - request dx status update 
+      reqchan <subchan> <dxname | 'all'> - request compamp data by subchannel
+      resetsocket <dxname | 'all'> - reset socket on dx(s)
+      restart <dxname | 'all'> - restart dx(s)
+      senddatareq <dxname | 'all'> - send science data request to dx(s)
+      shutdown <dxname [dxname...] | 'all'> - shutdown dx(s) 
+      status [<dxname>='all'] - display dx status  
+      stop <dxname | 'all'> - stop dx(s) 
+
+seeker>> sched help
+  Command: "sched"
+    Parameters:    
+      autorisecutoff: time cutoff used to determine autorise targets {minutes}
+      beam1: use beam 1 (on | off) 
+      beam2: use beam 2 (off | on) 
+      beam3: use beam 3 (off | on) 
+      beam4: use beam 4 (off | on) 
+      beam5: use beam 5 (off | on) 
+      beam6: use beam 6 (off | on) 
+      beambandwidth: beam input bandwidth {MHz}
+      beginfreq: starting frequency for range/auto observations {MHz}
+      catshigh: high priority catalog names {comma separated catalog names}
+      catshighmaxcounts: high priority catalog maximum counts cutoff {count}
+      catslow: low priority catalog names {comma separated catalog names}
+      checktargets: validate targets (visible, etc.) (off | warn | on) 
+      comcal: enable periodic commensal cals (off | on) 
+      comcalinterval: wait interval between commensal cals {minutes}
+      comcallength: commensal cal duration {minutes}
+      declowerlimit: minimum target declination {deg}
+      decupperlimit: maximum target declination {deg}
+      dxoverlap: overlap between adjacent DXs {MHz}
+      dxround: for range observations, rounds down to nearest multiple of dxround {MHz}
+      dxtune: method used to tune DXs (user | range | forever) 
+      dxtunetol: maximum difference between requested & actual DX center freq {MHz}
+      emailaddr: mailing addresses for strategy failure notification
+      emailstratfail: send out email notification of strategy failure (off | on) 
+      endfreq: ending frequency for range/auto observations {MHz}
+      followup: follow up activities when signals are confirmed (off | on) 
+      followupmode: mode for automatic or manual (user) followup of activities (auto | user) 
+      geosatavoid: geostationary satellite band dec avoidance angle {deg}
+      maxdistly: maximum target distance {light years}
+      maxfailures: maximum number of sequential activity failures allowed {count}
+      mindxbw: minimum % of total available dx bandwidth to use {%}
+      minfollowups: reserve time for the minimum number of followup observations {observations}
+      mintargetsep: minimum target separation {beamsizes}
+      moonavoid: moon avoidance angle {deg}
+      multitarget: observe multiple targets (off | on) 
+      pipe: should activities be pipelined (on | off) 
+      primaryidcutoff: min number of targets with shared primary target id that must be visible {count}
+      repeatstrat: repeat strategy <count> times {count}
+      restartpause: number of seconds to pause between activity restart attempts {secs}
+      rftune: method used to tune RF (auto | user) 
+      rotateids: enable periodic rotation of primary target ids (off | on) 
+      rotateidsinterval: time interval between primary target ids rotation {minutes}
+      stopstratfail: stop on strategy failure (on | off) 
+      sunavoid: sun avoidance angle {deg}
+      target: method used to choose targets (user | semiauto | auto | autorise | commensal) 
+      targetavailactsetup: estimated act setup time, used when determining target availability {secs}
+      targetmerit: comma separated list of target merit factors to apply (timeleft | dist | catalog | dec | completelyobs | meridian | primaryid) 
+      targetwait: wait for target complete before changing to next target (on | off) 
+      tasks: comma separated list of tasks to run (obs | tscopesetup | autoselectants | prepants | freeants | bfreset | bfinit | bfautoatten | caldelay | calphase | calfreq) 
+      tscopemaxfailures: maximum number of sequential 'tscope ready' act start failures allowed {count}
+      tscopereadypause: number of seconds to pause between 'tscope ready' activity restart attempts {secs}
+      zenithavoid: zenith avoidance angle {deg}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+
+seeker>> db help
+  Command: "db"
+    Parameters:    
+      host: database server host
+      name: database name
+      passwd: database password
+      port: database server port {number}
+      usedb: use database (off | on) 
+      user: database user name
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+
+seeker>> help
+SSE/seeker help
+===============
+help all - displays help for all subsystems
+help <subsystem>  - displays help for the given subsystem:
+   act (activity)
+   arch (archiver)
+   channel (channelizer)
+   control (component control)
+   db (database)
+   dx (detection module)
+   sched (scheduler)
+   tscope (telescope & RF control)
+help misc - displays the misc. commands
+
+The subsystem control is split into two parts, 
+Parameter Commands and Immediate commands:
+
+help param - overview of subsystem parameter control
+help immed - overview of subsystem immediate commands
+
+
+seeker>> control help
+  Command: "control"
+    Immediate Commands for controlling components:
+      start <component1> [<componentN> ...] - start components
+      shutdown <'all' | component1> [<componentN> ...] - shutdown components
+      restart <'all' | component1> [<componentN> ...] - restart components (i.e., shutdown followed by start)
+
+    Immediate Commands for component controller itself:
+      help - print this help text
+      intrin [<name>='all'] - display ComponentControl intrinsics
+      names - list names of all connected ComponentControls
+      reqstat [<name>='all'] - request ComponentControl status update
+      reset <name | 'all'> - reset ComponentControl(s)
+      resetsocket <name | 'all'> - reset ComponentControl socket
+      send <name | 'all'> <command> [arg1] [arg2] ... [arg5] - send command with arguments to ComponentControl(s)
+      selfshutdown <name | 'all'> - shutdown ComponentControl(s)
+      status [<name>='all'] - display status of ComponentControl(s)
+
+seeker>> tscope help
+  Command: "tscope"
+    Parameters:    
+      antlistsource: where to specify the ant lists (param | antgroup) 
+      antsprimary: comma separated primary ant names
+      antsxpol: comma separated X pol ant names
+      antsypol: comma separated Y pol ant names
+      beamsize: synth beamsize at 1 GHz {arcsec @1GHz}
+      calcycles: number of times calibration is repeated {count}
+      caliterations: number of bf calibration iterations
+      caltime: calibration integration time {secs}
+      caltype: calibration type (phase | delay | freq) 
+      centertuneoffset: center tune offset (diff between SonATA band center and bf band center) {MHz}
+      primaryfov: primary Field-Of-View at 1 GHz {deg @1GHz}
+      sitehoriz: site horizon {deg}
+      sitelat: site latitude {north deg}
+      sitelong: site longitude {west deg}
+      sitename: site name
+      tuneoffset: baseband tune offset (automatically added to tuning[a-d]) {MHz}
+      tuninga: sky freq for ATA tuning 'A' {MHz}
+      tuningb: sky freq for ATA tuning 'B' {MHz}
+      tuningc: sky freq for ATA tuning 'C' {MHz}
+      tuningd: sky freq for ATA tuning 'D' {MHz}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      allocate <'antgroup' | antxx[,antxx...]> [<name='all'] - allocate subarray
+      assign beamxxx <'antgroup' | antxx[,antxx...]> [<name='all'] -  define the antennas that make up a beam
+      autoselectants <bf list like 1,2,3> - automatically select ants for the antgroups
+      bfcal <delay|phase|freq> integrate <secs> cycles <count> [<name='all']
+      bfcal <delay|phase|freq> integrate <secs> cycles <count> [<name='all'] iterations <num>
+      bfinit - init beamformer with all ants previously assigned to beams
+      bfpoint - point all beams previously assigned coordinates
+      bfclearcoords - clear all assigned beam coordinates
+      bfclearants - clear antenna assignments for all beams
+      bfsetcoords beamName azel <Az deg> <El deg> [<name='all']
+      bfsetcoords beamName gal <Long deg> <Lat deg> [<name='all']
+      bfsetcoords beamName j2000 <RA hours> <Dec deg> [<name='all']
+      bfsetcoords beamName j2000deg <RA deg> <Dec deg> [<name='all']
+      bfreset - reset beamformer (requires recalibration)
+      bfstop - stop currently running beamformer command
+      cleanup [<name='all'] - disconnect from telescope
+      connect [<name='all'] - connect to telescope
+      deallocate <'antgroup' | antxx[,antxx...]> [<name='all'] - deallocate subarray
+      disconnect [<name='all'] - disconnect from telescope
+      intrin [<name>='all'] - display tscope intrinsics
+      monitor <periodSecs> [<name='all'] - monitor period
+      names - list names of all connected tscopes
+      point <'antgroup' | antxx[,antxx...]> azel <Az deg> <El deg> [<name='all']
+      point <'antgroup' | antxx[,antxx...]> gal <Long deg> <Lat deg> [<name='all']
+      point <'antgroup' | antxx[,antxx...]> j2000 <RA hours> <Dec deg> [<name='all']
+      point <'antgroup' | antxx[,antxx...]> j2000deg <RA deg> <Dec deg> [<name='all']
+      reqstat [<name>='all'] - request tscope status update
+      send <name | 'all'> <command> [arg1] ... [arg8] - send backend command with arguments
+      resetsocket [<name='all'] - reset tscope socket
+      restart [<name='all'] - restart tscope(s)
+      tune <tuning{a-d}> <sky freq MHz> [<name='all'] - change tuning sky frequency
+      setup [<name='all'] - connect to telescope
+      shutdown [<name='all'] - run 'cleanup' & shutdown tscope server(s)
+      sim [<name='all'] - turn on simulator mode
+      status [<name>='all'] - display status of tscope(s)
+      stop <'antgroup' | antxx[,antxx...]> <name |'all'> - stop antenna array
+      stow <'antgroup' | antxx[,antxx...]> <name |'all'> - stow antenna array
+      unsim [<name='all'] - turn off simulator mode
+      wrap <'antgroup' | antxx[,antxx...]> <wrap number = 0, 1, 2> [<name='all'] - set array wrap
+      zfocus <'antgroup' | antxx[,antxx...]> <sky freq MHz> [<name='all'] - change zfocus sky frequency
+
+seeker>> help
+SSE/seeker help
+===============
+help all - displays help for all subsystems
+help <subsystem>  - displays help for the given subsystem:
+   act (activity)
+   arch (archiver)
+   channel (channelizer)
+   control (component control)
+   db (database)
+   dx (detection module)
+   sched (scheduler)
+   tscope (telescope & RF control)
+help misc - displays the misc. commands
+
+The subsystem control is split into two parts, 
+Parameter Commands and Immediate commands:
+
+help param - overview of subsystem parameter control
+help immed - overview of subsystem immediate commands
+
+
+seeker>> arch help
+  Command: "arch"
+    Parameters:    
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      intrin [<archiverName>='all'] - display dx archiver intrinsics 
+      names - list all connected dx archivers
+      reqstat [<archiverName>='all'] - request dx archiver status update 
+      resetsocket <archiverName | 'all'> - reset socket on dx archiver(s)
+      restart <archiverName | 'all'> - restart dx archiver(s)
+      shutdown <archiverName | 'all'> - shutdown dx archivers(s) 
+      status [<archiverName>='all'] - display dx archiver status  
+
+seeker>> channel help
+  Command: "channel"
+    Parameters:    
+      delay: Channelizer Start Delay {sec}
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      intrin [<chanName>='all'] - display channelizer intrinsics 
+      names - list all connected channelizers
+      reqstat [<chanName>='all'] - request channelizer status update 
+      resetsocket <chanName | 'all'> - reset socket on channelizer(s)
+      restart <chanName | 'all'> - restart channelizer(s)
+      start <delay secs> <freq MHz> <chanName | 'all'> - start channelizer(s) in delay secs, tuned to freq MHz
+      shutdown <chanName | 'all'> - shutdown channelizers(s) 
+      status [<chanName>='all'] - display channelizer status  
+      stop <chanName>='all'> - issue stop command 
+
+seeker>> act help
+  Command: "act"
+    Parameters:    
+      candarch: candidates to archive (confirmed | all | none) 
+      comparedxs: compare dx data products (off | on) 
+      cwcohdonetimeoutfactor: percent {percent of total signal detection timeout period to wait for 'done sending cw coherent signals' messages}
+      datacolltimeoutoffset: secs {how long to wait after expected DC complete time before timing out}
+      delay: data collection delay {sec}
+      diskfullerror: archive disk full error limit {%}
+      diskfullwarn: archive disk full warning limit {%}
+      dut: UTC diff from UT1 (UT1R-UTC from IERS Bulletin B) {sec}
+      earthephem: earth ephemeris file in $SSE_SETUP directory
+      emailactstat: send out email notification of activity status (off | on) 
+      emailaddr: mailing addresses for activity status notification
+      freqinvert: apply dx (DDC) freq inversion when using this part of the signal path (never | rf | if | always) 
+      multitargetnulls: insert nulls for targets used on other beams (on | off) 
+      nulldepth: expected minimum null effectiveness {dB}
+      offactnulls: specify which type of nulls should be used in OFF acts (projection | none | axial) 
+      pointprimary: point primary beam (on | off) 
+      prevactid: previous activity ID (for followup observation)
+      primarybeampos: primary beam pointing position type (targetid | coords) 
+      primarydecdeg: primary beam pointing position Dec {j2000 degrees}
+      primaryrahours: primary beam pointing position RA {j2000 hours}
+      readytimeout: component ready watchdog timeout period {sec}
+      rfiagelimit: recent RFI age limit {days}
+      sigdetwait: signal detection watchdog timer wait factor {X times data coll time}
+      site: name of site (ATA) 
+      targetbeam1: SETI target id for beam1 {SETI target id}
+      targetbeam2: SETI target id for beam2 {SETI target id}
+      targetbeam3: SETI target id for beam3 {SETI target id}
+      targetbeam4: SETI target id for beam4 {SETI target id}
+      targetbeam5: SETI target id for beam5 {SETI target id}
+      targetbeam6: SETI target id for beam6 {SETI target id}
+      targetprimary: target id at the primary FOV center {target id}
+      tscopetimeout: tscope ready watchdog timeout period {sec}
+      type: activity type (autoselectants | bfautoatten | bfinit | bfreset | birdiescan | cal | datacollect | dxtest | freeants | grideast | gridnorth | gridon | gridsouth | gridwest | iftest | iftestoff | ifteston | iftestzerodrift | pointantswait | prepants | rfbirdiescan | rfiscan | rftest | rftestfollowup | rftestforcedarchive | rftestzerodrift | target | target1-on | target1off | target2-on | target2off | target3-on | target3off | target4-on | target4off | target5-on-nofollowup | tscopesetup) 
+      varerror: check stx variance error limits (on | off) 
+      varerrorlower: stx variance error lower limit
+      varerrorupper: stx variance error upper limit
+      varwarn: check stx variance warning limits (on | off) 
+      varwarnlower: stx variance warn lower limit
+      varwarnupper: stx variance warn upper limit
+      watchdogs: use component watchdog timers (on | off) 
+    Parameter Commands:
+      default - set all parameters to their default values
+      help - print this help info
+      isvalid - verify that all parameters are valid
+      save <filename> - save parameters to file
+      set <parameter> <value> [<current, default, min, max>=current]
+      show [<parameter>=all] [<current, default, min, max>=current]
+    Immediate Commands:
+      status - display status for all activities 
+      clearfollowuplist - clear the list of pending followup activity Ids 
+      addfollowupactid <actId> - add actId to the list of pending followup activity Ids 
+
+seeker>> exit
+sse100[master]% exit
+exit
+
+Script done on Wed 28 Nov 2012 06:48:31 PM UTC

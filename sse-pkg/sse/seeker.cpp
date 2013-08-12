@@ -125,7 +125,9 @@ static void addActivityTypesToScheduler(Scheduler * scheduler)
    const string target3OffName("target3off");
    const string target4OnName("target4-on");
    const string target4OffName("target4off");
-   const string target5OnNoFollowupName("target5-on-nofollowup");
+   //const string target5OnNoFollowupName("target5-on-nofollowup");
+   const string targetnOnName("targetn-on"); //targetn-on is forever
+   const string targetnOffName("targetn-off");
 
    scheduler->addActivityType(targetName, ActivityEntry::UsesTargets,
                               NewTargetActWrapper);
@@ -161,20 +163,31 @@ static void addActivityTypesToScheduler(Scheduler * scheduler)
 
    scheduler->addActivityType(target4OffName, ActivityEntry::UsesTargets,
                               NewTargetOffActWrapper);
-   followup->setFollowupActType(target4OffName, target5OnNoFollowupName);
+   //
+   //followup->setFollowupActType(target4OffName, target5OnNoFollowupName);
+   //
+   
+   followup->setFollowupActType(target4OffName, targetnOnName);
+   scheduler->addActivityType(targetnOnName, ActivityEntry::UsesTargets,
+                              NewTargetOffActWrapper);
+		   
+   followup->setFollowupActType(targetnOnName, targetnOffName);
+   scheduler->addActivityType(targetnOffName, ActivityEntry::UsesTargets,
+                              NewTargetOffActWrapper);
+	   
+   followup->setFollowupActType(targetnOffName, targetnOnName);
 
 
-   // Set the maximum number of followups by making this activity
    // type the last in the followup chain:
 
-   scheduler->addActivityType(target5OnNoFollowupName, ActivityEntry::UsesTargets,
-                              NewTargetOnNoFollowupActWrapper);
+  // scheduler->addActivityType(target5OnNoFollowupName, ActivityEntry::UsesTargets,
+  //                           NewTargetOnNoFollowupActWrapper);
 
    // Make this activity its own followup type, so that the followup lookup
    // table activity-chain can be validated (even though this type should
    // never invoke a followup).
-   followup->setFollowupActType(target5OnNoFollowupName,
-                                target5OnNoFollowupName);
+  // followup->setFollowupActType(target5OnNoFollowupName,
+   //                             target5OnNoFollowupName);
 
 
    const string gridWestName("gridwest");
@@ -332,7 +345,6 @@ static void *seekerThread(void *seekerThreadArgsVoidStar)
    Scheduler *scheduler = Scheduler::instance();
    Site* site;
    try {
-cerr << "get new Site" << endl;
       site = new Site(seekerParser->getDxPort(),
                       seekerParser->getZxPort(),
                       seekerParser->getDxArchiverPort(),
@@ -351,14 +363,12 @@ cerr << "get new Site" << endl;
                       seekerParser->getNoUi());
       delete seekerParser;
     
-      cerr << "parser deleted" << endl;
       paraGlobal.setSite(site);  // attach the site to the Text UI
       paraGlobal.act_->setScheduler(scheduler);
       scheduler->setSite(site);
 
       addActivityTypesToScheduler(scheduler);
       addActStrategyTypesToScheduler(scheduler);
-      cerr << "strategies added " << endl;
    }
    catch (NssAcceptHandlerException &exception) {
       scheduler->failed();
@@ -408,7 +418,6 @@ cerr << "get new Site" << endl;
 
       exit(1);
    }
-cerr << "before releasing startingSeeker" << endl;
 
    startingSeeker->release();
 
@@ -416,7 +425,6 @@ cerr << "before releasing startingSeeker" << endl;
    // when a system call is interrupted (ie, errno == EINTR)
    // by enabling restart.
    //
-   cerr << "restart Reactor" << endl;
    ACE_Reactor::instance()->restart(1);
 
    //int status =

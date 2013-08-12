@@ -2,7 +2,7 @@
 # sonata-start-rosetta-beam2-good-ants.obs.tcl
 
 # send out "taking the array" email
-sh echo " SonATA taking array" | mailx -s 'SonATA taking array for Rosetta Test' -r jjordan@seti.org ata-staff@seti.org
+#sh echo " SonATA taking array" | mailx -s 'SonATA taking array for Rosetta Test' -r jjordan@seti.org ata-staff@seti.org
 
 # connect to telescope array
 #tscope setup

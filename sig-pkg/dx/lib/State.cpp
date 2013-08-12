@@ -291,7 +291,7 @@ State::getUsableBinsPerSubchannel(Resolution res)
 {
 	if (res < RES_1HZ || res > RES_1KHZ)
 		Fatal(ERR_IR);
-	int32_t bins = rint((float32_t) binSpec.usable / (1 << (res - RES_1HZ)));
+	int32_t bins = lrintf((float32_t) binSpec.usable / (1 << (res - RES_1HZ)));
 	return (bins);
 }
 

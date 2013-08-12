@@ -13,7 +13,7 @@ tscope setup
 # allow some setup time
 sh sleep 20
 
-act set candarch {all} current 
+act set candarch {confirmed} current 
 act set comparedxs {off} current 
 act set cwcohdonetimeoutfactor 0.700000000 current 
 act set datacolltimeoutoffset 10 current 
@@ -84,7 +84,7 @@ dx set coherentdetlim 0.000000000 current
 dx set compamps {on} current 
 dx set cwclustdeltafreq 2 current 
 dx set cwthresh 0.000000000 current 
-dx set daddres 1 current 
+dx set daddres 2 current 
 dx set daddthresh 9.5 current 
 dx set datareqfreq 1420.800100000 current 
 dx set datareqmaxcompampsubchan 12 max

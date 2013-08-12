@@ -1,4 +1,5 @@
 #!/bin/sh
+
 ################################################################################
 #
 # File:    email-jpl-ephem-xyz-requests
@@ -6,7 +7,7 @@
 # Authors: The OpenSonATA code is the result of many programmers
 #          over many years
 #
-# Copyright 2011 The SETI Institute
+# Copyright 2013 The SETI Institute
 #
 # OpenSonATA is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,24 +57,26 @@ fi
 
 # jpl target codes
 
-stardust=-29
+#stardust=-29
 voyager1=-31
-newhoriz=-98
-deepimpact=-140
-dawn=-203
-rosetta=-226
-mars=499
-jupiter=599
-saturn=699
+#newhoriz=-98
+#deepimpact=-140
+#dawn=-203
+#rosetta=-226
+#mars=499
+#jupiter=599
+#saturn=699
 earth=399
-moon=301
-pioneer10=-23
-cassini=-82
-kepler=-227
+#moon=301
+#pioneer10=-23
+#cassini=-82
+#kepler=-227
+#asteroid2012da14=728624
 
-targetlist="$stardust $voyager1 $newhoriz $deepimpact \
- $dawn $rosetta $cassini $kepler \
- $mars $earth $jupiter $saturn $moon"
+#targetlist="$stardust $voyager1 $newhoriz $deepimpact \
+# $dawn $rosetta $cassini $kepler \
+# $mars $earth $jupiter $saturn $moon"
+targetlist="$voyager1 $mars"
 
 # Set up a years worth of data.
 # Start with a few days ago to allow for interpolation
@@ -82,12 +85,17 @@ targetlist="$stardust $voyager1 $newhoriz $deepimpact \
 # date format: yyyy-mon-dd 
 
 dateFormat="%Y-%b-%d"
-startDate=`date -u -d '3 days ago' +"$dateFormat"`
-stopDate=`date -u -d '3 days ago + 1 year' +"$dateFormat"`
+#startDate=`date -u -d '' +"$dateFormat"`
+#stopDate=`date -u -d '3 days ago + 1 year' +"$dateFormat"`
+
+#START_TIME = '2013-Feb-15'
+#STOP_TIME = '2013-Feb-18'
+#START_TIME = '2013-Mar-10 00:00:0.0000'
+#STOP_TIME = '2014-Mar-10 00:00:0.0000'
 
 mailSubject="job"
 mailAddr="horizons@ssd.jpl.nasa.gov"
-returnAddr="$jane@seti.org"
+returnAddr="jrichards@seti.org"
 
 for target in $targetlist 
 do
@@ -111,8 +119,8 @@ COMMAND='$target'
 $center
 
 TIME_ZONE = 'UT+00:00'
-START_TIME = '$startDate'
-STOP_TIME = '$stopDate'
+START_TIME = '2013-Mar-10 00:00:0.0000'
+STOP_TIME = '2014-Mar-10  00:00:0.0000'
 
 STEP_SIZE= '1 day'
 
@@ -144,6 +152,55 @@ SUPPRESS_RANGE_RATE= 'NO'
 
 !\$\$EOF
 EOF
+
+
+
+
+cat <<EOF
+!\$\$SOF
+
+EMAIL_ADDR = '$returnAddr'
+
+COMMAND='$target'
+$center
+
+TIME_ZONE = 'UT+00:00'
+START_TIME = '2013-Mar-10 00:00:0.0000'
+STOP_TIME = '2014-Mar-10  00:00:0.0000'
+
+STEP_SIZE= '1 day'
+
+TABLE_TYPE = 'VECTORS'
+
+!  2 =  State vector {x,y,z,vx,vy,vz}
+!  3 =  State vector + 1-way light-time + range + range-rate 
+VECT_TABLE = '3'
+REF_PLANE  = 'FRAME'
+
+! apply light time correction 
+VECT_CORR  = 'LT'
+
+! Hat Creek
+SITE_COORD= '-121.473333,+40.817777,1.043'
+COORD_TYPE= 'GEODETIC'
+
+ANG_FORMAT= 'DEG'
+OUT_UNITS= 'KM-S'
+RANGE_UNITS= 'AU'
+APPARENT= 'AIRLESS'
+SKIP_DAYLT= 'NO'
+EXTRA_PREC= 'YES'
+R_T_S_ONLY= 'NO'
+REF_SYSTEM= 'J2000'
+CSV_FORMAT= 'YES'
+OBJ_DATA= 'NO'
+SUPPRESS_RANGE_RATE= 'NO'
+
+!\$\$EOF
+EOF
+
+
+
 
 done
 

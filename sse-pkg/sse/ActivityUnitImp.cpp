@@ -3679,17 +3679,17 @@ string LookUpCandidatesFromPrevAct::prepareQuery()
    if (!actUnit_->zxMode_)
 	   sqlStmt <<  " AND targetId = " << actUnit_->targetId_;
   }
-
+// For SETI Live follow up observations only accept reconfirm
   sqlStmt << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
 	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_
 	   << " AND sigClass = '"
 	   << SseDxMsg::signalClassToString(CLASS_CAND)
 	   << "'"
 	   << " AND (reason = '"
-	   << SseDxMsg::signalClassReasonToBriefString(CONFIRM)
+	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
 	   << "'"
 	   << " OR reason = '"
-	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
+	   << SseDxMsg::signalClassReasonToBriefString(CONFIRM)
 	   << "'"
 	   << ")";
 
@@ -3912,36 +3912,31 @@ string LookUpCandidatesFromSetiLive::prepareQuery()
 	   << " AND rfFreq > " << actUnit_->dxBandLowerFreqLimitMHz_
 	   << " AND rfFreq < " << actUnit_->dxBandUpperFreqLimitMHz_ ;
 	   
-	   // Get all the signals for this Zx
-#ifdef testing
-   //
-	   << " AND sigClass = '"
+// For SETI Live follow up observations only accept reconfirm
+  if (actUnit_->actOpsBitEnabled(FOLLOW_UP_OBSERVATION))
+  {
+  sqlStmt << " AND sigClass = '"
+	   << SseDxMsg::signalClassToString(CLASS_CAND)
+	   << "'"
+	   << " AND (reason = '"
+	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
+	   << "'"
+	   << ")";
+  }
+  else // for target obs only accept confirm
+  {
+  sqlStmt << " AND sigClass = '"
 	   << SseDxMsg::signalClassToString(CLASS_CAND)
 	   << "'"
 	   << " AND (reason = '"
 	   << SseDxMsg::signalClassReasonToBriefString(CONFIRM)
 	   << "'"
-	   << " OR reason = '"
-	   << SseDxMsg::signalClassReasonToBriefString(RECONFIRM)
-	   << "'"
 	   << ")";
-#endif 
-   /*
-     If this is an OFF observation, then only get candidates
-     that this dx saw originally.  This avoids a problem where
-     adjacent, overlapped dxs try to look for a signal that they
-     did not see in the previous ON, and don't see again in the OFF,
-     thus keeping it alive as a candidate even when the original dx 
-     sees it in the OFF and thus resolves it as RFI.
-   */
-//   if (actUnit_->actOpsBitEnabled(OFF_OBSERVATION))
-   //{
-      //sqlStmt << "AND dxNumber = " << actUnit_->getDxNumber();
-   //}
-
+  }
+	   // Get all the signals for this Zx
    sqlStmt << " ORDER by rfFreq ";
 
-   //cout << sqlStmt.str() << endl;
+   cout << sqlStmt.str() << endl;
 
    return sqlStmt.str();
 }

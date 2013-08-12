@@ -53,6 +53,10 @@ echo "No targets remain after Culling by min target separation"
 echo `grep "no targets remain" *$1* | wc -l`
 echo "No targets are available within the observing constraints"
 echo `grep "No targets are available" *$1* | wc -l `
+echo "No targets are visible"
+echo `grep "OrderedTargets::cullNotVisible: targets left: 0" *$1* | wc -l `
+echo "Observing Stops max activity restart attempts exceeded"
+echo `grep "max activity restart attempts" *$1* | wc -l `
 echo "Dx failures"
 echo "-----------"
 echo "Activities with Dx Failures"
