@@ -155,11 +155,7 @@ dnl AC_CONFIG_SUBDIRS(libpqxx)
 
 
 # Define the default ACE_ROOT for the Makefiles.
-<<<<<<< HEAD
 ACE_ROOT="/usr/local/ACE_wrappers"
-=======
-ACE_ROOT="${HOME}/SonATA/packages/ACE_wrappers"
->>>>>>> 24f86727718c75296ba316a85f6db9a2d074ec70
 
 # build with stlport for debugging
 AC_ARG_WITH(stlport, [  --with-stlport          use the stlport library])
