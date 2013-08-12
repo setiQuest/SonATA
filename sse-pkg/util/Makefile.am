@@ -94,6 +94,7 @@ bin_SCRIPTS = \
 	sonata-startup-cron-vger-wrapper.sh \
 	galcenter-keplerHz-progress.sh \
 	galcenter2-keplerHz-progress.sh \
+	new-galcenter2-keplerHz-progress.sh \
 	opensonata-build-test.sh 
 
 bin_PROGRAMS = \

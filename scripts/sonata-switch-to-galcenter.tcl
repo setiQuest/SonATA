@@ -18,10 +18,11 @@ sched set catshigh galcentergrid2
 sched set catslow exoplanets,habcat,tycho2subset,tycho2remainder
 #sched set targetmerit primaryid,catalog,meridian,completelyobs,timeleft
 sched set targetmerit {primaryid,catalog,completelyobs,timeleft,meridian} current
-sched set primaryidcutoff 10 current
+#sched set primaryidcutoff 10 current
+sched set primaryidcutoff 3 current
 # the numbers will come from Gerry
-sched set comcalinterval 60.000000000 current
-sched set comcallength 2.000000000 current
+sched set comcalinterval 30.000000000 current
+sched set comcallength 3.000000000 current
 #sched set mintargetsep 3 current
 sched set mintargetsep 2 current
 sched set comcal on

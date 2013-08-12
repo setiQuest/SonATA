@@ -260,6 +260,9 @@ double Target::overallMerit()
    return overallMerit_;
 }
 
+// This routine is obsolete
+// It has been replace by TargetMerit::overallMerit()
+//
 void Target::computeOverallMerit()
 {
    computeTimeLeftMerit();

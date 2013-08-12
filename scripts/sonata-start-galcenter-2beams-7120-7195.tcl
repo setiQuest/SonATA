@@ -1,11 +1,11 @@
-# sonata-start-kepler-3beams-6767-6967-obs.tcl
+# sonata-start-galcenter-2beams-6567-6767-obs.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
-#sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
+#sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Galcenter.' -r jrichards@seti.org ata-staff@seti.org
 
-exec setAlarm ARM,sonata,Kepler
+exec setAlarm ARM,sonata,Galcenter
 
 # connect to the backend server
 tscope setup
@@ -30,7 +30,7 @@ act set nulldepth 7.000000000 current
 act set offactnulls {projection} current 
 act set pointprimary {on} current 
 act set prevactid 0 current 
-act set primarybempos {targetid} current 
+act set primarybeampos {targetid} current 
 act set primarydecdeg 0.000000000 current 
 act set primaryrahours 0.000000000 current 
 act set readytimeout 60 current 
@@ -53,8 +53,8 @@ act set varwarnlower 8.000000000 current
 act set varwarn {on} current 
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
-db set host {sse300} current 
-db set name {kepler6867mhz} current 
+db set host {sse100} current 
+db set name {galcenter} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -84,8 +84,8 @@ dx set coherentdetlim 0.000000000 current
 dx set compamps {on} current 
 dx set cwclustdeltafreq 2 current 
 dx set cwthresh 0.000000000 current 
-dx set daddres 2 current 
-dx set daddthresh 9.5 current 
+dx set daddres 4 current 
+dx set daddthresh 6.5 current 
 dx set datareqfreq 1420.800100000 current 
 dx set datareqmaxcompampsubchan 12 max
 dx set datareqmaxcompampsubchan 12
@@ -114,24 +114,24 @@ dx set zerodrifttol 0.007000000 current
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
 sched set beam2 {on} current 
-sched set beam3 {on} current 
+sched set beam3 {off} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 6767.000000000 current 
-sched set catshigh {keplerHZ,exokepler} current 
+sched set beginfreq 7120.00 current 
+sched set catshigh {galcentergrid2} current
 sched set catshighmaxcounts 20000 current 
 sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
 sched set comcalinterval 60.000000000 current 
 sched set comcallength 2.000000000 current 
-sched set comcal {off} current 
+sched set comcal {on} current 
 sched set declowerlimit -90.000000000 current 
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 6967.000000000 current 
+sched set endfreq 7195.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -147,7 +147,8 @@ sched set dxround 0.100000000 current
 sched set dxtune {range} current 
 sched set dxtunetol 0.010000000 current 
 sched set pipe {on} current 
-sched set primaryidcutoff 120 current 
+#sched set primaryidcutoff 120 current 
+sched set primaryidcutoff 3  current 
 sched set repeatstrat 1 current 
 sched set restartpause 30 current 
 sched set rftune {auto} current 
@@ -157,7 +158,7 @@ sched set stopstratfail {off} current
 sched set sunavoid 55.000000000 current 
 sched set target {auto} current 
 sched set targetavailactsetup 60 current 
-sched set targetmerit {catalog,meridian,completelyobs,timeleft} current 
+sched set targetmerit {primaryid,catalog,meridian,completelyobs,timeleft} current 
 sched set targetwait {on} current 
 #sched set tasks {autoselectants,prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
 sched set tasks {prepants,bfreset,bfautoatten,bfinit,caldelay,calphase,calfreq,obs} current 
@@ -177,7 +178,7 @@ tscope set caltime 90 current
 tscope set caltype {delay} current 
 tscope set centertuneoffset 0.000000000 current 
 tscope set primaryfov 3.500000000 current 
-tscope set sitehoriz 18.000000000 current 
+tscope set sitehoriz 16.5 current 
 tscope set sitelat 40.817361111 current 
 tscope set sitelong 121.471802778 current 
 tscope set sitename {ATA} current 

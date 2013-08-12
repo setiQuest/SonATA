@@ -113,6 +113,7 @@ scripts_SCRIPTS = \
 	sonata-cron-begin-cygnus-exoplanets-session.sh \
 	sonata-cron-begin-cygnusx3-session.sh \
 	sonata-cron-begin-exoplanets-session.sh \
+	sonata-cron-begin-kepler-session.sh \
 	sonata-cron-begin-waterhole2x-2840-3040MHz-session.sh \
 	sonata-cron-begin-waterhole2x-3040-3240MHz-session.sh \
 	sonata-cron-begin-waterhole2x-3240-3440MHz-session.sh \
@@ -285,7 +286,31 @@ scripts_SCRIPTS = \
 	sonata-start-exoplanets-3beams-6567-6767-obs.tcl \
 	sonata-start-exoplanets-3beams-6767-6967-obs.tcl \
 	sonata-start-kepler-3beams-6767-6967-obs.tcl \
+	sonata-start-galcenter-3beams-6767-6967-obs.tcl \
 	sonata-start-exoplanets-3beams-6967-7167-obs.tcl \
+	sonata-start-exoplanets-3beams-8920-9000-obs.tcl \
+	sonata-start-exoplanets-3beams-8840-8920-obs.tcl\
+	sonata-start-exoplanets-3beams-8760-8840-obs.tcl\
+	sonata-start-exoplanets-3beams-8680-8760-obs.tcl\
+	sonata-start-exoplanets-3beams-8600-8680-obs.tcl\
+	sonata-start-exoplanets-3beams-8520-8600-obs.tcl\
+	sonata-start-exoplanets-3beams-8440-8520-obs.tcl\
+	sonata-start-exoplanets-3beams-8360-8440-obs.tcl\
+	sonata-start-exoplanets-3beams-8280-8360-obs.tcl\
+	sonata-start-exoplanets-3beams-8200-8280-obs.tcl\
+	sonata-start-kepler-3beams-8760-8840-obs.tcl\
+	sonata-start-kepler-3beams-8680-8760-obs.tcl\
+	sonata-start-kepler-3beams-8600-8680-obs.tcl\
+	sonata-start-kepler-3beams-8120-8200-obs.tcl\
+	sonata-start-kepler-3beams-8040-8120-obs.tcl\
+	sonata-start-kepler-3beams-7960-8040-obs.tcl\
+	sonata-start-kepler-3beams-7Ghz-8Ghz-obs.tcl\
+	sonata-cron-begin-galcenter-session.sh \
+	sonata-start-galcenter-3beams-7960-8040-obs.tcl\
+	sonata-start-galcenter-3beams-3000-3080-obs.tcl\
+	sonata-start-galcenter-2beams-7045-7120-obs.tcl\
+	sonata-start-galcenter-2beams-6970-7045-obs.tcl\
+	sonata-start-kepler-3beams-6967-7167-obs.tcl \
 	sonata-start-kepler-2beams-6567-6767-obs.tcl \
 	sonata-start-da14-2beam-8400-8850-obs.tcl \
 	sonata-cron-begin-da14-session.sh \
@@ -308,4 +333,6 @@ scripts_SCRIPTS = \
 	testgrid.tcl \
 	sonata-switch-to-galcenter.tcl \
 	sonata-cron-switch-to-galcenter.sh \
-	1beam-dualpol-1dx-1zx-512F-env-vars.tcsh
+	1beam-dualpol-1dx-1zx-512F-env-vars.tcsh \
+	sonata-start-kepler-3beams-8760-8840-obs.tcl \
+	sonata-start-test-2beams-8405-8442-obs.tcl

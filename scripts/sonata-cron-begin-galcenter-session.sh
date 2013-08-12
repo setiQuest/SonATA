@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# sonata-cron-begin-exoplanets-session
+# sonata-cron-begin-galcenter-session
 
 #run the test to see if we should be running. If not - exit the script.
 /home/sonata/scripts/should_start_obs.rb
@@ -21,7 +21,9 @@ ${HOME}/sonata_install/bin/sonata-startup-cron-wrapper.sh -batch
 sleep 120
 
 #send command to SSE to start Observing
-#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-8120-8200-obs.tcl
-#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-8040-8120-obs.tcl
 #${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-7960-8040-obs.tcl
-${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-kepler-3beams-7Ghz-8Ghz-obs.tcl
+#set up to start with galcenter
+#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-galcenter-3beams-7960-8040-obs.tcl
+#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-galcenter-2beams-7120-7195-obs.tcl
+#${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-galcenter-2beams-7045-7120-obs.tcl
+${HOME}/sonata_install/bin/sonata-seeker-command-cron-wrapper.sh source ${HOME}/sonata_install/scripts/sonata-start-galcenter-2beams-6970-7045-obs.tcl

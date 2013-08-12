@@ -1,10 +1,11 @@
-# sonata-start-kepler-3beams-6767-6967-obs.tcl
+# sonata-start-kepler-3beams-8040-8120-obs.tcl
 #
 # SSE seeker commands to start observing
 
 # send out "taking the array" email
 #sh echo "SonATA taking array. Observing with 3 beams" | mailx -s 'SonATA taking array for Kepler.' -r jrichards@seti.org ata-staff@seti.org
 
+#exec setAlarm ARM,sonata,Exoplanets Modified Anu
 exec setAlarm ARM,sonata,Kepler
 
 # connect to the backend server
@@ -30,7 +31,7 @@ act set nulldepth 7.000000000 current
 act set offactnulls {projection} current 
 act set pointprimary {on} current 
 act set prevactid 0 current 
-act set primarybempos {targetid} current 
+act set primarybeampos {targetid} current 
 act set primarydecdeg 0.000000000 current 
 act set primaryrahours 0.000000000 current 
 act set readytimeout 60 current 
@@ -53,8 +54,9 @@ act set varwarnlower 8.000000000 current
 act set varwarn {on} current 
 act set varwarnupper 100.000000000 current 
 act set watchdogs {on} current 
-db set host {sse300} current 
-db set name {kepler6867mhz} current 
+db set host {sse100} current 
+db set name {exoplanets8ghz} current 
+#db set name {exoplanets8960mhz} current 
 db set passwd {} current 
 db set port 0 current 
 db set usedb {on} current 
@@ -84,8 +86,8 @@ dx set coherentdetlim 0.000000000 current
 dx set compamps {on} current 
 dx set cwclustdeltafreq 2 current 
 dx set cwthresh 0.000000000 current 
-dx set daddres 2 current 
-dx set daddthresh 9.5 current 
+dx set daddres 4 current 
+dx set daddthresh 6.5 current 
 dx set datareqfreq 1420.800100000 current 
 dx set datareqmaxcompampsubchan 12 max
 dx set datareqmaxcompampsubchan 12
@@ -113,25 +115,25 @@ dx set tripletthresh 48.000000000 current
 dx set zerodrifttol 0.007000000 current 
 sched set autorisecutoff 10.000000000 current 
 sched set beam1 {on} current 
-sched set beam2 {on} current 
+sched set beam2 {off} current 
 sched set beam3 {on} current 
 sched set beam4 {off} current 
 sched set beam5 {off} current 
 sched set beam6 {off} current 
 sched set beambandwidth 30.000000000 current 
-sched set beginfreq 6767.000000000 current 
-sched set catshigh {keplerHZ,exokepler} current 
+sched set beginfreq 8040.00 current 
+sched set catshigh {exoplanets,keplerHZ,exokepler} current 
 sched set catshighmaxcounts 20000 current 
-sched set catslow {exoplanets,habcat,tycho2subset,tycho2remainder} current 
+sched set catslow {habcat,tycho2subset,tycho2remainder} current 
 sched set checktargets {off} current 
-sched set comcalinterval 60.000000000 current 
-sched set comcallength 2.000000000 current 
+sched set comcalinterval 30.000000000 current 
+sched set comcallength 3.000000000 current 
 sched set comcal {off} current 
 sched set declowerlimit -90.000000000 current 
 sched set decupperlimit 90.000000000 current 
 sched set emailaddr {observing@seti.org} current 
 sched set emailstratfail {on} current 
-sched set endfreq 6967.000000000 current 
+sched set endfreq 8120.000000000 current 
 sched set followupmode {auto} current 
 sched set followup {on} current 
 sched set geosatavoid 5.000000000 current 
@@ -140,7 +142,8 @@ sched set maxfailures 3 current
 sched set minfollowups 12 current 
 sched set mindxbw 20.000000000 current 
 sched set mintargetsep 2.500000000 current 
-sched set moonavoid 10.000000000 current 
+#sched set moonavoid 10.000000000 current 
+sched set moonavoid 2.500000000 current 
 sched set multitarget {on} current 
 sched set dxoverlap 0.001000000 current 
 sched set dxround 0.100000000 current 
@@ -177,7 +180,7 @@ tscope set caltime 90 current
 tscope set caltype {delay} current 
 tscope set centertuneoffset 0.000000000 current 
 tscope set primaryfov 3.500000000 current 
-tscope set sitehoriz 18.000000000 current 
+tscope set sitehoriz 16.5 current 
 tscope set sitelat 40.817361111 current 
 tscope set sitelong 121.471802778 current 
 tscope set sitename {ATA} current 
@@ -187,6 +190,17 @@ tscope set tuningb 1420.000000000 current
 tscope set tuningc 1420.000000000 current 
 tscope set tuningd 1420.000000000 current 
 
+db set host sse100
+db set name kepler8ghz
+
+sched set minNumberReservedFollowups 12 current
+
+# change catalog priorities
+sched set catshigh keplerHZ,exokepler
+sched set catslow exoplanets,habcat,tycho2subset,tycho2remainder
+sched set targetmerit catalog,meridian,completelyobs,timeleft
+sched set comcal on
+exec /home/sonata/scripts/circle 0.234
 
 source antenna-list.tcl
 
