@@ -310,6 +310,7 @@ scripts_SCRIPTS = \
 	sonata-start-galcenter-3beams-3000-3080-obs.tcl\
 	sonata-start-galcenter-2beams-7045-7120-obs.tcl\
 	sonata-start-galcenter-2beams-6970-7045-obs.tcl\
+	sonata-start-galcenter-2beams-6895-6970-obs.tcl\
 	sonata-start-kepler-3beams-6967-7167-obs.tcl \
 	sonata-start-kepler-2beams-6567-6767-obs.tcl \
 	sonata-start-da14-2beam-8400-8850-obs.tcl \
