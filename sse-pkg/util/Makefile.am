@@ -91,10 +91,11 @@ bin_SCRIPTS = \
 	db-backup-sse100.sh \
 	sse100-backup.sh \
 	sse300-backup.sh \
+	db-backup.sse300.sh \
 	sonata-startup-cron-vger-wrapper.sh \
+	setilive-summary.sh \
 	galcenter-keplerHz-progress.sh \
 	galcenter2-keplerHz-progress.sh \
-	new-galcenter2-keplerHz-progress.sh \
 	opensonata-build-test.sh 
 
 bin_PROGRAMS = \
