@@ -34,6 +34,7 @@
 // $Header: /home/cvs/nss/sonata-pkg/channelizer/src/Transmitter.cpp,v 1.25 2009/05/24 22:25:42 kes Exp $
 //
 #include "Transmitter.h"
+#include "Args.h"
 
 using std::norm;
 
@@ -76,13 +77,17 @@ void
 TransmitterTask::extractArgs()
 {
 #if ASSIGN_CPUS
+	//JR - Nov 08, 2013 - Added support for optionally specifying CPU.
+	Args *commandLineArgs = Args::getInstance();
+	int cpu = commandLineArgs->getTransmitterCPU();
 	// on multiprocessor systems, park on cpu 1
 	int32_t nCpus = sysconf(_SC_NPROCESSORS_CONF);
 	if (nCpus > 3) {
 		// set the affinity to cpu 3
 		cpu_set_t affinity;
 		CPU_ZERO(&affinity);
-		CPU_SET(2, &affinity);
+		CPU_SET(cpu, &affinity);
+		printf("Transmiiter CPU=%d\n", cpu);
 		pid_t tid = gettid();
 		int rval = sched_setaffinity(tid, sizeof(cpu_set_t), &affinity);
 		Assert(rval >= 0);

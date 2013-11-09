@@ -97,6 +97,9 @@ public:
 	int32_t getStatisticsPort() { return (statistics.port); }
 	int32_t getWorkers() { return (workers); }
 	int32_t getDecimation() { return (decimation); }
+	//JR - Nov 05, 2013
+	uint32_t getWorkersFirstCPU() { return (workersFirstCPU); }
+	uint32_t getTransmitterCPU() { return (transmitterCPU); }
 
 private:
 	static Args *instance;
@@ -128,6 +131,9 @@ private:
 	HostSpec input;						// input host specification
 	HostSpec output;					//  output address specification
 	HostSpec statistics;				//  statistics address specification
+	//JR - Nov 05, 2013 - Added to allow specifying which CPU for the worker threads
+	uint32_t workersFirstCPU;                        //The first CPU for the worker threads.
+	uint32_t transmitterCPU;                        //The CPU to run the Transmitter worker thread.
 
 	// hidden
 	Args();

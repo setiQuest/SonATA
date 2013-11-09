@@ -35,6 +35,7 @@
 //
 
 #include "Worker.h"
+#include "Args.h"
 
 namespace chan {
 
@@ -55,19 +56,29 @@ WorkerTask::~WorkerTask()
 void
 WorkerTask::extractArgs()
 {
+	//JR - nov 05, 2013 - Added to support starting worker thread at a certain CPU
+	Args *cmdLineArgs = Args::getInstance();
+	int firstCPU = cmdLineArgs->getWorkersFirstCPU();
 #if ASSIGN_CPUS
 	// if there are more than 3 processors, keep off first 3
 	int32_t nCpus = sysconf(_SC_NPROCESSORS_CONF);
 	int64_t n = (int64_t) args;
-	if (nCpus > 3) {
+	if (nCpus > firstCPU) {
 		// set the affinity to cpu 0
 		cpu_set_t affinity;
 		CPU_ZERO(&affinity);
-		if (n >= 0 && nCpus > n + 3)
-			CPU_SET(n + 3, &affinity);
+		//JR - Changed 3 to firstCPU
+		if (n >= 0 && nCpus > n + firstCPU)
+	        {
+			printf("WorkerThread %d is on CPU %d\n", (int)n+1, (int)n + firstCPU);
+			CPU_SET(n + firstCPU, &affinity);
+		}
 		else {
-			for (int32_t i = 3; i < nCpus; ++i)
+			for (int32_t i = firstCPU; i < nCpus; ++i)
+			{
+				printf("WorkerThread %d is on CPU %d\n", (int)n+1, i);
 				CPU_SET(i, &affinity);
+			}
 		}
 		pid_t tid = gettid();
 		int rval = sched_setaffinity(tid, sizeof(cpu_set_t), &affinity);

@@ -45,7 +45,7 @@ using namespace sonata_lib;
 
 namespace chan {
 
-static string usage = "channelizer [-?] [-A addr] [-a port] [-b] [-B bw] [-c channels] [-C channels] [-D decimation] [-d filter file] [-f file] [-h port] [-H host] [-i port] [-I host] [-j port] [-J host] [-M] [-m] [-N foldings] [-O oversampling] [-o] [-P polarization] [-S src] [-w workers]\n\
+static string usage = "channelizer [-?] [-A addr] [-a port] [-b] [-B bw] [-c channels] [-C channels] [-D decimation] [-d filter file] [-f file] [-h port] [-H host] [-i port] [-I host] [-j port] [-J host] [-M] [-m] [-N foldings] [-O oversampling] [-o] [-P polarization] [-S src] [-w workers] [-W worker thread first CPU]\n\
 	-?: print usage and exit\n\
 	-A addr: statistics address\n\
 	-a port: statistics port\n\
@@ -73,12 +73,14 @@ static string usage = "channelizer [-?] [-A addr] [-a port] [-b] [-B bw] [-c cha
 	-P polarization: polarization (X or Y)\n\
 	-p: print general output statistics\n\
 	-Q chname: channelizer name\n\
-	-R receiver: cpu to use for receiver task\n\
+	-R receiver: cpu to use for receiver task. Zero based.\n\
 	-S src: beam source (uint32, input packets)\n\
 	-s src: channel source (uint32_t, output packets)\n\
 	-t time: start time in unix time (sec)\n\
+	-T cpu: CPU to run transmitter thread. Zero based.\n\
 	-V: print version and exit\n\
-	-w workers: number of worker tasks\n\\n\\n";
+	-w workers: number of worker tasks\n\
+	-W start CPU core: first CPU core for worker threads (3)\n\\n\\n";
 
 Args *Args::instance = 0;
 
@@ -106,7 +108,9 @@ Args::Args(): initBufs(false), localMode(false), logSseMsgs(false),
 		filterFile(""), channels(), sse(DEFAULT_SSE_ADDR, DEFAULT_SSE_PORT),
 		input(DEFAULT_INPUT_ADDR, DEFAULT_INPUT_PORT),
 		output(DEFAULT_OUTPUT_ADDR, DEFAULT_OUTPUT_PORT),
-		statistics(DEFAULT_STATISTICS_ADDR, DEFAULT_STATISTICS_PORT)
+		statistics(DEFAULT_STATISTICS_ADDR, DEFAULT_STATISTICS_PORT),
+		workersFirstCPU(DEFAULT_WORKERS_STARTCPU), transmitterCPU(DEFAULT_TRANSMITTER_CPU)
+
 {
 }
 
@@ -124,7 +128,7 @@ Error
 Args::parse(int argc, char **argv)
 {
 	bool done = false;
-	const char *optstring = "?bLMmnopVA:a:B:C:c:D:d:F:f:H:h:I:i:J:j:N:O:P:Q:R:S:s:t:w:";
+	const char *optstring = "?bLMmnopVA:a:B:C:c:D:d:F:f:H:h:I:i:J:j:l:N:O:P:Q:R:S:s:t:T:w:W:";
 
 	opterr= 0;
 	while (!done) {
@@ -246,11 +250,17 @@ Args::parse(int argc, char **argv)
 		case 't':
 			startTime = atoi(optarg);
 			break;
+		case 'T':
+			transmitterCPU = atoi(optarg);
+			break;
 		case 'V':
 			cout << CHVERSION << endl;
 			exit(1);
 		case 'w':
 			workers = atoi(optarg);
+			break;
+		case 'W':
+			workersFirstCPU = atoi(optarg);
 			break;
 		default:
 			cout << "Invalid option: " << optopt << endl;
@@ -288,7 +298,7 @@ Args::parse(int argc, char **argv)
 void Args::showDefaults()
 {
 
-     cout << "channelizer [-?] [-b] [-B bw] [-c channels] [-C channels] [-D decimation] [-d filter file] [-f file] [-h port] [-H host] [-i port] [-I host] [-j port] [-J host] [-m] [-N foldings] [-O oversampling] [-o] [-P polarization] [-S src] [-w workers]\n\
+     cout << "channelizer [-?] [-b] [-B bw] [-c channels] [-C channels] [-D decimation] [-d filter file] [-f file] [-h port] [-H host] [-i port] [-I host] [-j port] [-J host] [-m] [-N foldings] [-O oversampling] [-o] [-P polarization] [-S src] [-w workers] [-T <transmitter CPU>]\n\
 	-?: print usage and exit\n\
 	-b: initialize buffers during allocation (false)\n\
 	-B bw: bandwidth bw (MHz) (" << DEFAULT_BANDWIDTH << ")\n\
@@ -314,11 +324,13 @@ void Args::showDefaults()
 	-P polarization: polarization (X or Y) (" << ATADataPacketHeader::XLINEAR 
 			<< ")\n\
 	-Q chName: name of this channelizer (" << DEFAULT_NAME << ")\n\
+	-R receiver thread CPU: (0)\n\
 	-S src: beam source (uint32, input packets) (" << DEFAULT_BEAMSRC << ")\n\
-	-s src: channel source (uint32_t, output packets) (" << DEFAULT_CHANSRC
-			<< ")\n\
+	-s src: channel source (uint32_t, output packets) (" << DEFAULT_CHANSRC << ")\n\
+	-T transmitting thread CPU: (" << DEFAULT_TRANSMITTER_CPU << ")\n\
 	-V: print version and exit\n\
-	-w workers: number of worker tasks (" << DEFAULT_WORKERS << ")\n\\n\\n";
+	-w workers: number of worker tasks (" << DEFAULT_WORKERS << ")\n\
+	-W workers first CPU: first CPU core for worker threads (" << DEFAULT_WORKERS_STARTCPU << ")\n\\n\\n";
 }
 
 }
